@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="description" content="Smart Edu - Learning Management System. Transform your learning experience with our comprehensive educational platform designed for modern learners.">
+        <meta name="description" content="LMS SMKN 40 Jakarta - Learning Management System for modern education.">
 
-        <title>Smart Edu - Learning Management System</title>
+        <title>LMS SMKN 40 Jakarta</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
         
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="{{ asset('images/landing/logo.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('images/landing/logo40.png') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -317,7 +317,7 @@
                         <!-- Glow Effect -->
                         <div class="absolute inset-0 {{ $errors->any() ? 'bg-red-200 bg-opacity-30' : 'bg-white bg-opacity-30' }} rounded-2xl blur-xl scale-110 pulse-glow"></div>
                         <div class="relative w-20 h-20 sm:w-24 sm:h-24 {{ $errors->any() ? 'bg-red-100 bg-opacity-20 border-red-300' : 'bg-white bg-opacity-20 border-white border-opacity-30' }} rounded-2xl flex items-center justify-center backdrop-blur-sm p-2 sm:p-3 border transition-all duration-300 hover:bg-opacity-30 hover:scale-105 cursor-pointer">
-                            <img src="{{ asset('images/landing/logo.png') }}" alt="Smart Edu LMS Logo" class="w-full h-full object-contain">
+                            <img src="{{ asset('images/landing/logo40.png') }}" alt="LMS SMKN 40 Jakarta" class="w-full h-full object-contain">
                         </div>
                         <!-- Decorative Elements -->
                         <div class="absolute -top-2 -right-2 w-6 h-6 {{ $errors->any() ? 'bg-red-400' : 'bg-yellow-400' }} rounded-full opacity-60 animate-pulse transition-all duration-300 hover:opacity-100 hover:scale-125"></div>
@@ -331,7 +331,7 @@
                         
                         <h1 class="text-4xl sm:text-5xl font-bold mb-4 sm:mb-6 tracking-tight relative group">
                             <span class="gold-text relative transition-all duration-300 group-hover:scale-105">
-                                Smart Edu
+                                SMKN 40 Jakarta
                                 <!-- Gold Accent Line -->
                                 <div class="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent transition-all duration-300 group-hover:via-yellow-300"></div>
                             </span>
@@ -343,13 +343,13 @@
                         </h2>
                         
                         <p class="text-xl sm:text-2xl font-medium mb-4 text-white opacity-90 relative group">
-                            Smart Learning Solutions
+                            
                             <!-- Decorative Line -->
                             <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-24 h-1 {{ $errors->any() ? 'bg-red-300' : 'bg-white' }} bg-opacity-30 transition-all duration-300 group-hover:w-32 group-hover:bg-opacity-50"></div>
                         </p>
                         
                         <p class="text-lg sm:text-xl text-white opacity-75 max-w-md leading-relaxed relative group">
-                            Transform your learning experience with our comprehensive educational platform designed for modern learners.
+                           
                         </p>
                         
                         <!-- Decorative Elements -->
@@ -401,10 +401,10 @@
                         <!-- Mobile Logo -->
                         <div class="lg:hidden text-center mb-6 sm:mb-8">
                             <div class="w-14 h-14 sm:w-16 sm:h-16 {{ $errors->any() ? 'bg-red-100 border-red-200' : 'blue-gradient' }} rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 p-1.5 sm:p-2 transition-all duration-300">
-                                <img src="{{ asset('images/landing/logo.png') }}" alt="Smart Edu LMS Logo" class="w-full h-full object-contain">
+                                <img src="{{ asset('images/landing/logo40.png') }}" alt="LMS SMKN 40 Jakarta" class="w-full h-full object-contain">
                             </div>
                             <h1 class="text-xl sm:text-2xl font-bold {{ $errors->any() ? 'text-red-700' : 'text-blue-900' }} transition-colors duration-300">
-                                <span class="gold-text">Smart Edu</span>
+                                <span class="gold-text">SMKN 40 Jakarta</span>
                             </h1>
                             <h2 class="text-sm sm:text-base font-medium {{ $errors->any() ? 'text-red-600' : 'text-blue-700' }} transition-colors duration-300">
                                 Learning Management System
@@ -414,7 +414,7 @@
                     <!-- Form Container -->
                     <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border {{ $errors->any() ? 'border-red-200 shadow-red-100' : 'border-blue-100' }} transition-all duration-300">
                         <div class="mb-6 sm:mb-8">
-                            <h2 class="text-xl sm:text-2xl font-bold {{ $errors->any() ? 'text-red-700' : 'text-blue-900' }} mb-2 transition-colors duration-300">Welcome to Smart Edu</h2>
+                            <h2 class="text-xl sm:text-2xl font-bold {{ $errors->any() ? 'text-red-700' : 'text-blue-900' }} mb-2 transition-colors duration-300">Welcome to LMS SMKN 40</h2>
                             <p class="text-sm sm:text-base {{ $errors->any() ? 'text-red-600' : 'text-blue-600' }} transition-colors duration-300">Sign in to your account to continue your learning journey</p>
                         </div>
 
@@ -424,7 +424,7 @@
                         <!-- Footer -->
                         <div class="text-center mt-6 sm:mt-8">
                             <p class="text-xs sm:text-sm text-blue-500">
-                                © 2024 <span class="gold-text font-semibold">Smart Edu</span> - Learning Management System. All rights reserved.
+                                © 2026 <span class="gold-text font-semibold">SMKN 40 Jakarta</span> - Learning Management System. All rights reserved.
                             </p>
                         </div>
                 </div>

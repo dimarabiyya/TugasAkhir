@@ -188,8 +188,8 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="{{ route('dashboard') }}" class="sidebar-logo">
-                <img src="{{ asset('build/images/logo/logo.png') }}" alt="Logo">
-                <span class="text">Smart Edu</span>
+                <img src="{{ asset('build/images/logo/logo40.png') }}" alt="Logo">
+                <span class="text">LMS SMKN 40 Jakarta</span>
             </a>
         </div>
         

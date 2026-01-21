@@ -39,8 +39,8 @@
                 <!-- Logo -->
                 <div class="logo_container">
                     <div class="logo">
-                        <img src="{{ asset('images/landing/logo.png') }}" alt="Smart Edu Logo">
-                        <span>Smart Edu</span>
+                        <img src="{{ asset('images/landing/logo40.png') }}" alt="SMKN 40 Jakarta" style="width: 70px; height: 70px;">
+                        <span>LMS</span>
                     </div>
                 </div>
                 
@@ -166,7 +166,7 @@
                                         <div class="footer_contact_icon">
                                             <img src="{{ asset('images/landing/envelope.svg') }}" alt="">
                                         </div>
-                                        hello@smartedu.com
+                                        smkn40jakarta@gmail.com
                                     </li>
                                 </ul>
                             </div>

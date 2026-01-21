@@ -15,7 +15,7 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('skydash/css/style.css') }}">
     
-    <link rel="shortcut icon" href="{{ asset('images/landing/logo.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/landing/logo40.png') }}" />
     
     <style>
         @media (max-width: 991px) {
@@ -520,11 +520,11 @@
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <a class="navbar-brand brand-logo me-5 d-flex align-items-center" href="{{ route('dashboard') }}">
-                    <img src="{{ asset('images/landing/logo.png') }}" class="me-2" alt="logo" style="max-height: 40px;" />
-                    <span class="brand-logo-text">SMART EDU</span>
+                    <img src="{{ asset('images/landing/logo40.png') }}" class="me-2" alt="logo" style="max-height: 40px;" />
+                    <span class="brand-logo-text">LMS SMKN</span>
                 </a>
                 <a class="navbar-brand brand-logo-mini" href="{{ route('dashboard') }}">
-                    <img src="{{ asset('images/landing/logo.png') }}" alt="logo" style="max-height: 30px;" />
+                    <img src="{{ asset('images/landing/logo40.png') }}" alt="logo" style="max-height: 30px;" />
                 </a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -716,7 +716,7 @@
             <!-- Footer -->
             <footer class="footer">
                 <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://smartedu.com" target="_blank">Smart Edu LMS</a> 2024</span>
+                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="" target="_blank">LMS SMKN 40 Jakarta</a> 2026</span>
                 </div>
             </footer>
         </div>
