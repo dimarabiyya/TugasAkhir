@@ -11,6 +11,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\QuizQuestionController;
 use App\Http\Controllers\QuizTakingController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\EbookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -173,6 +174,26 @@ Route::middleware('auth')->group(function () {
     Route::patch('/testimonials/{testimonial}/approve', [App\Http\Controllers\TestimonialController::class, 'approve'])->name('testimonials.approve');
     Route::patch('/testimonials/{testimonial}/reject', [App\Http\Controllers\TestimonialController::class, 'reject'])->name('testimonials.reject');
     Route::patch('/testimonials/{testimonial}/toggle-featured', [App\Http\Controllers\TestimonialController::class, 'toggleFeatured'])->name('testimonials.toggle-featured');
+});
+
+// Perpustakaan E-book routes
+Route::middleware(['auth'])->group(function () {
+    
+    // Semua user login bisa melihat dan download
+    Route::get('/perpustakaan', [EbookController::class, 'index'])->name('ebooks.index');
+    Route::get('/perpustakaan/{ebook}/download', [EbookController::class, 'download'])->name('ebooks.download');
+
+    // Hanya Admin yang bisa manage (Sesuaikan middleware 'role:admin' dengan sistemmu)
+    // Contoh jika pakai Spatie Permission: middleware(['role:admin'])
+    // Atau jika field database biasa: middleware(function($request, $next) { ... })
+    
+    Route::prefix('admin/ebooks')->name('ebooks.')->group(function () {
+        Route::get('/create', [EbookController::class, 'create'])->name('create');
+        Route::post('/store', [EbookController::class, 'store'])->name('store');
+        Route::delete('/{ebook}', [EbookController::class, 'destroy'])->name('destroy');
+        // Tambahkan route edit/update jika perlu
+    });
+
 });
 
 // Public testimonial routes - must be last to avoid conflicts
