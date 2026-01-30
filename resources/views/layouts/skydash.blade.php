@@ -595,23 +595,17 @@
                 </li>
                 
                 @if(auth()->user()->hasRole('admin'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" data-bs-toggle="collapse" href="#courses-menu" aria-expanded="{{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'true' : 'false' }}" aria-controls="courses-menu">
+                    <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('courses.index') }}">
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
                             <span class="menu-title">Mata Pelajaran</span>
-                            <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'show' : '' }}" id="courses-menu">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"><a class="nav-link {{ request()->routeIs('courses.index') ? 'active' : '' }}" href="{{ route('courses.index') }}">Semua Mapel</a></li>
-                                <li class="nav-item"><a class="nav-link {{ request()->routeIs('courses.create') ? 'active' : '' }}" href="{{ route('courses.create') }}">Buat Mapel</a></li>
-                            </ul>
-                        </div>
+                        
                     </li>
 
                     <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('ebooks.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <i class="mdi mdi-book menu-icon"></i>
                             <span class="menu-title">Perpustakaan</span>
                         </a>
                     </li>
@@ -641,13 +635,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
+                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
                             <span class="menu-title">Kuis</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('testimonials.manage') }}">
+                        <a class="nav-link {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ? 'active' : '' }}" href="{{ route('testimonials.manage') }}">
                             <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
                             <span class="menu-title">Testimonial</span>
                         </a>
@@ -658,31 +652,31 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('courses.index') }}">
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
-                            <span class="menu-title">My Courses</span>
+                            <span class="menu-title">Mata Pelajaran</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}" href="{{ route('modules.index') }}">
                             <i class="mdi mdi-folder menu-icon"></i>
-                            <span class="menu-title">Modules</span>
+                            <span class="menu-title">Modul</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" href="{{ route('lessons.index') }}">
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
-                            <span class="menu-title">Lessons</span>
+                            <span class="menu-title">Materi</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}" href="{{ route('students.index') }}">
                             <i class="mdi mdi-school menu-icon"></i>
-                            <span class="menu-title">Students</span>
+                            <span class="menu-title">Siswa</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
                             <i class="mdi mdi-help-circle menu-icon"></i>
-                            <span class="menu-title">Quizzes</span>
+                            <span class="menu-title">Kuis</span>
                         </a>
                     </li>
                 @endif
@@ -691,7 +685,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('courses.index') }}">
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
-                            <span class="menu-title">Browse Courses</span>
+                            <span class="menu-title">Mata Pelajaran</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -703,7 +697,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
                             <i class="mdi mdi-help-circle menu-icon"></i>
-                            <span class="menu-title">Quizzes</span>
+                            <span class="menu-title">Kuis</span>
                         </a>
                     </li>
                     <li class="nav-item">

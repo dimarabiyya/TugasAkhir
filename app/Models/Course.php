@@ -17,7 +17,7 @@ class Course extends Model
         'description',
         'thumbnail',
         'level',
-        'price',
+        'price', // Biarkan tetap di sini agar bisa diisi '0' oleh controller
         'is_published',
         'duration_hours',
         'instructor_id',
@@ -25,10 +25,10 @@ class Course extends Model
 
     protected $casts = [
         'is_published' => 'boolean',
-        'price' => 'decimal:2',
+        'price' => 'decimal:2', // Tetap pertahankan casting ini
     ];
 
-    // Boot method to auto-generate slug
+    // Boot method (sama seperti sebelumnya, tidak perlu diubah)
     protected static function boot()
     {
         parent::boot();
@@ -40,47 +40,20 @@ class Course extends Model
         });
         
         static::updating(function ($course) {
-            // Update slug if title changed
             if ($course->isDirty('title') && empty($course->slug)) {
                 $course->slug = Str::slug($course->title);
             }
         });
     }
 
-    // Relationships
-    public function modules()
-    {
-        return $this->hasMany(Module::class)->orderBy('order');
-    }
+    // Relationships (sama seperti sebelumnya, dipersingkat di sini)
+    public function modules() { return $this->hasMany(Module::class)->orderBy('order'); }
+    public function enrollments() { return $this->hasMany(Enrollment::class); }
+    public function users() { return $this->belongsToMany(User::class, 'enrollments')->withPivot(['enrolled_at', 'completed_at', 'progress_percentage'])->withTimestamps(); }
+    public function transactions() { return $this->hasMany(Transaction::class); }
+    public function instructor() { return $this->belongsTo(User::class, 'instructor_id'); }
+    public function testimonials() { return $this->hasMany(Testimonial::class); }
 
-    public function enrollments()
-    {
-        return $this->hasMany(Enrollment::class);
-    }
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'enrollments')
-                    ->withPivot(['enrolled_at', 'completed_at', 'progress_percentage'])
-                    ->withTimestamps();
-    }
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
-    }
-
-    public function instructor()
-    {
-        return $this->belongsTo(User::class, 'instructor_id');
-    }
-
-    public function testimonials()
-    {
-        return $this->hasMany(Testimonial::class);
-    }
-
-    // Accessor for lessons count
     public function getLessonsCountAttribute()
     {
         return $this->modules->sum(function ($module) {
@@ -88,27 +61,12 @@ class Course extends Model
         });
     }
 
-    // Scope for published courses
-    public function scopePublished($query)
-    {
-        return $query->where('is_published', true);
-    }
-
-    // Scope for level
-    public function scopeLevel($query, $level)
-    {
-        return $query->where('level', $level);
-    }
+    public function scopePublished($query) { return $query->where('is_published', true); }
+    public function scopeLevel($query, $level) { return $query->where('level', $level); }
     
-    // Helper method to get URL with slug
-    public function getUrlAttribute()
-    {
-        return route('courses.show', ['course' => $this->id, 'slug' => $this->slug]);
-    }
+    public function getUrlAttribute() { return route('courses.show', ['course' => $this->id, 'slug' => $this->slug]); }
     
-    /**
-     * Get the indexable data array for the model.
-     */
+    // UPDATE BAGIAN INI: Hapus price dari index pencarian (opsional)
     public function toSearchableArray()
     {
         return [
@@ -117,25 +75,12 @@ class Course extends Model
             'slug' => $this->slug,
             'description' => $this->description,
             'level' => $this->level,
-            'price' => $this->price,
+            // 'price' => $this->price, // Bisa dihapus atau biarkan saja
             'is_published' => $this->is_published,
             'duration_hours' => $this->duration_hours,
         ];
     }
     
-    /**
-     * Get the value used to index the model.
-     */
-    public function getScoutKey()
-    {
-        return $this->id;
-    }
-    
-    /**
-     * Get the name of the key used to index the model.
-     */
-    public function getScoutKeyName()
-    {
-        return 'id';
-    }
+    public function getScoutKey() { return $this->id; }
+    public function getScoutKeyName() { return 'id'; }
 }

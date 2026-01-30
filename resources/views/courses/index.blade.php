@@ -67,20 +67,6 @@ use Illuminate\Support\Facades\Storage;
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="price_min">Min Price</label>
-                                <input type="number" step="0.01" class="form-control" name="price_min" 
-                                       id="price_min" placeholder="0.00" value="{{ request('price_min') }}">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="price_max">Max Price</label>
-                                <input type="number" step="0.01" class="form-control" name="price_max" 
-                                       id="price_max" placeholder="9999.99" value="{{ request('price_max') }}">
-                            </div>
-                        </div>
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>&nbsp;</label>
@@ -119,7 +105,6 @@ use Illuminate\Support\Facades\Storage;
                                 <th>Status</th>
                                 <th>Duration</th>
                                 <th>Modules</th>
-                                <th>Price</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -180,13 +165,6 @@ use Illuminate\Support\Facades\Storage;
                                     <span class="text-muted">
                                         <i class="icon-people mr-1"></i>{{ $course->modules->count() }}
                                     </span>
-                                </td>
-                                <td data-priority="3">
-                                    @if($course->price == 0)
-                                        <span class="badge badge-success">FREE</span>
-                                    @else
-                                        <span class="font-weight-bold text-primary">${{ number_format($course->price, 2) }}</span>
-                                    @endif
                                 </td>
                                 <td data-priority="1">
                                     <div class="btn-group btn-group-sm" role="group">

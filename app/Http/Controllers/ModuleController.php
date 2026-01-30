@@ -16,10 +16,41 @@ class ModuleController extends Controller
      */
     public function index(Request $request): View
     {
+        $user = auth()->user();
+        
+        // Mulai query dengan eager loading
         $query = Module::with(['course', 'lessons']);
 
-        // Search functionality
-        if ($request->has('search') && $request->search !== '') {
+        // -----------------------------------------------------------
+        // LOGIKA FILTER ROLE (Baru Ditambahkan)
+        // -----------------------------------------------------------
+        
+        // Cek jika user adalah Instructor DAN BUKAN Admin
+        if ($user->hasRole('instructor') && !$user->hasRole('admin')) {
+            
+            // 1. Filter MODULES: 
+            // Ambil module HANYA jika course-nya memiliki instructor_id = user yang login
+            $query->whereHas('course', function($q) use ($user) {
+                $q->where('instructor_id', $user->id);
+            });
+
+            // 2. Filter DROPDOWN COURSES:
+            // List course untuk filter di view hanya course milik instruktur tersebut
+            $courses = Course::select('id', 'title')
+                             ->where('instructor_id', $user->id)
+                             ->get();
+                             
+        } else {
+            // Jika Admin, ambil semua course untuk dropdown
+            $courses = Course::select('id', 'title')->get();
+        }
+
+        // -----------------------------------------------------------
+        // END LOGIKA FILTER ROLE
+        // -----------------------------------------------------------
+
+        // Search functionality (Tetap sama)
+        if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('title', 'like', '%' . $searchTerm . '%')
@@ -30,13 +61,14 @@ class ModuleController extends Controller
             });
         }
 
-        // Filter by course
-        if ($request->has('course_id') && $request->course_id !== '') {
+        // Filter by specific course (Tetap sama)
+        if ($request->filled('course_id')) {
             $query->where('course_id', $request->course_id);
         }
 
+        // Pagination & Ordering
+        // Pastikan scopeOrdered() ada di Model Module, jika tidak ganti jadi orderBy('order')
         $modules = $query->ordered()->paginate(15)->appends($request->query());
-        $courses = Course::select('id', 'title')->get();
 
         return view('modules.index', compact('modules', 'courses'));
     }
@@ -48,17 +80,33 @@ class ModuleController extends Controller
     {
         $this->checkManagePermission();
         
+        // TAMBAHAN KEAMANAN (Opsional tapi disarankan):
+        // Pastikan instruktur tidak bisa create modul untuk course orang lain lewat URL
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized access to this course.');
+            }
+        }
+        
         // Get the next order number for this course
         $nextOrder = $course->modules()->max('order') + 1;
         
         return view('modules.create', compact('course', 'nextOrder'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // ... (Method store, show, edit, update, destroy biarkan sama) ...
+    // Note: Untuk edit, update, destroy sebaiknya juga ditambahkan 
+    // pengecekan instructor_id seperti di create() di atas agar lebih aman.
+
     public function store(ModuleRequest $request, Course $course): RedirectResponse
     {
+        // Validasi kepemilikan course
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized action.');
+            }
+        }
+
         $validated = $request->validated();
         $validated['course_id'] = $course->id;
 
@@ -69,9 +117,6 @@ class ModuleController extends Controller
             ->with('success', 'Module created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Module $module): View
     {
         $module->load(['course', 'lessons' => function($query) {
@@ -81,23 +126,31 @@ class ModuleController extends Controller
         return view('modules.show', compact('module'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Module $module): View
     {
         $this->checkManagePermission();
+        
+        // Validasi kepemilikan
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized access.');
+            }
+        }
         
         $module->load('course');
         
         return view('modules.edit', compact('module'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(ModuleRequest $request, Module $module): RedirectResponse
     {
+        // Validasi kepemilikan sebelum update
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized action.');
+            }
+        }
+
         $validated = $request->validated();
         $module->update($validated);
 
@@ -106,16 +159,19 @@ class ModuleController extends Controller
             ->with('success', 'Module updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Module $module): RedirectResponse
     {
         $this->checkManagePermission();
         
+        // Validasi kepemilikan sebelum hapus
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized action.');
+            }
+        }
+        
         $course = $module->course;
         
-        // Check if module has lessons
         if ($module->lessons()->count() > 0) {
             return redirect()
                 ->route('modules.show', $module)
@@ -129,9 +185,6 @@ class ModuleController extends Controller
             ->with('success', 'Module deleted successfully.');
     }
 
-    /**
-     * Check if user has permission to manage modules
-     */
     private function checkManagePermission(): void
     {
         if (!auth()->user()->hasAnyRole(['admin', 'instructor'])) {

@@ -35,15 +35,31 @@
       }
     }
 
-    var current = location.pathname.split("/").slice(-1)[0].replace(/^\/|\/$/g, '');
+    // Use full pathname (no trailing slash) to avoid partial matches like '/manage'
+    var current = location.pathname.replace(/\/$/, '');
+
     $('.nav li a', sidebar).each(function() {
       var $this = $(this);
-      addActiveClass($this);
+      var href = $this.attr('href');
+      if (!href) return;
+      try {
+        var hrefPath = new URL(href, location.origin).pathname.replace(/\/$/, '');
+        if (hrefPath === current || current.indexOf(hrefPath + '/') === 0) {
+          addActiveClass($this);
+        }
+      } catch (e) { /* ignore invalid hrefs */ }
     })
 
     $('.horizontal-menu .nav li a').each(function() {
       var $this = $(this);
-      addActiveClass($this);
+      var href = $this.attr('href');
+      if (!href) return;
+      try {
+        var hrefPath = new URL(href, location.origin).pathname.replace(/\/$/, '');
+        if (hrefPath === current || current.indexOf(hrefPath + '/') === 0) {
+          addActiveClass($this);
+        }
+      } catch (e) { /* ignore invalid hrefs */ }
     })
 
     //Close other submenu in sidebar on opening any

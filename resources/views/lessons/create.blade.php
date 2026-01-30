@@ -171,23 +171,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group mb-4">
-                        <div class="form-check">
-                            <input type="checkbox" 
-                                   class="form-check-input" 
-                                   id="is_free" 
-                                   name="is_free" 
-                                   value="1" 
-                                   {{ old('is_free') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="is_free">
-                                This lesson is free
-                            </label>
-                        </div>
-                        <small class="form-text text-muted">
-                            Free lessons can be accessed without enrollment
-                        </small>
-                    </div>
-
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary mr-3">
                             <i class="mdi mdi-check"></i> Create Lesson

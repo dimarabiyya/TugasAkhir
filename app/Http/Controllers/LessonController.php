@@ -16,10 +16,36 @@ class LessonController extends Controller
      */
     public function index(Request $request): View
     {
+        $user = auth()->user();
+        
+        // Mulai query dengan eager loading
         $query = Lesson::with(['module.course']);
 
+        // ---------------------------------------------------
+        // 1. LOGIKA FILTER ROLE (Hanya tampilkan milik sendiri)
+        // ---------------------------------------------------
+        if ($user->hasRole('instructor') && !$user->hasRole('admin')) {
+            // Ambil Lesson hanya jika Module -> Course -> Instructor ID sama dengan User ID
+            $query->whereHas('module.course', function($q) use ($user) {
+                $q->where('instructor_id', $user->id);
+            });
+
+            // Filter dropdown Modules (hanya module milik instruktur ini)
+            $modules = Module::with('course')
+                ->whereHas('course', function($q) use ($user) {
+                    $q->where('instructor_id', $user->id);
+                })->get();
+        } else {
+            // Admin melihat semua module
+            $modules = Module::with('course')->get();
+        }
+
+        // ---------------------------------------------------
+        // 2. LOGIKA PENCARIAN & FILTER LAINNYA
+        // ---------------------------------------------------
+        
         // Search functionality
-        if ($request->has('search') && $request->search !== '') {
+        if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('title', 'like', '%' . $searchTerm . '%')
@@ -34,22 +60,18 @@ class LessonController extends Controller
         }
 
         // Filter by module
-        if ($request->has('module_id') && $request->module_id !== '') {
+        if ($request->filled('module_id')) {
             $query->where('module_id', $request->module_id);
         }
 
         // Filter by type
-        if ($request->has('type') && $request->type !== '') {
+        if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
 
-        // Filter by free status
-        if ($request->filled('is_free')) {
-            $query->where('is_free', $request->is_free == '1' ? 1 : 0);
-        }
+        // (Filter is_free dihapus/diabaikan dari controller ini jika sudah tidak dipakai di view)
 
         $lessons = $query->ordered()->paginate(15)->appends($request->query());
-        $modules = Module::with('course')->get();
         $lessonTypes = ['video', 'reading', 'audio', 'interactive'];
 
         return view('lessons.index', compact('lessons', 'modules', 'lessonTypes'));
@@ -62,9 +84,15 @@ class LessonController extends Controller
     {
         $this->checkManagePermission();
         
+        // KEAMANAN: Cek apakah instruktur memiliki module ini
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized access to this module.');
+            }
+        }
+        
         // Get the next order number for this module
         $nextOrder = $module->lessons()->max('order') + 1;
-        
         $lessonTypes = ['video', 'reading', 'audio', 'interactive'];
         
         return view('lessons.create', compact('module', 'nextOrder', 'lessonTypes'));
@@ -75,8 +103,18 @@ class LessonController extends Controller
      */
     public function store(LessonRequest $request, Module $module): RedirectResponse
     {
+        // KEAMANAN: Cek kepemilikan module
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized action.');
+            }
+        }
+
         $validated = $request->validated();
+        
+        // SETTING MANUAL:
         $validated['module_id'] = $module->id;
+        $validated['is_free'] = 1; 
 
         Lesson::create($validated);
 
@@ -90,6 +128,13 @@ class LessonController extends Controller
      */
     public function show(Lesson $lesson): View
     {
+        // Cek akses lesson
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($lesson->module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized view.');
+            }
+        }
+
         $lesson->load(['module.course', 'quiz', 'lessonProgress' => function($query) {
             $query->where('user_id', auth()->id());
         }]);
@@ -103,6 +148,13 @@ class LessonController extends Controller
     public function edit(Lesson $lesson): View
     {
         $this->checkManagePermission();
+
+        // KEAMANAN
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($lesson->module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized access.');
+            }
+        }
         
         $lesson->load('module.course');
         $lessonTypes = ['video', 'reading', 'audio', 'interactive'];
@@ -115,7 +167,19 @@ class LessonController extends Controller
      */
     public function update(LessonRequest $request, Lesson $lesson): RedirectResponse
     {
+        // KEAMANAN
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($lesson->module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized action.');
+            }
+        }
+
         $validated = $request->validated();
+        
+        // SETTING MANUAL:
+        // Kita paksa 0 agar update tidak error karena field hilang dari request
+        $validated['is_free'] = 0; 
+
         $lesson->update($validated);
 
         return redirect()
@@ -129,6 +193,13 @@ class LessonController extends Controller
     public function destroy(Lesson $lesson): RedirectResponse
     {
         $this->checkManagePermission();
+
+        // KEAMANAN
+        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
+            if ($lesson->module->course->instructor_id !== auth()->id()) {
+                abort(403, 'Unauthorized action.');
+            }
+        }
         
         $module = $lesson->module;
         

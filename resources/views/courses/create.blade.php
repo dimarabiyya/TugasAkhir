@@ -64,17 +64,6 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" min="0" 
-                                       class="form-control @error('price') is-invalid @enderror" 
-                                       id="price" name="price" value="{{ old('price') }}" 
-                                       placeholder="0.00" required>
-                                @error('price')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="form-group">
                                 <label for="duration_hours" class="form-label">Duration (Hours) <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('duration_hours') is-invalid @enderror" 
                                        id="duration_hours" name="duration_hours" value="{{ old('duration_hours') }}" 

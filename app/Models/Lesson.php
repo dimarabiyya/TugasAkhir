@@ -22,7 +22,7 @@ class Lesson extends Model
     ];
 
     protected $casts = [
-        'is_free' => 'boolean',
+        'is_free'
     ];
 
     // Relationships

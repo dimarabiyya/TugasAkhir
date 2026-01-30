@@ -76,13 +76,13 @@ use Illuminate\Support\Facades\Storage;
                 <h4 class="card-title mb-4">
                     <i class="icon-info text-primary"></i> About This Course
                 </h4>
-                
+
                 <div class="mb-4">
                     <p class="text-muted" style="line-height: 1.8; font-size: 1rem;">{{ $course->description }}</p>
                 </div>
-                
+
                 <hr class="my-4">
-                
+
                 <!-- Course Stats Grid -->
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -125,90 +125,90 @@ use Illuminate\Support\Facades\Storage;
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Modules Section -->
-        <div class="card mt-3">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title mb-0">
-                        <i class="icon-folder text-primary"></i> Course Modules ({{ $course->modules->count() }})
-                    </h4>
-                    @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor')))
-                        <a href="{{ route('modules.create', $course) }}" class="btn btn-sm btn-primary">
-                            <i class="icon-plus"></i> Add Module
-                        </a>
-                    @endif
-                </div>
-                
-                @if($course->modules->count() > 0)
-                    <div class="modules-list">
-                        @foreach($course->modules as $module)
-                        <div class="module-item card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div style="flex: 1;">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <span class="badge badge-primary mr-2" style="min-width: 80px;">
-                                                Module {{ $module->order }}
-                                            </span>
-                                            @if($module->lessons->count() > 0)
-                                                <span class="badge badge-info">
-                                                    {{ $module->lessons->count() }} {{ Str::plural('Lesson', $module->lessons->count()) }}
-                                                </span>
-                                            @endif
-                                        </div>
-                                        <h5 class="mb-2 font-weight-bold">{{ $module->title }}</h5>
-                                        @if($module->description)
-                                            <p class="text-muted mb-3">{{ Str::limit($module->description, 150) }}</p>
-                                        @endif
-                                        
-                                        @if($module->lessons->count() > 0)
-                                            <div class="lessons-preview">
-                                                @foreach($module->lessons->take(3) as $lesson)
-                                                    <div class="lesson-item mb-2 p-2 bg-light rounded">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="icon-{{ $lesson->type == 'video' ? 'camcorder' : ($lesson->type == 'reading' ? 'book-open' : ($lesson->type == 'audio' ? 'volume-2' : 'pencil')) }} mr-2 text-primary"></i>
-                                                            <span class="font-weight-medium">{{ $lesson->title }}</span>
-                                                            @if($lesson->is_free)
-                                                                <span class="badge badge-success ml-2">FREE</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                                @if($module->lessons->count() > 3)
-                                                    <p class="text-muted mb-0 small">
-                                                        + {{ $module->lessons->count() - 3 }} more {{ Str::plural('lesson', $module->lessons->count() - 3) }}
-                                                    </p>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </div>
-                                    @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor')))
-                                        <div class="ml-3">
-                                            <a href="{{ route('modules.edit', $module) }}" class="btn btn-sm btn-primary">
-                                                <i class="icon-pencil"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                @else
-                    <div class="text-center py-5">
-                        <i class="icon-folder" style="font-size: 64px; color: #e3e6f0;"></i>
-                        <h5 class="mt-3 mb-2 text-muted">No modules yet</h5>
-                        <p class="text-muted">Add modules to organize course content</p>
+
+                <hr class="my-4">
+
+                <!-- Modules Section (moved inside About card) -->
+                <div class="modules-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="card-title mb-0">
+                            <i class="icon-folder text-primary"></i> Course Modules ({{ $course->modules->count() }})
+                        </h4>
                         @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor')))
-                            <a href="{{ route('modules.create', $course) }}" class="btn btn-primary">
-                                <i class="icon-plus"></i> Add First Module
+                            <a href="{{ route('modules.create', $course) }}" class="btn btn-sm btn-primary">
+                                <i class="icon-plus"></i> Add Module
                             </a>
                         @endif
                     </div>
-                @endif
+
+                    @if($course->modules->count() > 0)
+                        <div class="modules-list">
+                            @foreach($course->modules as $module)
+                            <div class="module-item card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div style="flex: 1;">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge badge-primary mr-2" style="min-width: 80px;">
+                                                    Module {{ $module->order }}
+                                                </span>
+                                                @if($module->lessons->count() > 0)
+                                                    <span class="badge badge-info">
+                                                        {{ $module->lessons->count() }} {{ Str::plural('Lesson', $module->lessons->count()) }}
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            <h5 class="mb-2 font-weight-bold">{{ $module->title }}</h5>
+                                            @if($module->description)
+                                                <p class="text-muted mb-3">{{ Str::limit($module->description, 150) }}</p>
+                                            @endif
+
+                                            @if($module->lessons->count() > 0)
+                                                <div class="lessons-preview">
+                                                    @foreach($module->lessons->take(3) as $lesson)
+                                                        <div class="lesson-item mb-2 p-2 bg-light rounded">
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="icon-{{ $lesson->type == 'video' ? 'camcorder' : ($lesson->type == 'reading' ? 'book-open' : ($lesson->type == 'audio' ? 'volume-2' : 'pencil')) }} mr-2 text-primary"></i>
+                                                                <span class="font-weight-medium">{{ $lesson->title }}</span>
+                                                                @if($lesson->is_free)
+                                                                    <span class="badge badge-success ml-2">FREE</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                    @if($module->lessons->count() > 3)
+                                                        <p class="text-muted mb-0 small">
+                                                            + {{ $module->lessons->count() - 3 }} more {{ Str::plural('lesson', $module->lessons->count() - 3) }}
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
+                                        @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor')))
+                                            <div class="ml-3">
+                                                <a href="{{ route('modules.edit', $module) }}" class="btn btn-sm btn-primary">
+                                                    <i class="icon-pencil"></i>
+                                                </a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <i class="icon-folder" style="font-size: 64px; color: #e3e6f0;"></i>
+                            <h5 class="mt-3 mb-2 text-muted">No modules yet</h5>
+                            <p class="text-muted">Add modules to organize course content</p>
+                            @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor')))
+                                <a href="{{ route('modules.create', $course) }}" class="btn btn-primary">
+                                    <i class="icon-plus"></i> Add First Module
+                                </a>
+                            @endif
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
         
