@@ -12,6 +12,7 @@ use App\Http\Controllers\QuizQuestionController;
 use App\Http\Controllers\QuizTakingController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EbookController;
+use App\Http\Controllers\ClassroomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -182,10 +183,6 @@ Route::middleware(['auth'])->group(function () {
     // Semua user login bisa melihat dan download
     Route::get('/perpustakaan', [EbookController::class, 'index'])->name('ebooks.index');
     Route::get('/perpustakaan/{ebook}/download', [EbookController::class, 'download'])->name('ebooks.download');
-
-    // Hanya Admin yang bisa manage (Sesuaikan middleware 'role:admin' dengan sistemmu)
-    // Contoh jika pakai Spatie Permission: middleware(['role:admin'])
-    // Atau jika field database biasa: middleware(function($request, $next) { ... })
     
     Route::prefix('admin/ebooks')->name('ebooks.')->group(function () {
         Route::get('/create', [EbookController::class, 'create'])->name('create');
@@ -198,5 +195,14 @@ Route::middleware(['auth'])->group(function () {
 
 // Public testimonial routes - must be last to avoid conflicts
 Route::get('/testimonials/{testimonial}', [App\Http\Controllers\TestimonialController::class, 'show'])->name('testimonials.show');
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('classrooms', ClassroomController::class);
+});
+
+// Route untuk instruktur melihat kelasnya
+Route::middleware(['auth', 'role:instructor'])->group(function () {
+    Route::get('/my-classes', [ClassroomController::class, 'myClasses'])->name('instructor.classes');
+});
 
 require __DIR__.'/auth.php';

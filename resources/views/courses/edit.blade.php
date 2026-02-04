@@ -66,14 +66,12 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" min="0" 
-                                       class="form-control @error('price') is-invalid @enderror" 
-                                       id="price" name="price" value="{{ old('price', $course->price) }}" 
-                                       placeholder="0.00" required>
-                                @error('price')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <label>Pilih Kelas</label>
+                                <select name="classroom_id" class="form-control">
+                                    @foreach($classrooms as $class)
+                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             
                             <div class="form-group">

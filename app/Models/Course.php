@@ -83,4 +83,8 @@ class Course extends Model
     
     public function getScoutKey() { return $this->id; }
     public function getScoutKeyName() { return 'id'; }
+
+    public function classroom() {
+        return $this->belongsTo(Classroom::class);
+    }
 }

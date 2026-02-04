@@ -62,6 +62,15 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="form-group">
+                                <label>Pilih Kelas</label>
+                                <select name="classroom_id" class="form-control">
+                                    @foreach($classrooms as $class)
+                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             
                             <div class="form-group">
                                 <label for="duration_hours" class="form-label">Duration (Hours) <span class="text-danger">*</span></label>

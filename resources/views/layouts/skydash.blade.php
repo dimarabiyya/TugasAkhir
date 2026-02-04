@@ -600,7 +600,13 @@
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
                             <span class="menu-title">Mata Pelajaran</span>
                         </a>
-                        
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('classrooms.index') }}">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Kelas</span>
+                        </a>
                     </li>
 
                     <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">

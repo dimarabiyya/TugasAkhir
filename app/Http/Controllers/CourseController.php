@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -46,11 +47,13 @@ class CourseController extends Controller
     {
         $this->checkManagePermission();
         
+        $classrooms = Classroom::all();
+
         $instructors = \App\Models\User::whereHas('roles', function($q) {
             $q->where('name', 'instructor');
         })->orderBy('name')->get();
         
-        return view('courses.create', compact('instructors'));
+        return view('courses.create', compact('classrooms', 'instructors'));
     }
 
     public function store(Request $request)
@@ -62,7 +65,7 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'level' => 'required|in:beginner,intermediate,advanced',
-            // 'price' => 'required...', // DIHAPUS
+            'classroom_id' => 'required|exists:classrooms,id',
             'duration_hours' => 'required|integer|min:0',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'instructor_id' => 'nullable|exists:users,id',
@@ -125,10 +128,11 @@ class CourseController extends Controller
         $this->checkManagePermission();
         
         $instructors = \App\Models\User::whereHas('roles', function($q) {
-            $q->where('name', 'instructor');
+        $q->where('name', 'instructor');
         })->orderBy('name')->get();
-        
-        return view('courses.edit', compact('course', 'instructors'));
+
+        $classrooms = Classroom::all();
+        return view('courses.edit', compact('course', 'classrooms', 'instructors'));
     }
 
     public function update(Request $request, Course $course)
@@ -140,7 +144,6 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'level' => 'required|in:beginner,intermediate,advanced',
-            // 'price' => 'required...', // DIHAPUS
             'duration_hours' => 'required|integer|min:0',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'instructor_id' => 'nullable|exists:users,id',
