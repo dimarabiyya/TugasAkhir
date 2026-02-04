@@ -6,24 +6,50 @@ use App\Models\Course;
 use App\Models\Classroom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Course::with(['modules.lessons', 'instructor']);
+        $user = Auth::user();
+        $query = Course::with(['modules.lessons', 'instructor', 'classroom']);
         
-        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
-            $query->where('instructor_id', auth()->id());
+        // --- LOGIKA FILTER BERDASARKAN ROLE ---
+
+        if ($user->hasRole('admin')) {
+            // Admin bisa melihat semua, tidak perlu filter classroom
+        } 
+        elseif ($user->hasRole('instructor')) {
+            // Instruktur melihat course miliknya SENDIRI 
+            // ATAU course yang berada di kelas tempat dia mengajar modul
+            $query->where(function($q) use ($user) {
+                $q->where('instructor_id', $user->id)
+                  ->orWhereHas('classroom.courses', function($sq) use ($user) {
+                      $sq->where('instructor_id', $user->id);
+                  });
+            });
+        } 
+        elseif ($user->hasRole('student')) {
+            // Student HANYA boleh melihat course yang ada di dalam kelas tempat dia terdaftar
+            $classroomIds = $user->classrooms()->pluck('classrooms.id')->toArray();
+
+            // Jika student belum terdaftar di kelas manapun, kembalikan koleksi kosong
+            if (empty($classroomIds)) {
+                $courses = collect();
+                return view('courses.index', compact('courses'));
+            }
+
+            $query->whereIn('classroom_id', $classroomIds);
         }
+
+        // --- FILTER PENCARIAN & LEVEL (Sudah ada di kode Anda) ---
 
         if ($request->has('search') && $request->search !== '') {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('title', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('slug', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('level', 'like', '%' . $searchTerm . '%');
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%');
             });
         }
 
@@ -35,10 +61,7 @@ class CourseController extends Controller
             $query->where('is_published', $request->published == '1' ? 1 : 0);
         }
 
-        // BAGIAN FILTER PRICE DIHAPUS DI SINI
-        // Agar tidak ada error jika user iseng mengirim parameter price
-
-        $courses = $query->paginate(12)->appends($request->query());
+        $courses = $query->latest()->paginate(12)->appends($request->query());
 
         return view('courses.index', compact('courses'));
     }
@@ -104,21 +127,33 @@ class CourseController extends Controller
 
     public function show(Course $course, $slug = null)
     {
+        $user = Auth::user();
+
+        // --- PROTEKSI AKSES (Agar tidak bisa nembak ID lewat URL) ---
+        if ($user->hasRole('student')) {
+            $myClassrooms = $user->classrooms()->pluck('classrooms.id')->toArray();
+            if (!in_array($course->classroom_id, $myClassrooms)) {
+                abort(403, 'Anda tidak terdaftar di kelas untuk modul ini.');
+            }
+        } 
+        elseif ($user->hasRole('instructor') && !$user->hasRole('admin')) {
+            // Pastikan instruktur memang mengajar di kelas tersebut
+            $isInstructorInClass = Course::where('classroom_id', $course->classroom_id)
+                                         ->where('instructor_id', $user->id)
+                                         ->exists();
+            if (!$isInstructorInClass) {
+                abort(403, 'Anda tidak memiliki akses ke kelas ini.');
+            }
+        }
+
         if ($slug && $slug !== $course->slug) {
             return redirect()->route('courses.show', ['course' => $course->id, 'slug' => $course->slug]);
         }
         
         $course->load(['modules.lessons', 'modules.lessons.quiz', 'enrollments', 'instructor']);
         
-        $isEnrolled = false;
-        $enrollment = null;
-        
-        if (auth()->check()) {
-            $enrollment = auth()->user()->enrollments()
-                ->where('course_id', $course->id)
-                ->first();
-            $isEnrolled = $enrollment !== null;
-        }
+        $isEnrolled = $user->enrollments()->where('course_id', $course->id)->exists();
+        $enrollment = $user->enrollments()->where('course_id', $course->id)->first();
         
         return view('courses.show', compact('course', 'isEnrolled', 'enrollment'));
     }
@@ -144,6 +179,7 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'level' => 'required|in:beginner,intermediate,advanced',
+            'classroom_id' => 'required|exists:classrooms,id',
             'duration_hours' => 'required|integer|min:0',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'instructor_id' => 'nullable|exists:users,id',

@@ -9,6 +9,7 @@ use App\Models\QuizAttempt;
 use App\Models\Module;
 use App\Models\Quiz;
 use App\Models\User;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,110 +22,107 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
-        // Get enrolled courses
-        $enrolledCourses = $user->courses()
+        // 1. Ambil semua ID kelas yang di-assign ke student
+        $classroomIds = $user->classrooms()->pluck('classrooms.id');
+        
+        // 2. Ambil course/modules HANYA yang ada di dalam kelas-kelas tersebut
+        $enrolledCourses = Course::whereIn('classroom_id', $classroomIds)
             ->with(['modules.lessons'])
             ->get();
 
-        // Get recent lesson progress
+        // Simpan ID semua course yang relevan untuk filter query selanjutnya
+        $courseIds = $enrolledCourses->pluck('id');
+
+        // 3. Ambil progress pelajaran TERBARU (Hanya dari course kelas yang di-assign)
         $recentProgress = $user->lessonProgress()
+            ->whereHas('lesson.module.course', function($q) use ($classroomIds) {
+                $q->whereIn('classroom_id', $classroomIds);
+            })
             ->with('lesson.module.course')
             ->orderBy('updated_at', 'desc')
             ->limit(5)
             ->get();
 
-        // Get quiz attempts
+        // 4. Ambil history kuis TERBARU (Hanya dari kuis milik course kelas yang di-assign)
         $recentQuizAttempts = $user->quizAttempts()
+            ->whereHas('quiz.lesson.module', function($q) use ($courseIds) {
+                $q->whereIn('course_id', $courseIds);
+            })
             ->with('quiz.lesson.module.course')
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
 
-        // Calculate statistics
+        // --- KALKULASI STATISTIK (DIBATASI KELAS) ---
+
         $totalEnrolledCourses = $enrolledCourses->count();
-        $completedCourses = $user->enrollments()->whereNotNull('completed_at')->count();
-        $activeCourses = $user->enrollments()->whereNull('completed_at')->count();
+        
+        // Statistik enrollment dibatasi hanya course yang ada di kelas student
+        $completedCourses = $user->enrollments()
+            ->whereIn('course_id', $courseIds)
+            ->whereNotNull('completed_at')
+            ->count();
+
+        $activeCourses = $user->enrollments()
+            ->whereIn('course_id', $courseIds)
+            ->whereNull('completed_at')
+            ->count();
+
+        // Total semua lesson yang ada di kelas student
         $totalLessons = $enrolledCourses->sum(function($course) {
-            return $course->modules->sum(function($module) {
-                return $module->lessons->count();
-            });
+            return $course->modules->sum(fn($module) => $module->lessons->count());
         });
         
-        $completedLessons = 0;
-        foreach ($enrolledCourses as $course) {
-            foreach ($course->modules as $module) {
-                foreach ($module->lessons as $lesson) {
-                    $progress = $user->lessonProgress()
-                        ->where('lesson_id', $lesson->id)
-                        ->where('is_completed', true)
-                        ->first();
-                    if ($progress) {
-                        $completedLessons++;
-                    }
-                }
-            }
-        }
+        // Hitung lesson yang sudah selesai (Dibatasi lesson di dalam kelas student)
+        $completedLessonsCount = $user->lessonProgress()
+            ->where('is_completed', true)
+            ->whereHas('lesson.module', function($q) use ($courseIds) {
+                $q->whereIn('course_id', $courseIds);
+            })->count();
 
-        $overallProgress = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100, 2) : 0;
-        $completedLessonsCount = $user->lessonProgress()->where('is_completed', true)->count();
-        $inProgressLessons = $user->lessonProgress()->where('is_completed', false)->count();
+        $overallProgress = $totalLessons > 0 ? round(($completedLessonsCount / $totalLessons) * 100, 2) : 0;
         
-        // Quiz statistics
-        $totalQuizAttempts = $user->quizAttempts()->count();
+        // --- STATISTIK KUIS (DIBATASI KELAS) ---
         
-        // Calculate passed/failed quizzes - use is_passed if available, otherwise calculate
-        $submittedAttempts = $user->quizAttempts()->where('submitted', true)->with('quiz')->get();
+        $submittedAttempts = $user->quizAttempts()
+            ->where('submitted', true)
+            ->whereHas('quiz.lesson.module', function($q) use ($courseIds) {
+                $q->whereIn('course_id', $courseIds);
+            })
+            ->with('quiz')
+            ->get();
         
+        $totalQuizAttempts = $submittedAttempts->count();
         $passedQuizzes = 0;
         $failedQuizzes = 0;
+        $totalScorePercentage = 0;
         
         foreach ($submittedAttempts as $attempt) {
+            $totalScorePercentage += $attempt->score_percentage ?? 0;
+            
+            // Cek kelulusan
             if (isset($attempt->is_passed)) {
-                // Use is_passed column if available
-                if ($attempt->is_passed) {
-                    $passedQuizzes++;
-                } else {
-                    $failedQuizzes++;
-                }
+                $attempt->is_passed ? $passedQuizzes++ : $failedQuizzes++;
             } elseif ($attempt->quiz) {
-                // Fallback: calculate based on percentage
-                $percentage = $attempt->score_percentage;
-                if ($percentage >= $attempt->quiz->passing_score) {
-                    $passedQuizzes++;
-                } else {
-                    $failedQuizzes++;
-                }
+                $percentage = $attempt->score_percentage ?? 0;
+                $percentage >= ($attempt->quiz->passing_score ?? 70) ? $passedQuizzes++ : $failedQuizzes++;
             }
         }
         
-        // Calculate average score
-        $averageScore = 0;
-        if ($submittedAttempts->count() > 0) {
-            $totalPercentage = $submittedAttempts->sum(function($attempt) {
-                return $attempt->score_percentage ?? 0;
-            });
-            $averageScore = $totalPercentage / $submittedAttempts->count();
-        }
+        $averageScore = $totalQuizAttempts > 0 ? $totalScorePercentage / $totalQuizAttempts : 0;
         
-        // Progress by course for chart
+        // --- DATA CHART ---
+
+        // Progress per course
         $courseProgress = $enrolledCourses->map(function($course) use ($user) {
-            $totalCourseLessons = $course->modules->sum(function($module) {
-                return $module->lessons->count();
-            });
+            $lessonsInCourse = $course->modules->flatMap(fn($m) => $m->lessons);
+            $totalCourseLessons = $lessonsInCourse->count();
             
-            $completedCourseLessons = 0;
-            foreach ($course->modules as $module) {
-                foreach ($module->lessons as $lesson) {
-                    $progress = $user->lessonProgress()
-                        ->where('lesson_id', $lesson->id)
-                        ->where('is_completed', true)
-                        ->first();
-                    if ($progress) {
-                        $completedCourseLessons++;
-                    }
-                }
-            }
-            
+            $completedCourseLessons = $user->lessonProgress()
+                ->whereIn('lesson_id', $lessonsInCourse->pluck('id'))
+                ->where('is_completed', true)
+                ->count();
+                
             return [
                 'course' => $course->title,
                 'progress' => $totalCourseLessons > 0 ? round(($completedCourseLessons / $totalCourseLessons) * 100, 1) : 0,
@@ -133,13 +131,14 @@ class DashboardController extends Controller
             ];
         })->values();
 
-        // Weekly progress data for chart
+        // Weekly progress (tetap global atau bisa difilter ke kelas juga)
         $weeklyProgress = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
             $completedOnDate = $user->lessonProgress()
                 ->where('is_completed', true)
                 ->whereDate('updated_at', $date->toDateString())
+                ->whereHas('lesson.module', fn($q) => $q->whereIn('course_id', $courseIds))
                 ->count();
             $weeklyProgress[] = [
                 'date' => $date->format('D'),
@@ -147,38 +146,11 @@ class DashboardController extends Controller
             ];
         }
 
-        // Quiz performance over time
-        $quizPerformance = $user->quizAttempts()
-            ->where('submitted', true)
-            ->orderBy('completed_at', 'asc')
-            ->get()
-            ->map(function($attempt) {
-                return [
-                    'score' => $attempt->score_percentage ?? 0,
-                    'date' => $attempt->completed_at ? $attempt->completed_at->format('M d') : 'N/A',
-                ];
-            })
-            ->take(10)
-            ->values();
-
         return view('dashboard.student', compact(
-            'enrolledCourses',
-            'recentProgress',
-            'recentQuizAttempts',
-            'overallProgress',
-            'totalEnrolledCourses',
-            'completedCourses',
-            'activeCourses',
-            'totalLessons',
-            'completedLessonsCount',
-            'inProgressLessons',
-            'totalQuizAttempts',
-            'passedQuizzes',
-            'failedQuizzes',
-            'averageScore',
-            'courseProgress',
-            'weeklyProgress',
-            'quizPerformance'
+            'enrolledCourses', 'recentProgress', 'recentQuizAttempts', 'overallProgress',
+            'totalEnrolledCourses', 'completedCourses', 'activeCourses', 'totalLessons',
+            'completedLessonsCount', 'totalQuizAttempts', 'passedQuizzes', 'failedQuizzes',
+            'averageScore', 'courseProgress', 'weeklyProgress'
         ));
     }
 
@@ -189,11 +161,11 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
-        // Get course statistics for instructor's courses only
-        $query = Course::query();
-        if ($user->hasRole('instructor') && !$user->hasRole('admin')) {
-            $query->where('instructor_id', $user->id);
-        }
+        $classroomIds = Course::where('instructor_id', $user->id)
+        ->pluck('classroom_id')
+        ->unique();
+        
+        $query = Course::where('instructor_id', $user->id);
         
         $totalCourses = $query->count();
         $publishedCourses = $query->where('is_published', true)->count();
@@ -211,12 +183,12 @@ class DashboardController extends Controller
             $q->whereIn('course_id', $courseIds);
         })->count();
         
-        $totalStudents = User::whereHas('roles', function($query) {
-            $query->where('name', 'student');
+        $totalStudents = User::whereHas('classrooms', function($q) use ($classroomIds) {
+            $q->whereIn('classrooms.id', $classroomIds);
         })->count();
 
-        // Get recent courses
-        $recentCourses = Course::with('modules.lessons')
+        $recentCourses = Course::where('instructor_id', $user->id)
+            ->with('modules.lessons')
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();

@@ -66,12 +66,21 @@
                             </div>
                             
                             <div class="form-group">
-                                <label>Pilih Kelas</label>
-                                <select name="classroom_id" class="form-control">
-                                    @foreach($classrooms as $class)
-                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                <label for="classroom_id" class="form-label">Pilih Kelas <span class="text-danger">*</span></label>
+                                <select class="form-control @error('classroom_id') is-invalid @enderror" 
+                                        id="classroom_id" name="classroom_id" required>
+                                    <option value="">Select Classroom</option>
+                                    @foreach($classrooms ?? [] as $class)
+                                        <option value="{{ $class->id }}" 
+                                                {{ old('classroom_id', $course->classroom_id ?? '') == $class->id ? 'selected' : '' }}>
+                                            {{ $class->name }}
+                                        </option>
                                     @endforeach
                                 </select>
+                                
+                                @error('classroom_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             
                             <div class="form-group">

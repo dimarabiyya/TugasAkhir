@@ -198,11 +198,11 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center py-4">
-                                    <div class="text-center py-5">
-                                        <i class="icon-note" style="font-size: 64px; color: #ccc;"></i>
-                                        <h4 class="mt-3">No quizzes found</h4>
-                                        <p class="text-muted">
+                                <td class="text-center py-4">
+                                    <div class="text-center py-2">
+                                        <i class="icon-note" style="font-size: 48px; color: #ccc;"></i>
+                                        <h5 class="mt-2">No quizzes found</h5>
+                                        <p class="text-muted mb-0">
                                             @if(request('search') || request('status') || request('lesson_id'))
                                                 Try adjusting your search criteria.
                                             @else
@@ -211,6 +211,13 @@
                                         </p>
                                     </div>
                                 </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -368,13 +375,14 @@
             $('#quizzesTable').DataTable({
                 responsive: {
                     details: {
+                        // Use the first column as the responsive control column (correct selector)
                         type: 'column',
-                        target: 'tr'
+                        target: 0
                     }
                 },
                 pageLength: 10,
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                order: [[0, 'asc']],
+                order: [[1, 'asc']],
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Search quizzes...",
@@ -392,6 +400,13 @@
                 },
                 columnDefs: [
                     {
+                        // Mark first column as control and not orderable
+                        className: 'control',
+                        orderable: false,
+                        targets: 0
+                    },
+                    {
+                        // Actions column should remain non-orderable
                         targets: -1,
                         orderable: false,
                         searchable: false,

@@ -21,6 +21,7 @@ class Course extends Model
         'is_published',
         'duration_hours',
         'instructor_id',
+        'classroom_id',
     ];
 
     protected $casts = [
