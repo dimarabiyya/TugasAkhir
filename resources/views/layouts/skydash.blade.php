@@ -595,24 +595,17 @@
                 </li>
                 
                 @if(auth()->user()->hasRole('admin'))
-                    <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('courses.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
-                            <span class="menu-title">Mata Pelajaran</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs('classrooms.index, classrooms.edit, classrooms.create') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('classrooms.index') }}">
                             <i class="icon-grid menu-icon"></i>
                             <span class="menu-title">Kelas</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('ebooks.index') }}">
-                            <i class="mdi mdi-book menu-icon"></i>
-                            <span class="menu-title">Perpustakaan</span>
+                    <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('courses.index') }}">
+                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <span class="menu-title">Mata Pelajaran</span>
                         </a>
                     </li>
 
@@ -646,10 +639,25 @@
                             <span class="menu-title">Kuis</span>
                         </a>
                     </li>
+
+                    <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('ebooks.index') }}">
+                            <i class="mdi mdi-book menu-icon"></i>
+                            <span class="menu-title">Perpustakaan</span>
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ? 'active' : '' }}" href="{{ route('testimonials.manage') }}">
                             <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
                             <span class="menu-title">Testimonial</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('instructors.index') }}">
+                            <i class="icon-head menu-icon"></i>
+                            <span class="menu-title">Management Guru</span>
                         </a>
                     </li>
                 @endif

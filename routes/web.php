@@ -13,6 +13,7 @@ use App\Http\Controllers\QuizTakingController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EbookController;
 use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\InstructorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -205,4 +206,10 @@ Route::middleware(['auth', 'role:instructor'])->group(function () {
     Route::get('/my-classes', [ClassroomController::class, 'myClasses'])->name('instructor.classes');
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Management Guru khusus Admin
+    Route::middleware(['role:admin'])->group(function () {
+        Route::resource('instructors', InstructorController::class);
+    });
+});
 require __DIR__.'/auth.php';
