@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Smart Edu - Learning Management System. Transform your learning experience with our comprehensive educational platform designed for modern learners.">
+    <meta name="description" content="Learning Management System SMKN 40 - Transform your learning experience with our comprehensive educational platform designed for modern learners.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>Smart Edu - Learning Management System</title>
+    <title>Learning Management System SMKN 40</title>
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('css/landing/bootstrap4/bootstrap.min.css') }}">
@@ -22,6 +22,7 @@
     <!-- Main Styles -->
     <link rel="stylesheet" href="{{ asset('css/landing/main_styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/landing/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/landing/colors-override.css') }}">
     
     @stack('styles')
     
@@ -62,11 +63,11 @@
             
             <div class="header_side d-flex flex-row justify-content-center align-items-center">
                 @auth
-                <a href="{{ url('/dashboard') }}" style="padding: 8px 20px; background: #1e40af; color: white; text-decoration: none; border-radius: 4px; font-weight: 500;">Dashboard</a>
+                <a href="{{ url('/dashboard') }}" style="padding: 8px 20px; background: #0066CC; color: white; text-decoration: none; border-radius: 4px; font-weight: 500;">Dashboard</a>
             @else
-                <a href="{{ route('login') }}" style="padding: 8px 20px; background: #1e40af; color: white; text-decoration: none; border-radius: 4px; font-weight: 500;">Login</a>
+                <a href="{{ route('login') }}" style="padding: 8px 20px; background: #0066CC; color: white; text-decoration: none; border-radius: 4px; font-weight: 500;">Login</a>
                 @if (Route::has('register'))
-                    <a href="{{ route('register') }}" style="padding: 8px 20px; background: transparent; color: #1e40af; text-decoration: none; border: 1px solid #1e40af; border-radius: 4px; font-weight: 500; margin-left: 10px;">Register</a>
+                    <a href="{{ route('register') }}" style="padding: 8px 20px; background: transparent; color: #0066CC; text-decoration: none; border: 1px solid #0066CC; border-radius: 4px; font-weight: 500; margin-left: 10px;">Register</a>
                 @endif
             @endauth
             </div>
@@ -109,8 +110,8 @@
                         <div class="col-lg-3 footer_col">
                             <div class="logo_container">
                                 <div class="logo">
-                                    <img src="{{ asset('images/landing/logo.png') }}" alt="Smart Edu Logo">
-                                    <span>Smart Edu</span>
+                                    <img src="{{ asset('images/landing/Logo40.png') }}" alt="Learning Management System SMKN 40 Logo">
+                                    <span>Learning Management System SMKN 40</span>
                                 </div>
                             </div>
                             <p class="footer_about_text">Transform your learning experience with our comprehensive educational platform designed for modern learners. Join thousands of students worldwide.</p>
@@ -177,7 +178,7 @@
                 <!-- Footer Bar -->
                 <div class="footer_bar d-flex flex-column flex-sm-row align-items-center">
                     <div class="footer_copyright">
-                        <span>© {{ date('Y') }} Smart Edu. All rights reserved.</span>
+                        <span>© {{ date('Y') }} Learning Management System SMKN 40. All rights reserved.</span>
                     </div>
                     <div class="footer_social ml-sm-auto">
                         <ul class="menu_social">

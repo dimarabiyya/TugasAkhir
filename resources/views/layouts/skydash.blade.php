@@ -660,9 +660,24 @@
                             <span class="menu-title">Management Guru</span>
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('attendance.index') }}">
+                            <i class="icon-check menu-icon"></i>
+                            <span class="menu-title">Absensi</span>
+                        </a>
+                    </li>
+
+                    
                 @endif
                 
                 @if(auth()->user()->hasRole('instructor'))
+                    <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('ebooks.index') }}">
+                            <i class="mdi mdi-book menu-icon"></i>
+                            <span class="menu-title">Perpustakaan</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('courses.index') }}">
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
@@ -688,6 +703,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('attendance.index') }}">
+                            <i class="icon-head menu-icon"></i>
+                            <span class="menu-title">Absensi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
                             <i class="mdi mdi-help-circle menu-icon"></i>
                             <span class="menu-title">Kuis</span>
@@ -696,10 +717,28 @@
                 @endif
                 
                 @if(auth()->user()->hasRole('student'))
+                    <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('ebooks.index') }}">
+                            <i class="mdi mdi-book menu-icon"></i>
+                            <span class="menu-title">Perpustakaan</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('courses.index') }}">
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
                             <span class="menu-title">Mata Pelajaran</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}" href="{{ route('modules.index') }}">
+                            <i class="mdi mdi-folder menu-icon"></i>
+                            <span class="menu-title">Modul</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" href="{{ route('lessons.index') }}">
+                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <span class="menu-title">Materi</span>
                         </a>
                     </li>
                     <li class="nav-item">

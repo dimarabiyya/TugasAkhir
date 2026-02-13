@@ -14,6 +14,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EbookController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -212,4 +213,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('instructors', InstructorController::class);
     });
 });
+
+Route::middleware(['auth', 'role:admin|instructor'])->group(function () {
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/create', [AttendanceController::class, 'create'])->name('attendance.create');
+    Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/group/{course}/{date}', [AttendanceController::class, 'show'])->name('attendance.show');
+});
+
+Route::middleware(['auth', 'role:instructor'])->group(function () {
+    Route::get('/attendance/{attendance}/edit', [AttendanceController::class, 'edit'])->name('attendance.edit');
+    Route::put('/attendance/{attendance}', [AttendanceController::class, 'update'])->name('attendance.update');
+    Route::post('/attendance/group/update', [AttendanceController::class, 'updateGroup'])->name('attendance.group.update');
+});
+
 require __DIR__.'/auth.php';

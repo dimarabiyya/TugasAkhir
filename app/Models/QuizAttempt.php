@@ -66,6 +66,18 @@ class QuizAttempt extends Model
         return round(($this->score / $this->total_points) * 100, 2);
     }
 
+    // Accessor to ensure answers_review is always array
+    public function getAnswersReviewAttribute($value)
+    {
+        if (is_null($value)) {
+            return [];
+        }
+        if (is_array($value)) {
+            return $value;
+        }
+        return json_decode($value, true) ?? [];
+    }
+
     // Scope for completed attempts
     public function scopeCompleted($query)
     {

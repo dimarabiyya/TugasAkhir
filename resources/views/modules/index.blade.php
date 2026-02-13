@@ -189,7 +189,7 @@
                 <p class="text-muted mb-4">Choose a course to add a new module to:</p>
                 
                 @if($courses->count() > 0)
-                    <div class="row">
+                    <div class="row">s
                         @foreach($courses as $course)
                         <div class="col-md-6 mb-3">
                             <div class="card course-card h-100" style="cursor: pointer;" onclick="selectCourse({{ $course->id }}, '{{ $course->title }}')">

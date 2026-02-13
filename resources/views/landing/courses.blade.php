@@ -151,7 +151,7 @@ use Illuminate\Support\Str;
                             @if($course->instructor)
                                 {{ Str::limit($course->instructor->name, 20) }}, <span>Instructor</span>
                             @else
-                                Smart Edu, <span>Author</span>
+                                Learning Management System SMKN 40, <span>Author</span>
                             @endif
                         </div>
                         <div class="course_price d-flex flex-column align-items-center justify-content-center">
@@ -190,11 +190,11 @@ use Illuminate\Support\Str;
 <style>
     .button_outline {
         background: transparent;
-        border: 2px solid #ffb606;
+        border: 2px solid #0066CC;
         height: 48px;
         padding-left: 38px;
         padding-right: 38px;
-        border-radius: 0px;
+        border-radius: 6px;
         text-align: center;
         cursor: pointer;
         display: inline-block;
@@ -205,7 +205,7 @@ use Illuminate\Support\Str;
     .button_outline span {
         font-size: 14px;
         font-weight: 700;
-        color: #ffb606;
+        color: #0066CC;
         text-transform: uppercase;
         line-height: 48px;
         white-space: nowrap;
@@ -213,7 +213,7 @@ use Illuminate\Support\Str;
     }
     
     .button_outline:hover {
-        background: #ffb606;
+        background: #0066CC;
     }
     
     .button_outline:hover span {
@@ -239,12 +239,12 @@ use Illuminate\Support\Str;
     }
     
     .btn-link {
-        color: #1e40af;
+        color: #0066CC;
         text-decoration: none;
     }
     
     .btn-link:hover {
-        color: #3b82f6;
+        color: #DC143C;
     }
     
     .btn-link i {

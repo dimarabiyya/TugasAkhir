@@ -1,6 +1,13 @@
 @extends('layouts.skydash')
 
 @section('content')
+<!-- Debug Info -->
+<script>
+    console.log('Quiz ID: {{ $quiz->id }}');
+    console.log('Attempt ID: {{ $attempt->id }}');
+    console.log('Form action: {{ route("quiz.taking.submit", ["quiz" => $quiz, "attempt" => $attempt]) }}');
+</script>
+
 <div class="quiz-taking-container">
     <!-- Quiz Header -->
     <div class="row mb-4">
@@ -68,8 +75,9 @@
     @endif
 
     <!-- Quiz Form -->
-    <form id="quiz-form" action="{{ route('quiz.taking.submit', ['quiz' => $quiz, 'attempt' => $attempt]) }}" method="POST">
+    <form id="quiz-form" action="{{ route('quiz.taking.submit', ['quiz' => $quiz, 'attempt' => $attempt]) }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="submitted" value="1">
         
         <div class="questions-container">
             @foreach($questions as $index => $question)
@@ -147,12 +155,10 @@
                                 <span class="text-muted" id="question-counter">Question 1 of {{ $questions->count() }}</span>
                             </div>
                             <div>
-                                @if($questions->count() > 1)
-                                    <button type="button" id="next-btn" class="btn btn-primary">
-                                        Next <i class="icon-arrow-right ml-2"></i>
-                                    </button>
-                                @endif
-                                <button type="button" id="submit-btn" class="btn btn-success ml-2" style="display: none;">
+                                <button type="button" id="next-btn" class="btn btn-primary" {{ $questions->count() <= 1 ? 'style="display: none;"' : '' }}>
+                                    Next <i class="icon-arrow-right ml-2"></i>
+                                </button>
+                                <button type="button" id="submit-btn" class="btn btn-success ml-2" {{ $questions->count() <= 1 ? '' : 'style="display: none;"' }}>
                                     <i class="icon-check mr-2"></i> Submit Quiz
                                 </button>
                             </div>
@@ -330,8 +336,15 @@ if (timeLimit > 0) {
             
             if (timeRemaining <= 0) {
                 clearInterval(timerInterval);
-                alert('Time is up! Submitting quiz...');
-                document.getElementById('quiz-form').submit();
+                console.log('Time is up! Auto-submitting quiz via AJAX...');
+                // Disable form inputs before submit
+                document.getElementById('quiz-form').querySelectorAll('input, button').forEach(el => {
+                    if (el.id !== 'quiz-form') {
+                        el.disabled = true;
+                    }
+                });
+                // Submit via AJAX
+                submitQuizViaAjax();
             }
         }
     }, 1000);
@@ -395,10 +408,12 @@ function updateNavButtons() {
     
     prevBtn.style.display = currentQuestion > 1 ? 'block' : 'none';
     
-    if (currentQuestion < totalQuestions) {
+    // Show next button only if not on last question and there are multiple questions
+    if (currentQuestion < totalQuestions && totalQuestions > 1) {
         nextBtn.style.display = 'block';
         submitBtn.style.display = 'none';
     } else {
+        // Show submit button on last question or if only one question
         nextBtn.style.display = 'none';
         submitBtn.style.display = 'block';
     }
@@ -480,35 +495,48 @@ document.querySelectorAll('.answer-input').forEach(input => {
 });
 
 // Submit button
-document.getElementById('submit-btn')?.addEventListener('click', function() {
-    const answered = document.querySelectorAll('.answer-input:checked').length;
+document.getElementById('submit-btn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    console.log('Submit button clicked');
     
+    const answered = document.querySelectorAll('.answer-input:checked').length;
+    console.log('Answered questions: ' + answered + ' / ' + totalQuestions);
+    
+    let confirmMessage = '';
     if (answered === 0) {
-        if (!confirm('You haven\'t answered any questions. Are you sure you want to submit?')) {
-            return;
-        }
+        confirmMessage = 'You haven\'t answered any questions. Are you sure you want to submit?';
     } else if (answered < totalQuestions) {
-        if (!confirm(`You have answered ${answered} out of ${totalQuestions} questions. Are you sure you want to submit?`)) {
-            return;
-        }
+        confirmMessage = `You have answered ${answered} out of ${totalQuestions} questions. Are you sure you want to submit?`;
     } else {
-        if (!confirm('Are you sure you want to submit your quiz? This action cannot be undone.')) {
-            return;
-        }
+        confirmMessage = 'Are you sure you want to submit your quiz? This action cannot be undone.';
     }
+    
+    if (!confirm(confirmMessage)) {
+        console.log('Submit cancelled by user');
+        return;
+    }
+    
+    console.log('Submitting form...');
     
     // Clear timer
     if (timerInterval) {
         clearInterval(timerInterval);
     }
     
+    // Get form data before disabling
+    const formData = new FormData(document.getElementById('quiz-form'));
+    console.log('Form data keys:', Array.from(formData.keys()));
+    
     // Disable form
-    document.getElementById('quiz-form').querySelectorAll('input, button').forEach(el => {
+    const form = document.getElementById('quiz-form');
+    form.querySelectorAll('input, button').forEach(el => {
         el.disabled = true;
     });
-    
-    // Submit form
-    document.getElementById('quiz-form').submit();
+
+    // Allow page unload (prevent beforeunload prompt) and submit via AJAX helper
+    allowBeforeUnload = true;
+    console.log('Submitting via AJAX helper');
+    submitQuizViaAjax();
 });
 
 // Keyboard shortcuts
@@ -520,8 +548,10 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Prevent accidental page leave
+// Prevent accidental page leave unless allowed (we set allowBeforeUnload=true when submitting)
+let allowBeforeUnload = false;
 window.addEventListener('beforeunload', function(e) {
+    if (allowBeforeUnload) return;
     const answered = document.querySelectorAll('.answer-input:checked').length;
     if (answered > 0) {
         e.preventDefault();
@@ -541,6 +571,58 @@ document.querySelectorAll('.answer-input:checked').forEach(input => {
         navBtn.classList.add('answered');
     }
 });
+
+// Keep session alive - refresh every 1 minute
+setInterval(function() {
+    fetch('{{ route('quiz.taking.progress', ['quiz' => $quiz, 'attempt' => $attempt]) }}')
+        .then(response => response.json())
+        .catch(error => console.log('Session keep-alive request'));
+}, 1 * 60 * 1000);
+
+// Submit quiz via AJAX (used for timer auto-submit and unified submit)
+function submitQuizViaAjax() {
+    // allow unload to avoid beforeunload prompt during intentional submit
+    allowBeforeUnload = true;
+    const form = document.getElementById('quiz-form');
+    const answers = {};
+    document.querySelectorAll('.answer-input').forEach(input => {
+        const qid = input.dataset.questionId;
+        if (!qid) return;
+        if (!answers[qid]) answers[qid] = [];
+        if (input.checked) answers[qid].push(input.value);
+    });
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ answers: answers, submitted: 1 })
+    })
+    .then(async response => {
+        if (response.status === 419) {
+            alert('Session expired. Please reload the page and submit again.');
+            return;
+        }
+        const data = await response.json().catch(() => null);
+        if (data && data.success && data.redirect) {
+            window.location.href = data.redirect;
+        } else if (response.redirected) {
+            window.location.href = response.url;
+        } else {
+            // fallback to normal submit
+            form.submit();
+        }
+    })
+    .catch(error => {
+        console.error('Auto-submit failed:', error);
+        // fallback to normal submit
+        form.submit();
+    });
+}
 </script>
 @endpush
 @endsection

@@ -5,11 +5,13 @@
 <div class="home" id="home">
     @push('styles')
     <style>
-        /* Milestones Styling */
+        /* Enhanced Milestones Styling */
         .milestones {
             width: 100%;
-            background: #1a1a1a;
+            background: linear-gradient(135deg, #2C3E50 0%, #1a1a1a 100%);
             position: relative;
+            padding-top: 100px;
+            padding-bottom: 100px;
         }
         .milestones_background {
             position: absolute;
@@ -20,26 +22,39 @@
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center center;
-            opacity: 0.27;
+            opacity: 0.15;
         }
         .milestone_col {
-            padding-top: 80px;
-            padding-bottom: 80px;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            text-align: center;
         }
         .milestone {
             position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #FFD700;
+        }
+        .milestone:hover {
+            background: rgba(220, 20, 60, 0.1);
+            transform: translateY(-5px);
         }
         .milestone_icon {
             margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
         }
         .milestone_icon img {
             width: 60px;
             height: auto;
+            filter: brightness(0) invert(1);
         }
         .milestone_counter {
             font-size: 36px;
             font-weight: 700;
-            color: #ffb606;
+            color: #FFD700;
             line-height: 1;
             margin-bottom: 10px;
         }
@@ -51,7 +66,7 @@
             letter-spacing: 0.5px;
         }
         
-        /* Fix testimonials styling - no parallax */
+        /* Enhanced testimonials styling */
         .testimonials_background {
             position: absolute;
             top: 0;
@@ -61,7 +76,7 @@
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center center;
-            opacity: 0.27;
+            opacity: 0.15;
         }
         .testimonials_background_container {
             position: absolute;
@@ -74,7 +89,7 @@
         .testimonials {
             position: relative;
             width: 100%;
-            background: #1a1a1a;
+            background: linear-gradient(135deg, #2C3E50 0%, #1a1a1a 100%);
             padding-top: 100px;
             padding-bottom: 100px;
         }
@@ -87,45 +102,56 @@
         }
         
         .section_title h1 {
-            color: #1e40af;
+            color: #DC143C;
             font-size: 2.5rem;
             margin-bottom: 2rem;
+            font-weight: 600;
         }
-        /* Hero boxes styling - text white */
+        /* Hero boxes styling - text white with red accent */
         .hero_box_title {
             color: #FFFFFF !important;
+            font-weight: 600;
         }
         .hero_box_link {
-            color: #FFFFFF !important;
+            color: #FFD700 !important;
             opacity: 0.9;
+            font-weight: 600;
+        }
         }
         .hero_box_link:hover {
-            color: #ffb606 !important;
+            color: #FFB606 !important;
             opacity: 1;
+            text-decoration: underline;
         }
         .card-title a {
-            color: #1e40af;
+            color: #DC143C;
             font-weight: 600;
             text-decoration: none;
         }
         .card-title a:hover {
-            color: #3b82f6;
+            color: #0066CC;
         }
         .register_title span {
-            color: #ffb606;
+            color: #FFD700;
             font-weight: 700;
         }
         
-        /* Button Styling from original template */
+        /* Button Styling - Updated Colors */
         .button
         {
             height: 48px;
             padding-left: 38px;
             padding-right: 38px;
-            background: #ffb606;
-            border-radius: 0px;
+            background: #0066CC;
+            border-radius: 6px;
             text-align: center;
             cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            background: #0052A3;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4);
         }
         .button a
         {
@@ -141,35 +167,26 @@
             -o-transition: all 200ms ease;
             transition: all 200ms ease;
         }
-        .button:hover
-        {
-            box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
-            -webkit-transform: translateY(-3px);
-            -moz-transform: translateY(-3px);
-            -ms-transform: translateY(-3px);
-            -o-transform: translateY(-3px);
-            transform: translateY(-3px);
-        }
         .button_1
         {
-            background: #ffb606;
+            background: #0066CC;
         }
         .button_1:hover
         {
-            background: #e6a505;
+            background: #0052A3;
         }
         
-        /* Register button white with gold text */
+        /* Register button white with blue text */
         .register_button.button_1 {
             background: #FFFFFF;
-            border: 2px solid #ffb606;
+            border: 2px solid #0066CC;
         }
         .register_button.button_1 a {
-            color: #ffb606;
+            color: #0066CC;
             font-weight: 700;
         }
         .register_button.button_1:hover {
-            background: #ffb606;
+            background: #0066CC;
         }
         .register_button.button_1:hover a {
             color: #FFFFFF;
@@ -213,7 +230,7 @@
                 <div class="hero_slide_container d-flex flex-column align-items-center justify-content-center">
                     <div class="hero_slide_content text-center">
                         <h1 data-animation-in="fadeInUp" data-animation-out="animate-out fadeOut">
-                            Learn with <span>Smart Edu</span> LMS
+                            Learn with <span>Learning Management System SMKN 40</span>
                         </h1>
                     </div>
                 </div>
@@ -287,7 +304,7 @@
                 <div class="register_section d-flex flex-column align-items-center justify-content-center">
                     <div class="register_content text-center">
                         <h1 class="register_title">Start learning today! Get <span>30%</span> discount</h1>
-                        <p class="register_text">Join thousands of students and start your learning journey with Smart Edu. Transform your skills and advance your career with our comprehensive courses.</p>
+                        <p class="register_text">Join thousands of students and start your learning journey with Learning Management System SMKN 40. Transform your skills and advance your career with our comprehensive courses.</p>
                         <div class="button button_1 register_button mx-auto trans_200">
                     @auth
                                 <a href="{{ url('/dashboard') }}">Go to Dashboard</a>
@@ -442,7 +459,7 @@
                         <div class="owl-item">
                             <div class="testimonials_item text-center">
                                 <div class="quote">"</div>
-                                <p class="testimonials_text">Smart Edu has completely transformed my learning experience. The courses are well-structured, the instructors are knowledgeable, and the platform is user-friendly. I've gained valuable skills that have advanced my career significantly.</p>
+                                <p class="testimonials_text">Learning Management System SMKN 40 has completely transformed my learning experience. The courses are well-structured, the instructors are knowledgeable, and the platform is user-friendly. I've gained valuable skills that have advanced my career significantly.</p>
                                 <div class="testimonial_user">
                                     <div class="testimonial_image mx-auto">
                                         <img src="{{ asset('images/landing/testimonials_user.jpg') }}" alt="">

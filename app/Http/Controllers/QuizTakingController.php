@@ -132,7 +132,6 @@ class QuizTakingController extends Controller
             // Create new user answers
             foreach ($validated['answer_ids'] as $answerId) {
                 UserAnswer::create([
-                    'user_id' => Auth::id(),
                     'quiz_attempt_id' => $attempt->id,
                     'quiz_question_id' => $validated['question_id'],
                     'quiz_answer_id' => $answerId,
@@ -144,7 +143,8 @@ class QuizTakingController extends Controller
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => 'Failed to save answer']);
+            \Log::error('Failed to save answer: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to save answer: ' . $e->getMessage()]);
         }
     }
 
@@ -153,18 +153,57 @@ class QuizTakingController extends Controller
      */
     public function submit(Request $request, Quiz $quiz, QuizAttempt $attempt)
     {
-        if ($attempt->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized');
-        }
-
-        if ($attempt->submitted) {
-            return redirect()->route('quiz.taking.result', ['quiz' => $quiz, 'attempt' => $attempt]);
-        }
-
-        DB::beginTransaction();
+        \Log::info('===== QUIZ SUBMISSION STARTED =====');
+        \Log::info('Request method: ' . $request->method());
+        \Log::info('Quiz ID: ' . $quiz->id);
+        \Log::info('Attempt ID: ' . $attempt->id);
+        \Log::info('User ID: ' . Auth::id());
+        \Log::info('Request data: ' . json_encode($request->all()));
+        
         try {
+            if ($attempt->user_id !== Auth::id()) {
+                abort(403, 'Unauthorized');
+            }
+
+            // Refresh attempt from database
+            $attempt = QuizAttempt::find($attempt->id);
+            
+            if ($attempt->submitted) {
+                return redirect()->route('quiz.taking.result', ['quiz' => $quiz, 'attempt' => $attempt]);
+            }
+
+            DB::beginTransaction();
+
+            // First, save any remaining answers from form submission
+            $answers = $request->input('answers', []);
+            \Log::info('Submitting quiz answers for attempt ' . $attempt->id);
+            
+            if (!empty($answers)) {
+                foreach ($answers as $questionId => $answerIds) {
+                    if (is_array($answerIds)) {
+                        // Delete existing answers for this question
+                        UserAnswer::where('quiz_attempt_id', $attempt->id)
+                            ->where('quiz_question_id', $questionId)
+                            ->delete();
+
+                        // Create new user answers
+                        foreach ($answerIds as $answerId) {
+                            if (!empty($answerId)) {
+                                UserAnswer::create([
+                                    'quiz_attempt_id' => $attempt->id,
+                                    'quiz_question_id' => $questionId,
+                                    'quiz_answer_id' => $answerId,
+                                    'is_correct' => false,
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+
             // Calculate score
             $score = $this->calculateScore($attempt, $quiz);
+            \Log::info('Quiz score calculated: score=' . $score['score'] . ', total=' . $score['total_points']);
             
             $attempt->update([
                 'score' => $score['score'],
@@ -174,14 +213,31 @@ class QuizTakingController extends Controller
                 'unanswered_questions' => $score['unanswered'],
                 'submitted' => true,
                 'completed_at' => now(),
-                'answers_review' => $score['review'],
+                'answers_review' => json_encode($score['review']),
             ]);
 
             // Mark as passed
             $attempt->markAsPassed();
             $attempt->save();
+            
+            \Log::info('Quiz attempt submitted successfully: attempt_id=' . $attempt->id . ', score=' . $attempt->score . ', passed=' . $attempt->is_passed);
 
             DB::commit();
+
+            // Refresh attempt to get latest data
+            $attempt->refresh();
+            
+            \Log::info('Redirecting to result page: route=quiz.taking.result');
+
+            $resultUrl = route('quiz.taking.result', ['quiz' => $quiz, 'attempt' => $attempt]);
+
+            if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+                return response()->json([
+                    'success' => true,
+                    'redirect' => $resultUrl,
+                    'score' => $attempt->score,
+                ]);
+            }
 
             if ($quiz->show_results_immediately) {
                 return redirect()->route('quiz.taking.result', ['quiz' => $quiz, 'attempt' => $attempt]);
@@ -191,7 +247,8 @@ class QuizTakingController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withErrors(['error' => 'Failed to submit quiz.']);
+            \Log::error('Quiz submission error: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withErrors(['error' => 'Failed to submit quiz: ' . $e->getMessage()]);
         }
     }
 

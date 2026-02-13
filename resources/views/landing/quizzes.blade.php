@@ -149,7 +149,7 @@ use Carbon\Carbon;
                                         @if(optional($quiz->lesson)->module->course)
                                             <a href="#">{{ $quiz->lesson->module->course->title }}</a>
                                         @else
-                                            <a href="#">Smart Edu</a>
+                                            <a href="#">Learning Management System SMKN 40</a>
                                         @endif
                                     </span>
                                     <span>|</span>
@@ -273,7 +273,7 @@ use Carbon\Carbon;
                                         @if(optional($latestQuiz->lesson)->module->course)
                                             <a href="#">{{ $latestQuiz->lesson->module->course->title }}</a>
                                         @else
-                                            <a href="#">Smart Edu</a>
+                                            <a href="#">Learning Management System SMKN 40</a>
                                         @endif
                                     </span>
                                     <span>|</span>
@@ -322,11 +322,11 @@ use Carbon\Carbon;
 <style>
     .button_outline {
         background: transparent;
-        border: 2px solid #ffb606;
+        border: 2px solid #0066CC;
         height: 48px;
         padding-left: 38px;
         padding-right: 38px;
-        border-radius: 0px;
+        border-radius: 6px;
         text-align: center;
         cursor: pointer;
         display: inline-block;
@@ -337,7 +337,7 @@ use Carbon\Carbon;
     .button_outline span {
         font-size: 14px;
         font-weight: 700;
-        color: #ffb606;
+        color: #0066CC;
         text-transform: uppercase;
         line-height: 48px;
         white-space: nowrap;
@@ -345,7 +345,7 @@ use Carbon\Carbon;
     }
     
     .button_outline:hover {
-        background: #ffb606;
+        background: #0066CC;
     }
     
     .button_outline:hover span {
@@ -385,15 +385,16 @@ use Carbon\Carbon;
         height: 50px;
         line-height: 50px;
         text-align: center;
-        color: #1e40af;
+        color: #0066CC;
         text-decoration: none;
-        border: 1px solid #1e40af;
+        border: 1px solid #0066CC;
         transition: all 0.3s ease;
+        border-radius: 4px;
     }
     
     .news_page_nav ul li.active a,
     .news_page_nav ul li:hover a {
-        background-color: #1e40af;
+        background-color: #0066CC;
         color: white;
     }
     

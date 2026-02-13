@@ -53,7 +53,7 @@ class QuizQuestionController extends Controller
     {
         $this->checkManagePermission();
         $validated = $request->validate([
-            'question_text' => 'required|string',
+            'question' => 'required|string',
             'type' => 'required|in:multiple_choice,true_false,fill_blank',
             'points' => 'required|integer|min:1',
             'explanation' => 'nullable|string',
@@ -68,7 +68,7 @@ class QuizQuestionController extends Controller
         try {
             // Create the question
             $question = $quiz->questions()->create([
-                'question_text' => $validated['question_text'],
+                'question' => $validated['question'],
                 'type' => $validated['type'],
                 'points' => $validated['points'],
                 'explanation' => $validated['explanation'] ?? null,
@@ -117,7 +117,7 @@ class QuizQuestionController extends Controller
     {
         $this->checkManagePermission();
         $validated = $request->validate([
-            'question_text' => 'required|string',
+            'question' => 'required|string',
             'type' => 'required|in:multiple_choice,true_false,fill_blank',
             'points' => 'required|integer|min:1',
             'explanation' => 'nullable|string',
@@ -132,7 +132,7 @@ class QuizQuestionController extends Controller
         try {
             // Update the question
             $question->update([
-                'question_text' => $validated['question_text'],
+                'question' => $validated['question'],
                 'type' => $validated['type'],
                 'points' => $validated['points'],
                 'explanation' => $validated['explanation'] ?? null,

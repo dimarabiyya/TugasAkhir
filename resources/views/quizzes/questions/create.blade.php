@@ -27,11 +27,11 @@
                     @csrf
                     
                     <div class="form-group">
-                        <label for="question_text" class="form-label">Question Text <span class="text-danger">*</span></label>
-                        <textarea class="form-control @error('question_text') is-invalid @enderror" 
-                                  id="question_text" name="question_text" rows="3" required
-                                  placeholder="Enter the question...">{{ old('question_text') }}</textarea>
-                        @error('question_text')
+                        <label for="question" class="form-label">Question Text <span class="text-danger">*</span></label>
+                        <textarea class="form-control @error('question') is-invalid @enderror" 
+                                  id="question" name="question" rows="3" required
+                                  placeholder="Enter the question...">{{ old('question') }}</textarea>
+                        @error('question')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -108,6 +108,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-check">
+                                            <input type="hidden" name="answers[0][is_correct]" value="0">
                                             <input class="form-check-input" type="checkbox" name="answers[0][is_correct]" 
                                                    value="1" id="correct_0">
                                             <label class="form-check-label" for="correct_0">
@@ -133,6 +134,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-check">
+                                            <input type="hidden" name="answers[1][is_correct]" value="0">
                                             <input class="form-check-input" type="checkbox" name="answers[1][is_correct]" 
                                                    value="1" id="correct_1">
                                             <label class="form-check-label" for="correct_1">
@@ -199,6 +201,7 @@ document.getElementById('add-answer').addEventListener('click', function() {
                 </div>
                 <div class="col-md-3">
                     <div class="form-check">
+                        <input type="hidden" name="answers[${answerIndex}][is_correct]" value="0">
                         <input class="form-check-input" type="checkbox" name="answers[${answerIndex}][is_correct]" 
                                value="1" id="correct_${answerIndex}">
                         <label class="form-check-label" for="correct_${answerIndex}">

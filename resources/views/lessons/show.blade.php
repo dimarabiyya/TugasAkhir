@@ -2,10 +2,9 @@
 
 @section('content')
 <!-- Header Section -->
-<div class="row">
-    <div class="col-md-12 grid-margin">
-        <div class="row">
-            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+<div class="col-md-12 grid-margin">
+    <div class="row">
+        <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
                         <h3 class="font-weight-bold mb-2">{{ $lesson->title }}</h3>
@@ -46,10 +45,10 @@
     </div>
 </div>
 
+<!-- Main Content and Sidebar -->
 <div class="row">
-    <!-- Main Content -->
-    <div class="col-md-8 grid-margin stretch-card">
-        
+    <!-- Main Content Col -->
+    <div class="col-md-8 grid-margin">
         <!-- Lesson Information Card -->
         <div class="card">
             <div class="card-body">

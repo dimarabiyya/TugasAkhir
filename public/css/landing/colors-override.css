@@ -1,0 +1,399 @@
+/* Color Scheme Override for SMKN 40 LMS
+   Primary White: #FFFFFF
+   Primary Red: #DC143C (Crimson)
+   Secondary Yellow: #FFD700 (Gold)
+   Button Blue: #0066CC
+*/
+
+/* Override CSS Variables */
+:root {
+    --primary-white: #FFFFFF;
+    --primary-red: #DC143C;
+    --secondary-yellow: #FFD700;
+    --button-blue: #0066CC;
+    --text-dark: #2C3E50;
+    --text-light: #6C757D;
+    --bg-light: #F5F7FA;
+}
+
+/* Header Styles */
+.header {
+    background: var(--primary-white) !important;
+    box-shadow: 0 4px 12px rgba(220, 20, 60, 0.1);
+}
+
+.header_side {
+    background: var(--primary-red) !important;
+}
+
+.main_nav_item a:hover {
+    color: var(--primary-red) !important;
+}
+
+.hamburger_container:hover i {
+    color: var(--primary-red) !important;
+}
+
+.menu_item a:hover {
+    color: var(--primary-red) !important;
+}
+
+.menu_close_container:hover .menu_close,
+.menu_close_container:hover .menu_close::after {
+    background: var(--primary-red) !important;
+}
+
+/* Hero Slider */
+.hero_slide_content h1 span {
+    background: var(--secondary-yellow) !important;
+    color: #000000;
+}
+
+.hero_slider_nav {
+    background: var(--primary-white) !important;
+    border: 2px solid var(--primary-red);
+}
+
+.hero_slider_nav:hover {
+    background: var(--primary-red) !important;
+}
+
+.hero_slider_nav:hover span {
+    color: var(--primary-white) !important;
+}
+
+.hero_slider_nav span {
+    color: var(--primary-red) !important;
+}
+
+/* Hero Boxes */
+.hero_box {
+    background: var(--text-dark) !important;
+    border-top: 4px solid var(--primary-red);
+}
+
+.hero_box:hover {
+    background: var(--primary-red) !important;
+}
+
+.svg path {
+    fill: var(--secondary-yellow) !important;
+}
+
+.hero_box:hover svg path {
+    fill: var(--primary-white) !important;
+}
+
+/* Buttons */
+.button_1 {
+    background: var(--button-blue) !important;
+    color: var(--primary-white) !important;
+}
+
+.button_1:hover {
+    background: #0052A3 !important;
+    box-shadow: 0 8px 16px rgba(0, 102, 204, 0.3);
+}
+
+.button_1 a {
+    color: var(--primary-white) !important;
+}
+
+.register_button.button_1 {
+    background: var(--primary-white) !important;
+    border: 2px solid var(--button-blue) !important;
+}
+
+.register_button.button_1 a {
+    color: var(--button-blue) !important;
+}
+
+.register_button.button_1:hover {
+    background: var(--button-blue) !important;
+}
+
+.register_button.button_1:hover a {
+    color: var(--primary-white) !important;
+}
+
+/* Register Section */
+.register_section {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #B81030 100%) !important;
+}
+
+.register_title span {
+    color: var(--secondary-yellow) !important;
+}
+
+.register_button {
+    background: var(--button-blue) !important;
+}
+
+/* Search */
+.input_field:focus {
+    border: solid 2px var(--primary-red) !important;
+}
+
+.search_submit_button {
+    background: var(--button-blue) !important;
+}
+
+/* Section Title */
+.section_title h1::before {
+    background: var(--primary-red) !important;
+}
+
+.section_title h1 {
+    color: var(--text-dark) !important;
+}
+
+/* Cards */
+.card {
+    background: var(--bg-light) !important;
+    border: 1px solid #E8EEF5 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(220, 20, 60, 0.15);
+}
+
+.card-title a {
+    color: var(--primary-red) !important;
+    font-weight: 600;
+}
+
+.card-title a:hover {
+    color: var(--button-blue) !important;
+}
+
+.course_price {
+    background: var(--secondary-yellow) !important;
+}
+
+.course_price span {
+    color: #000000 !important;
+    font-weight: 600;
+}
+
+/* Testimonials */
+.testimonials {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2C3E50 100%) !important;
+}
+
+.quote {
+    color: var(--secondary-yellow) !important;
+}
+
+.testimonial_name {
+    color: var(--primary-red) !important;
+}
+
+.testimonials_slider .owl-dot.active span {
+    background: var(--secondary-yellow) !important;
+}
+
+.testimonials_slider .owl-dot span {
+    border-color: var(--secondary-yellow) !important;
+}
+
+/* Events */
+.event_date {
+    border-color: var(--primary-red) !important;
+}
+
+.event_day,
+.event_month {
+    color: var(--primary-red) !important;
+}
+
+.event_name a:hover {
+    color: var(--primary-red) !important;
+}
+
+/* Footer */
+.footer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2C3E50 100%) !important;
+}
+
+.footer_list_item a:hover {
+    color: var(--secondary-yellow) !important;
+}
+
+.footer_social .menu_social_item a i:hover {
+    color: var(--secondary-yellow) !important;
+}
+
+.newsletter_email:focus {
+    outline: solid 2px var(--primary-red) !important;
+}
+
+.newsletter_submit_btn {
+    background: var(--button-blue) !important;
+}
+
+.newsletter_submit_btn:hover {
+    background: #0052A3 !important;
+}
+
+/* Links */
+p a:active {
+    color: var(--primary-red) !important;
+}
+
+p a:hover {
+    background: var(--secondary-yellow) !important;
+    color: #000000 !important;
+}
+
+/* Selection */
+::selection {
+    background: var(--primary-red) !important;
+    color: var(--primary-white) !important;
+}
+
+p::selection {
+    background: var(--primary-red) !important;
+    color: var(--primary-white) !important;
+}
+
+/* Badge Colors */
+.badge-primary {
+    background-color: var(--button-blue) !important;
+}
+
+.badge-success {
+    background-color: #28A745 !important;
+}
+
+.badge-info {
+    background-color: #17A2B8 !important;
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: var(--button-blue) !important;
+    border-color: var(--button-blue) !important;
+}
+
+.btn-primary:hover {
+    background-color: #0052A3 !important;
+    border-color: #0052A3 !important;
+}
+
+.btn-outline-primary {
+    color: var(--button-blue) !important;
+    border-color: var(--button-blue) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--button-blue) !important;
+    color: var(--primary-white) !important;
+}
+
+.btn-outline-info {
+    color: var(--primary-red) !important;
+    border-color: var(--primary-red) !important;
+}
+
+.btn-outline-info:hover {
+    background-color: var(--primary-red) !important;
+    color: var(--primary-white) !important;
+}
+
+.btn-success {
+    background-color: #28A745 !important;
+    border-color: #28A745 !important;
+}
+
+/* Pagination */
+.pagination .page-link {
+    color: var(--button-blue) !important;
+    border-color: var(--button-blue) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--button-blue) !important;
+    border-color: var(--button-blue) !important;
+}
+
+.pagination .page-link:hover {
+    color: #0052A3 !important;
+    border-color: #0052A3 !important;
+}
+
+/* Form Controls */
+.form-control:focus {
+    border-color: var(--primary-red) !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 20, 60, 0.25) !important;
+}
+
+.form-control {
+    color: var(--text-dark) !important;
+    border-color: #DDD !important;
+}
+
+/* Collapse Utilities */
+.btn-link {
+    color: var(--button-blue) !important;
+}
+
+.btn-link:hover {
+    color: var(--primary-red) !important;
+}
+
+/* Quiz Cards Specific */
+.quiz-card {
+    border-top: 4px solid var(--primary-red);
+}
+
+.quiz-card:hover {
+    box-shadow: 0 10px 25px rgba(220, 20, 60, 0.15);
+}
+
+.quiz-title-compact a {
+    color: var(--primary-red) !important;
+}
+
+.quiz-title-compact a:hover {
+    color: var(--button-blue) !important;
+}
+
+/* Course Cards */
+.course-card-compact {
+    border-top: 4px solid var(--button-blue);
+}
+
+.course-card-compact:hover {
+    box-shadow: 0 8px 20px rgba(0, 102, 204, 0.15);
+}
+
+.course-title-compact a {
+    color: var(--primary-red) !important;
+}
+
+.course-title-compact a:hover {
+    color: var(--button-blue) !important;
+}
+
+.course-price-compact {
+    color: var(--primary-red) !important;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .register_section {
+        padding-top: 100px !important;
+        padding-bottom: 100px !important;
+    }
+    
+    .button_1 {
+        width: 100% !important;
+    }
+    
+    .hero_slide_content h1 {
+        font-size: 48px !important;
+    }
+}

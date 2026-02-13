@@ -46,7 +46,7 @@ use Illuminate\Support\Str;
                             @if($course->instructor)
                                 {{ Str::limit($course->instructor->name, 15) }}
                             @else
-                                Smart Edu
+                                Learning Management System SMKN 40
                             @endif
                         </div>
                         <div class="course_price d-flex flex-column align-items-center justify-content-center course-price-compact">
