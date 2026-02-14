@@ -127,6 +127,7 @@
         </div>
 
         <!-- Quiz Settings -->
+        @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
@@ -202,6 +203,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
         <!-- Schedule Information -->
         @if($quiz->start_date || $quiz->end_date)
@@ -230,6 +232,7 @@
         @endif
         
         <!-- Questions Section -->
+        @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
         <div class="card mt-3">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -299,6 +302,7 @@
                 @endif
             </div>
         </div>
+        @endif
         
         <!-- Recent Attempts -->
         @if($quiz->attempts->count() > 0)

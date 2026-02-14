@@ -2,9 +2,10 @@
 
 @section('content')
 <!-- Header Section -->
-<div class="col-md-12 grid-margin">
-    <div class="row">
-        <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="row">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
                         <h3 class="font-weight-bold mb-2">{{ $module->title }}</h3>
@@ -119,42 +120,44 @@
                     <div class="lessons-list">
                         @foreach($module->lessons as $lesson)
                         <div class="lesson-item card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div style="flex: 1;">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <span class="badge badge-primary mr-2" style="min-width: 80px;">
-                                                Lesson {{ $lesson->order }}
-                                            </span>
-                                            <span class="badge badge-{{ $lesson->type == 'video' ? 'info' : ($lesson->type == 'reading' ? 'success' : ($lesson->type == 'audio' ? 'warning' : 'secondary')) }}">
-                                                {{ ucfirst($lesson->type) }}
-                                            </span>
-                                            @if($lesson->is_free)
-                                                <span class="badge badge-success ml-2">FREE</span>
+                            <a href="{{ route('lessons.show', $lesson) }}" class="text-decoration-none">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div style="flex: 1;">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge badge-primary mr-2" style="min-width: 80px;">
+                                                    Lesson {{ $lesson->order }}
+                                                </span>
+                                                <span class="badge badge-{{ $lesson->type == 'video' ? 'info' : ($lesson->type == 'reading' ? 'success' : ($lesson->type == 'audio' ? 'warning' : 'secondary')) }}">
+                                                    {{ ucfirst($lesson->type) }}
+                                                </span>
+                                                @if($lesson->is_free)
+                                                    <span class="badge badge-success ml-2">FREE</span>
+                                                @endif
+                                            </div>
+                                            <h5 class="mb-2 font-weight-bold text-dark">{{ $lesson->title }}</h5>
+                                            @if($lesson->description)
+                                                <p class="text-muted mb-3">{{ Str::limit($lesson->description, 150) }}</p>
+                                            @endif
+                                            
+                                            @if($lesson->duration_minutes)
+                                                <div class="lesson-meta">
+                                                    <small class="text-muted">
+                                                        <i class="icon-clock mr-1"></i>{{ $lesson->duration_minutes }} minutes
+                                                    </small>
+                                                </div>
                                             @endif
                                         </div>
-                                        <h5 class="mb-2 font-weight-bold">{{ $lesson->title }}</h5>
-                                        @if($lesson->description)
-                                            <p class="text-muted mb-3">{{ Str::limit($lesson->description, 150) }}</p>
-                                        @endif
-                                        
-                                        @if($lesson->duration_minutes)
-                                            <div class="lesson-meta">
-                                                <small class="text-muted">
-                                                    <i class="icon-clock mr-1"></i>{{ $lesson->duration_minutes }} minutes
-                                                </small>
+                                        @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
+                                            <div class="ml-3" onclick="event.stopPropagation();">
+                                                <a href="{{ route('lessons.edit', $lesson) }}" class="btn btn-sm btn-primary">
+                                                    <i class="icon-pencil"></i>
+                                                </a>
                                             </div>
                                         @endif
                                     </div>
-                                    @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
-                                        <div class="ml-3">
-                                            <a href="{{ route('lessons.edit', $lesson) }}" class="btn btn-sm btn-primary">
-                                                <i class="icon-pencil"></i>
-                                            </a>
-                                        </div>
-                                    @endif
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         @endforeach
                     </div>
@@ -338,6 +341,17 @@
     .lesson-item:hover {
         border-color: #667eea;
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .lesson-item a {
+        display: block;
+        color: inherit;
+    }
+    
+    .lesson-item a:hover {
+        text-decoration: none;
+        color: inherit;
     }
     
     /* Course stats */
@@ -368,6 +382,21 @@
     
     .bg-gradient-success {
         background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    /* Ensure footer stays at bottom */
+    .main-panel {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .content-wrapper {
+        flex: 1;
+    }
+    
+    .footer {
+        margin-top: auto;
     }
 </style>
 @endpush

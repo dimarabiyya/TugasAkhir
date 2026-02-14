@@ -158,7 +158,9 @@ use Illuminate\Support\Facades\Storage;
                                                     </span>
                                                 @endif
                                             </div>
-                                            <h5 class="mb-2 font-weight-bold">{{ $module->title }}</h5>
+                                            <a href="{{ route('modules.show', $module) }}" class="text-decoration-none">
+                                                <h5 class="mb-2 font-weight-bold">{{ $module->title }}</h5>
+                                            </a>
                                             @if($module->description)
                                                 <p class="text-muted mb-3">{{ Str::limit($module->description, 150) }}</p>
                                             @endif
@@ -166,15 +168,12 @@ use Illuminate\Support\Facades\Storage;
                                             @if($module->lessons->count() > 0)
                                                 <div class="lessons-preview">
                                                     @foreach($module->lessons->take(3) as $lesson)
-                                                        <div class="lesson-item mb-2 p-2 bg-light rounded">
+                                                        <a href="{{ route('lessons.show', $lesson) }}" class="lesson-item mb-2 p-2 bg-light rounded d-block text-decoration-none">
                                                             <div class="d-flex align-items-center">
                                                                 <i class="icon-{{ $lesson->type == 'video' ? 'camcorder' : ($lesson->type == 'reading' ? 'book-open' : ($lesson->type == 'audio' ? 'volume-2' : 'pencil')) }} mr-2 text-primary"></i>
                                                                 <span class="font-weight-medium">{{ $lesson->title }}</span>
-                                                                @if($lesson->is_free)
-                                                                    <span class="badge badge-success ml-2">FREE</span>
-                                                                @endif
                                                             </div>
-                                                        </div>
+                                                        </a>
                                                     @endforeach
                                                     @if($module->lessons->count() > 3)
                                                         <p class="text-muted mb-0 small">
