@@ -10,18 +10,18 @@ use Illuminate\Support\Facades\Storage;
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                    <h3 class="font-weight-bold">Courses Management</h3>
-                    <h6 class="font-weight-normal mb-0">Manage and organize all your courses here</h6>
+                    <h3 class="font-weight-bold">Manajemen Mata Pelajaran</h3>
+                    <p class="font-weight-thin text-muted mb-0">Kelola dan atur semua Mata Pelajaran Anda di sini</p>
                 @else
-                    <h3 class="font-weight-bold">Available Courses</h3>
-                    <h6 class="font-weight-normal mb-0">Browse and enroll in courses</h6>
+                    <h3 class="font-weight-bold">Mata Pelajaran Tersedia</h3>
+                    <p class="font-weight-thin text-muted mb-0">Jelajahi dan daftar Mata Pelajaran</p>
                 @endif
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                         <a href="{{ route('courses.create') }}" class="btn btn-primary">
-                            <i class="icon-plus"></i> Create New Course
+                            <i class="icon-plus"></i> Buat Mapel Baru
                         </a>
                     @endif
                 </div>
@@ -36,24 +36,24 @@ use Illuminate\Support\Facades\Storage;
     <div class="col-md-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Advanced Search</h4>
+                <h4 class="card-title mb-4">Pencarian Lanjutan</h4>
                 <form action="{{ route('courses.index') }}" method="GET" id="searchForm">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="search">Search</label>
+                                <label for="search">Cari</label>
                                 <input type="text" class="form-control" name="search" id="search" 
-                                       placeholder="Search courses..." value="{{ request('search') }}">
+                                       placeholder="Cari mata pelajaran" value="{{ request('search') }}">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="level">Level</label>
+                                <label for="level">Tingkat</label>
                                 <select class="form-control" name="level" id="level">
-                                    <option value="">All Levels</option>
-                                    <option value="beginner" {{ request('level') == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                                    <option value="intermediate" {{ request('level') == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                                    <option value="advanced" {{ request('level') == 'advanced' ? 'selected' : '' }}>Advanced</option>
+                                    <option value="">Semua Tingkat</option>
+                                    <option value="beginner" {{ request('level') == 'beginner' ? 'selected' : '' }}>Pemula</option>
+                                    <option value="intermediate" {{ request('level') == 'intermediate' ? 'selected' : '' }}>Menengah</option>
+                                    <option value="advanced" {{ request('level') == 'advanced' ? 'selected' : '' }}>Lanjutan</option>
                                 </select>
                             </div>
                         </div>
@@ -61,9 +61,9 @@ use Illuminate\Support\Facades\Storage;
                             <div class="form-group">
                                 <label for="published">Status</label>
                                 <select class="form-control" name="published" id="published">
-                                    <option value="">All Status</option>
-                                    <option value="1" {{ request('published') == '1' ? 'selected' : '' }}>Published</option>
-                                    <option value="0" {{ request('published') == '0' ? 'selected' : '' }}>Draft</option>
+                                    <option value="">Semua Status</option>
+                                    <option value="1" {{ request('published') == '1' ? 'selected' : '' }}>Diterbitkan</option>
+                                    <option value="0" {{ request('published') == '0' ? 'selected' : '' }}>Draf</option>
                                 </select>
                             </div>
                         </div>
@@ -99,13 +99,13 @@ use Illuminate\Support\Facades\Storage;
                     <table id="coursesTable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Course</th>
-                                <th>Instructor</th>
-                                <th>Level</th>
+                                <th>Mata Pelajaran</th>
+                                <th>Guru</th>
+                                <th>Kesulitan</th>
                                 <th>Status</th>
-                                <th>Duration</th>
-                                <th>Modules</th>
-                                <th>Actions</th>
+                                <th>Durasi</th>
+                                <th>Modul</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -145,15 +145,22 @@ use Illuminate\Support\Facades\Storage;
                                             <span class="font-weight-medium">{{ Str::limit($course->instructor->name, 20) }}</span>
                                         </div>
                                     @else
-                                        <span class="text-muted">Not Assigned</span>
+                                        <span class="text-muted">Belum Ditugaskan</span>
                                     @endif
                                 </td>
                                 <td data-priority="4">
-                                    <span class="badge badge-info">{{ ucfirst($course->level) }}</span>
+                                    @php
+                                        $levelLabels = [
+                                            'beginner' => 'Pemula',
+                                            'intermediate' => 'Menengah',
+                                            'advanced' => 'Lanjutan'
+                                        ];
+                                    @endphp
+                                    <span class="badge badge-info">{{ $levelLabels[$course->level] ?? ucfirst($course->level) }}</span>
                                 </td>
                                 <td data-priority="2">
                                     <span class="badge {{ $course->is_published ? 'badge-success' : 'badge-warning' }}">
-                                        {{ $course->is_published ? 'Published' : 'Draft' }}
+                                        {{ $course->is_published ? 'Diterbitkan' : 'Draf' }}
                                     </span>
                                 </td>
                                 <td data-priority="5">
@@ -170,7 +177,7 @@ use Illuminate\Support\Facades\Storage;
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a href="{{ $course->url }}" 
                                            class="btn btn-info" 
-                                           title="View">
+                                           title="Lihat">
                                             <i class="mdi mdi-eye"></i>
                                         </a>
                                         @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
@@ -187,7 +194,7 @@ use Illuminate\Support\Facades\Storage;
                                                 @method('DELETE')
                                                 <button type="submit" 
                                                         class="btn btn-danger" 
-                                                       title="Delete">
+                                                       title="Hapus">
                                                     <i class="mdi mdi-delete"></i>
                                                 </button>
                                             </form>
@@ -200,17 +207,17 @@ use Illuminate\Support\Facades\Storage;
                                 <td colspan="8" class="text-center py-4">
                                     <div class="text-center py-5">
                                         <i class="icon-book" style="font-size: 64px; color: #ccc;"></i>
-                                        <h4 class="mt-3">No courses found</h4>
+                                        <h4 class="mt-3">Tidak ada kursus ditemukan</h4>
                                         <p class="text-muted">
                                             @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                                                Start by creating your first course!
+                                                Mulai dengan membuat kursus pertama Anda!
                                             @else
-                                                There are no courses available at the moment.
+                                                Tidak ada kursus yang tersedia saat ini.
                                             @endif
                                         </p>
                                         @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                                             <a href="{{ route('courses.create') }}" class="btn btn-primary mt-3">
-                                                <i class="icon-plus"></i> Create Course
+                                                <i class="icon-plus"></i> Buat Kursus
                                             </a>
                                         @endif
                                     </div>
@@ -434,18 +441,18 @@ use Illuminate\Support\Facades\Storage;
                 order: [[0, 'asc']],
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search courses...",
-                    lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ courses",
-                    infoEmpty: "No courses available",
-                    infoFiltered: "(filtered from _MAX_ total courses)",
+                    searchPlaceholder: "Cari kursus...",
+                    lengthMenu: "Tampilkan _MENU_ entri",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ kursus",
+                    infoEmpty: "Tidak ada kursus tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total kursus)",
                     paginate: {
-                        first: "First",
-                        last: "Last",
-                        next: "Next",
-                        previous: "Previous"
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Selanjutnya",
+                        previous: "Sebelumnya"
                     },
-                    emptyTable: "No courses found"
+                    emptyTable: "Tidak ada kursus ditemukan"
                 },
                 columnDefs: [
                     {
@@ -479,7 +486,7 @@ use Illuminate\Support\Facades\Storage;
             $('#coursesTable').each(function() {
                 var datatable = $(this);
                 var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-                search_input.attr('placeholder', 'Search courses...');
+                search_input.attr('placeholder', 'Cari kursus...');
                 search_input.removeClass('form-control-sm');
                 var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
                 length_sel.removeClass('form-control-sm');

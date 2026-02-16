@@ -8,8 +8,8 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Students Management</h3>
-                        <p class="text-muted mb-0">Manage student accounts and their learning progress</p>
+                        <h3 class="font-weight-bold mb-2">Manajemen Siswa</h3>
+                        <p class="text-muted mb-0">Kelola akun siswa dan kemajuan pembelajaran mereka</p>
                     </div>
                 </div>
             </div>
@@ -17,11 +17,11 @@
                 <div class="justify-content-end d-flex">
                     @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
                         <a href="{{ route('students.create') }}" class="btn btn-primary mr-2">
-                            <i class="mdi mdi-plus"></i> Add Student
+                            <i class="mdi mdi-plus"></i> Tambah Siswa
                         </a>
                     @endif
                     <a href="{{ route('dashboard') }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Back to Dashboard
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Dashboard
                     </a>
                 </div>
             </div>
@@ -36,32 +36,32 @@
             <div class="card-body">
                 <form method="GET" action="{{ route('students.index') }}" class="row g-3">
                     <div class="col-md-4">
-                        <label for="search" class="form-label">Search Students</label>
+                        <label for="search" class="form-label">Cari Siswa</label>
                         <input type="text" class="form-control" id="search" name="search" 
-                               value="{{ request('search') }}" placeholder="Search by name, email, or phone...">
+                               value="{{ request('search') }}" placeholder="Cari berdasarkan nama, email, atau telepon...">
                     </div>
                     <div class="col-md-3">
-                        <label for="enrollment_status" class="form-label">Enrollment Status</label>
+                        <label for="enrollment_status" class="form-label">Status Pendaftaran</label>
                         <select class="form-control" id="enrollment_status" name="enrollment_status">
-                            <option value="">All Students</option>
-                            <option value="enrolled" {{ request('enrollment_status') == 'enrolled' ? 'selected' : '' }}>Enrolled</option>
-                            <option value="not_enrolled" {{ request('enrollment_status') == 'not_enrolled' ? 'selected' : '' }}>Not Enrolled</option>
+                            <option value="">Semua Siswa</option>
+                            <option value="enrolled" {{ request('enrollment_status') == 'enrolled' ? 'selected' : '' }}>Terdaftar</option>
+                            <option value="not_enrolled" {{ request('enrollment_status') == 'not_enrolled' ? 'selected' : '' }}>Tidak Terdaftar</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="email_verified" class="form-label">Email Status</label>
+                        <label for="email_verified" class="form-label">Status Email</label>
                         <select class="form-control" id="email_verified" name="email_verified">
-                            <option value="">All</option>
-                            <option value="verified" {{ request('email_verified') == 'verified' ? 'selected' : '' }}>Verified</option>
-                            <option value="unverified" {{ request('email_verified') == 'unverified' ? 'selected' : '' }}>Unverified</option>
+                            <option value="">Semua</option>
+                            <option value="verified" {{ request('email_verified') == 'verified' ? 'selected' : '' }}>Terverifikasi</option>
+                            <option value="unverified" {{ request('email_verified') == 'unverified' ? 'selected' : '' }}>Belum Terverifikasi</option>
                         </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary mr-3">
-                            <i class="mdi mdi-magnify"></i> Search
+                            <i class="mdi mdi-magnify"></i> Cari
                         </button>
                         <a href="{{ route('students.index') }}" class="btn btn-outline-secondary">
-                            <i class="mdi mdi-refresh"></i> Clear
+                            <i class="mdi mdi-refresh"></i> Bersihkan
                         </a>
                     </div>
                 </form>
@@ -77,7 +77,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">
-                        <i class="mdi mdi-account-group text-primary"></i> All Students ({{ $students->total() }})
+                        <i class="mdi mdi-account-group text-primary"></i> Semua Siswa ({{ $students->total() }})
                     </h4>
                 </div>
 
@@ -87,14 +87,14 @@
                             <thead>
                                 <tr>
                                     <th>Avatar</th>
-                                    <th>Name</th>
+                                    <th>Nama</th>
                                     <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Level</th>
-                                    <th>Enrollments</th>
+                                    <th>Telepon</th>
+                                    <th>Tingkat</th>
+                                    <th>Pendaftaran</th>
                                     <th>Status</th>
-                                    <th>Joined</th>
-                                    <th>Actions</th>
+                                    <th>Bergabung</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,9 +117,9 @@
                                         <div>
                                             <span class="text-primary">{{ $student->email }}</span>
                                             @if($student->email_verified_at)
-                                                <br><small class="text-success"><i class="mdi mdi-check-circle"></i> Verified</small>
+                                                <br><small class="text-success"><i class="mdi mdi-check-circle"></i> Terverifikasi</small>
                                             @else
-                                                <br><small class="text-warning"><i class="mdi mdi-alert-circle"></i> Unverified</small>
+                                                <br><small class="text-warning"><i class="mdi mdi-alert-circle"></i> Belum Terverifikasi</small>
                                             @endif
                                         </div>
                                     </td>
@@ -138,9 +138,14 @@
                                                     'intermediate' => 'warning',
                                                     'advanced' => 'danger'
                                                 ];
+                                                $levelLabels = [
+                                                    'beginner' => 'Pemula',
+                                                    'intermediate' => 'Menengah',
+                                                    'advanced' => 'Lanjutan'
+                                                ];
                                             @endphp
                                             <span class="badge badge-{{ $levelColors[$student->level] ?? 'secondary' }}">
-                                                {{ ucfirst($student->level) }}
+                                                {{ $levelLabels[$student->level] ?? ucfirst($student->level) }}
                                             </span>
                                         @else
                                             <span class="text-muted">-</span>
@@ -150,15 +155,15 @@
                                         <div class="text-center">
                                             <span class="badge badge-info">{{ $student->enrollments->count() }}</span>
                                             @if($student->enrollments->count() > 0)
-                                                <br><small class="text-muted">{{ $student->enrollments->where('completed_at', '!=', null)->count() }} completed</small>
+                                                <br><small class="text-muted">{{ $student->enrollments->where('completed_at', '!=', null)->count() }} selesai</small>
                                             @endif
                                         </div>
                                     </td>
                                     <td>
                                         @if($student->enrollments->count() > 0)
-                                            <span class="badge badge-success">Active</span>
+                                            <span class="badge badge-success">Aktif</span>
                                         @else
-                                            <span class="badge badge-secondary">Inactive</span>
+                                            <span class="badge badge-secondary">Tidak Aktif</span>
                                         @endif
                                     </td>
                                     <td>
@@ -166,7 +171,7 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-info" title="View">
+                                            <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-info" title="Lihat">
                                                 <i class="mdi mdi-eye"></i>
                                             </a>
                                             @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
@@ -174,10 +179,10 @@
                                                     <i class="mdi mdi-pencil"></i>
                                                 </a>
                                                 <form action="{{ route('students.destroy', $student) }}" method="POST" class="d-inline"
-                                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this student?');">
+                                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus siswa ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
                                                         <i class="mdi mdi-delete"></i>
                                                     </button>
                                                 </form>
@@ -197,17 +202,17 @@
                 @else
                     <div class="text-center py-5">
                         <i class="mdi mdi-account-group" style="font-size: 64px; color: #e3e6f0;"></i>
-                        <h5 class="mt-3 mb-2 text-muted">No students found</h5>
+                        <h5 class="mt-3 mb-2 text-muted">Tidak ada siswa ditemukan</h5>
                         <p class="text-muted">
                             @if(request()->hasAny(['search', 'enrollment_status', 'email_verified']))
-                                Try adjusting your search criteria
+                                Coba sesuaikan kriteria pencarian Anda
                             @else
-                                No students have been registered yet
+                                Belum ada siswa yang terdaftar
                             @endif
                         </p>
                         @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
                             <a href="{{ route('students.create') }}" class="btn btn-primary">
-                                <i class="mdi mdi-plus"></i> Add First Student
+                                <i class="mdi mdi-plus"></i> Tambah Siswa Pertama
                             </a>
                         @endif
                     </div>

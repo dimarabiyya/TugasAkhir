@@ -5,7 +5,28 @@ use Illuminate\Support\Facades\Storage;
 @endphp
 
 @section('content')
-<div class="content-wrapper">
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <div class="row">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
+                    <h3 class="font-weight-bold">Daftar Kelas</h3>
+                    <p class="text-muted mb-0">Daftar dan kelola kelas yang ada</p>
+                @endif
+            </div>
+            <div class="col-12 col-xl-4">
+                <div class="justify-content-end d-flex">
+                    @if(!auth()->check() || !auth()->user()->hasAnyRole(['admin', 'instructor']))
+                        <a href="{{ route('courses.index') }}" class="btn btn-primary">
+                            <i class="icon-plus"></i> Browse Courses
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="">
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">

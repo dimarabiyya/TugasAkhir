@@ -8,15 +8,15 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Add New Student</h3>
-                        <p class="text-muted mb-0">Create a new student account</p>
+                        <h3 class="font-weight-bold mb-2">Tambah Siswa Baru</h3>
+                        <p class="text-muted mb-0">Buat akun siswa baru</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('students.index') }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Back to Students
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Siswa
                     </a>
                 </div>
             </div>
@@ -30,7 +30,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="mdi mdi-account-plus text-primary"></i> Student Information
+                    <i class="mdi mdi-account-plus text-primary"></i> Informasi Siswa
                 </h4>
 
                 <form action="{{ route('students.store') }}" method="POST">
@@ -38,14 +38,14 @@
                     
                     <div class="form-group mb-4">
                         <label for="name" class="form-label">
-                            Full Name <span class="text-danger">*</span>
+                            Nama Lengkap <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
                                class="form-control @error('name') is-invalid @enderror" 
                                id="name" 
                                name="name" 
                                value="{{ old('name') }}" 
-                               placeholder="Enter student's full name"
+                               placeholder="Masukkan nama lengkap siswa"
                                required>
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -54,63 +54,63 @@
 
                     <div class="form-group mb-4">
                         <label for="email" class="form-label">
-                            Email Address <span class="text-danger">*</span>
+                            Alamat Email <span class="text-danger">*</span>
                         </label>
                         <input type="email" 
                                class="form-control @error('email') is-invalid @enderror" 
                                id="email" 
                                name="email" 
                                value="{{ old('email') }}" 
-                               placeholder="Enter student's email address"
+                               placeholder="Masukkan alamat email siswa"
                                required>
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            This will be used for login and notifications
+                            Ini akan digunakan untuk login dan notifikasi
                         </small>
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="phone" class="form-label">Phone Number</label>
+                        <label for="phone" class="form-label">Nomor Telepon</label>
                         <input type="text" 
                                class="form-control @error('phone') is-invalid @enderror" 
                                id="phone" 
                                name="phone" 
                                value="{{ old('phone') }}" 
-                               placeholder="Enter student's phone number">
+                               placeholder="Masukkan nomor telepon siswa">
                         @error('phone')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="level" class="form-label">Student Level</label>
+                        <label for="level" class="form-label">Tingkat Siswa</label>
                         <select class="form-control @error('level') is-invalid @enderror" 
                                 id="level" 
                                 name="level">
-                            <option value="">Select student level (optional)</option>
-                            <option value="beginner" {{ old('level') == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                            <option value="intermediate" {{ old('level') == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                            <option value="advanced" {{ old('level') == 'advanced' ? 'selected' : '' }}>Advanced</option>
+                            <option value="">Pilih tingkat siswa (opsional)</option>
+                            <option value="beginner" {{ old('level') == 'beginner' ? 'selected' : '' }}>Pemula</option>
+                            <option value="intermediate" {{ old('level') == 'intermediate' ? 'selected' : '' }}>Menengah</option>
+                            <option value="advanced" {{ old('level') == 'advanced' ? 'selected' : '' }}>Lanjutan</option>
                         </select>
                         @error('level')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            This helps categorize students by their skill level
+                            Ini membantu mengkategorikan siswa berdasarkan tingkat keterampilan mereka
                         </small>
                     </div>
 
                     <div class="form-group mb-4">
                         <label for="password" class="form-label">
-                            Password <span class="text-danger">*</span>
+                            Kata Sandi <span class="text-danger">*</span>
                         </label>
                         <input type="password" 
                                class="form-control @error('password') is-invalid @enderror" 
                                id="password" 
                                name="password" 
-                               placeholder="Enter password (min 8 characters)"
+                               placeholder="Masukkan kata sandi (minimal 8 karakter)"
                                required>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -119,13 +119,13 @@
 
                     <div class="form-group mb-4">
                         <label for="password_confirmation" class="form-label">
-                            Confirm Password <span class="text-danger">*</span>
+                            Konfirmasi Kata Sandi <span class="text-danger">*</span>
                         </label>
                         <input type="password" 
                                class="form-control @error('password_confirmation') is-invalid @enderror" 
                                id="password_confirmation" 
                                name="password_confirmation" 
-                               placeholder="Confirm the password"
+                               placeholder="Konfirmasi kata sandi"
                                required>
                         @error('password_confirmation')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -134,10 +134,10 @@
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary mr-3">
-                            <i class="mdi mdi-check"></i> Create Student
+                            <i class="mdi mdi-check"></i> Buat Siswa
                         </button>
                         <a href="{{ route('students.index') }}" class="btn btn-secondary">
-                            <i class="mdi mdi-close"></i> Cancel
+                            <i class="mdi mdi-close"></i> Batal
                         </a>
                     </div>
                 </form>
@@ -151,39 +151,39 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-information text-info"></i> Student Account Info
+                    <i class="mdi mdi-information text-info"></i> Info Akun Siswa
                 </h5>
                 
                 <div class="info-list">
                     <div class="info-item d-flex align-items-center mb-3">
                         <i class="mdi mdi-account text-primary mr-3"></i>
                         <div>
-                            <h6 class="mb-1">Student Role</h6>
-                            <small class="text-muted">Automatically assigned 'student' role</small>
+                            <h6 class="mb-1">Peran Siswa</h6>
+                            <small class="text-muted">Otomatis ditugaskan peran 'siswa'</small>
                         </div>
                     </div>
                     
                     <div class="info-item d-flex align-items-center mb-3">
                         <i class="mdi mdi-email text-primary mr-3"></i>
                         <div>
-                            <h6 class="mb-1">Email Verification</h6>
-                            <small class="text-muted">Student will need to verify email</small>
+                            <h6 class="mb-1">Verifikasi Email</h6>
+                            <small class="text-muted">Siswa perlu memverifikasi email</small>
                         </div>
                     </div>
                     
                     <div class="info-item d-flex align-items-center mb-3">
                         <i class="mdi mdi-book text-primary mr-3"></i>
                         <div>
-                            <h6 class="mb-1">Course Access</h6>
-                            <small class="text-muted">Can enroll in available courses</small>
+                            <h6 class="mb-1">Akses Kursus</h6>
+                            <small class="text-muted">Dapat mendaftar kursus yang tersedia</small>
                         </div>
                     </div>
                     
                     <div class="info-item d-flex align-items-center">
                         <i class="mdi mdi-chart-line text-primary mr-3"></i>
                         <div>
-                            <h6 class="mb-1">Progress Tracking</h6>
-                            <small class="text-muted">Learning progress will be tracked</small>
+                            <h6 class="mb-1">Pelacakan Kemajuan</h6>
+                            <small class="text-muted">Kemajuan pembelajaran akan dilacak</small>
                         </div>
                     </div>
                 </div>
@@ -194,28 +194,28 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-school text-warning"></i> Student Levels
+                    <i class="mdi mdi-school text-warning"></i> Tingkat Siswa
                 </h5>
                 
                 <div class="level-guide">
                     <div class="level-item mb-3 p-3 border rounded">
                         <div class="d-flex align-items-center">
-                            <span class="badge badge-success mr-2">Beginner</span>
-                            <span class="text-muted small">New to the subject matter</span>
+                            <span class="badge badge-success mr-2">Pemula</span>
+                            <span class="text-muted small">Baru dalam materi pelajaran</span>
                         </div>
                     </div>
                     
                     <div class="level-item mb-3 p-3 border rounded">
                         <div class="d-flex align-items-center">
-                            <span class="badge badge-warning mr-2">Intermediate</span>
-                            <span class="text-muted small">Some knowledge and experience</span>
+                            <span class="badge badge-warning mr-2">Menengah</span>
+                            <span class="text-muted small">Beberapa pengetahuan dan pengalaman</span>
                         </div>
                     </div>
                     
                     <div class="level-item p-3 border rounded">
                         <div class="d-flex align-items-center">
-                            <span class="badge badge-danger mr-2">Advanced</span>
-                            <span class="text-muted small">Experienced and knowledgeable</span>
+                            <span class="badge badge-danger mr-2">Lanjutan</span>
+                            <span class="text-muted small">Berpengalaman dan berpengetahuan</span>
                         </div>
                     </div>
                 </div>
@@ -226,23 +226,23 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-chart text-success"></i> Quick Stats
+                    <i class="mdi mdi-chart text-success"></i> Statistik Cepat
                 </h5>
                 
                 <div class="stats-grid">
                     <div class="stat-item text-center mb-3">
                         <h4 class="text-primary mb-1">{{ \App\Models\User::role('student')->count() }}</h4>
-                        <small class="text-muted">Total Students</small>
+                        <small class="text-muted">Total Siswa</small>
                     </div>
                     
                     <div class="stat-item text-center mb-3">
                         <h4 class="text-success mb-1">{{ \App\Models\User::role('student')->whereHas('enrollments')->count() }}</h4>
-                        <small class="text-muted">Active Students</small>
+                        <small class="text-muted">Siswa Aktif</small>
                     </div>
                     
                     <div class="stat-item text-center">
                         <h4 class="text-info mb-1">{{ \App\Models\User::role('student')->whereNull('email_verified_at')->count() }}</h4>
-                        <small class="text-muted">Unverified</small>
+                        <small class="text-muted">Belum Terverifikasi</small>
                     </div>
                 </div>
             </div>

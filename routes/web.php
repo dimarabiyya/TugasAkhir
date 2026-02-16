@@ -134,9 +134,9 @@ Route::middleware('auth')->group(function () {
 // Student routes
 Route::middleware(['auth', 'permission:view students'])->group(function () {
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-    Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 });
 
+// Specific routes MUST come before parameterized routes
 Route::middleware(['auth', 'permission:create students'])->group(function () {
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
@@ -149,6 +149,11 @@ Route::middleware(['auth', 'permission:edit students'])->group(function () {
 
 Route::middleware(['auth', 'permission:delete students'])->group(function () {
     Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+});
+
+// Parameterized route MUST come last
+Route::middleware(['auth', 'permission:view students'])->group(function () {
+    Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 });
 
 // Profile routes

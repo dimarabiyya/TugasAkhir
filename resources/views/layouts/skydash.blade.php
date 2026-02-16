@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{ $title ?? 'Dashboard' }} - Smart Edu LMS</title>
+    <title>{{ $title ?? 'Dashboard' }} - LMS SMKN 40 Jakarta</title>
     
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('skydash/vendors/feather/feather.css') }}">
@@ -617,31 +617,29 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']) ? 'active' : '' }}" href="{{ route('enrollments.index') }}">
-                            <i class="mdi mdi-account-group menu-icon"></i>
-                            <span class="menu-title">Enrollments</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}" href="{{ route('students.index') }}">
-                            <i class="mdi mdi-school menu-icon"></i>
-                            <span class="menu-title">Siswa</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
                             <i class="mdi mdi-book-open-page-variant menu-icon"></i>
                             <span class="menu-title">Kuis</span>
                         </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']) ? 'active' : '' }}" href="{{ route('enrollments.index') }}">
+                            <i class="mdi mdi-school menu-icon"></i>
+                            <span class="menu-title">Progress Siswa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}" href="{{ route('students.index') }}">
+                            <i class="mdi mdi-account-group menu-icon"></i>
+                            <span class="menu-title">Siswa</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('ebooks.index') }}">
                             <i class="mdi mdi-book menu-icon"></i>
                             <span class="menu-title">Perpustakaan</span>
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ? 'active' : '' }}" href="{{ route('testimonials.manage') }}">
                             <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
@@ -662,8 +660,6 @@
                             <span class="menu-title">Absensi</span>
                         </a>
                     </li>
-
-                    
                 @endif
                 
                 @if(auth()->user()->hasRole('instructor'))

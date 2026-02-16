@@ -19,7 +19,7 @@
                         <div class="student-info-section">
                             <h1 class="student-name">{{ $student->name }}</h1>
                             <div class="student-badges">
-                                <span class="badge badge-primary">Student #{{ $student->id }}</span>
+                                <span class="badge badge-primary">Siswa #{{ $student->id }}</span>
                                 @if($student->level)
                                     @php
                                         $levelColors = [
@@ -27,13 +27,18 @@
                                             'intermediate' => 'warning',
                                             'advanced' => 'danger'
                                         ];
+                                        $levelLabels = [
+                                            'beginner' => 'Pemula',
+                                            'intermediate' => 'Menengah',
+                                            'advanced' => 'Lanjutan'
+                                        ];
                                     @endphp
-                                    <span class="badge badge-{{ $levelColors[$student->level] ?? 'secondary' }}">{{ ucfirst($student->level) }}</span>
+                                    <span class="badge badge-{{ $levelColors[$student->level] ?? 'secondary' }}">{{ $levelLabels[$student->level] ?? ucfirst($student->level) }}</span>
                                 @endif
                                 @if($student->email_verified_at)
-                                    <span class="badge badge-success">Verified</span>
+                                    <span class="badge badge-success">Terverifikasi</span>
                                 @else
-                                    <span class="badge badge-warning">Unverified</span>
+                                    <span class="badge badge-warning">Belum Terverifikasi</span>
                                 @endif
                             </div>
                             <div class="student-meta">
@@ -41,7 +46,7 @@
                                     <i class="mdi mdi-email"></i> {{ $student->email }}
                                 </span>
                                 <span class="meta-item">
-                                    <i class="mdi mdi-calendar"></i> Joined {{ $student->created_at->format('M d, Y') }}
+                                    <i class="mdi mdi-calendar"></i> Bergabung {{ $student->created_at->format('M d, Y') }}
                                 </span>
                             </div>
                         </div>
@@ -52,11 +57,11 @@
                 <div class="page-header-actions">
                     @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
                         <a href="{{ route('students.edit', $student) }}" class="btn btn-primary btn-lg">
-                            <i class="mdi mdi-pencil"></i> Edit Student
+                            <i class="mdi mdi-pencil"></i> Edit Siswa
                         </a>
                     @endif
                     <a href="{{ route('students.index') }}" class="btn btn-outline-secondary btn-lg">
-                        <i class="mdi mdi-arrow-left"></i> Back to Students
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Siswa
                     </a>
                 </div>
             </div>
@@ -75,7 +80,7 @@
                     </div>
                     <div class="stat-card-content">
                         <h3 class="stat-number">{{ $stats['total_enrollments'] }}</h3>
-                        <p class="stat-label">Total Enrollments</p>
+                        <p class="stat-label">Total Pendaftaran</p>
                     </div>
                 </div>
             </div>
@@ -86,7 +91,7 @@
                     </div>
                     <div class="stat-card-content">
                         <h3 class="stat-number">{{ $stats['completed_courses'] }}</h3>
-                        <p class="stat-label">Completed Courses</p>
+                        <p class="stat-label">Kursus Selesai</p>
                     </div>
                 </div>
             </div>
@@ -97,7 +102,7 @@
                     </div>
                     <div class="stat-card-content">
                         <h3 class="stat-number">{{ $stats['total_lessons_completed'] }}</h3>
-                        <p class="stat-label">Lessons Completed</p>
+                        <p class="stat-label">Pelajaran Selesai</p>
                     </div>
                 </div>
             </div>
@@ -108,7 +113,7 @@
                     </div>
                     <div class="stat-card-content">
                         <h3 class="stat-number">{{ number_format($stats['average_quiz_score'], 1) }}%</h3>
-                        <p class="stat-label">Avg Quiz Score</p>
+                        <p class="stat-label">Rata-rata Skor Kuis</p>
                     </div>
                 </div>
             </div>
@@ -128,11 +133,11 @@
                     <div class="section-header">
                         <h2 class="section-title">
                             <i class="mdi mdi-book-open"></i>
-                            Course Enrollments
+                            Pendaftaran Kursus
                         </h2>
                         <div class="section-actions">
                             <a href="{{ route('courses.index') }}" class="btn btn-outline-primary btn-sm">
-                                <i class="mdi mdi-plus"></i> Browse Courses
+                                <i class="mdi mdi-plus"></i> Jelajahi Kursus
                             </a>
                         </div>
                     </div>
@@ -145,11 +150,11 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Course</th>
-                                                <th>Enrolled</th>
-                                                <th>Progress</th>
+                                                <th>Kursus</th>
+                                                <th>Terdaftar</th>
+                                                <th>Kemajuan</th>
                                                 <th>Status</th>
-                                                <th width="80">Actions</th>
+                                                <th width="80">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -158,7 +163,7 @@
                                                 <td>
                                                     <div class="course-info">
                                                         <h6 class="course-title">{{ $enrollment->course->title }}</h6>
-                                                        <span class="course-level">{{ ucfirst($enrollment->course->level) }} level</span>
+                                                        <span class="course-level">{{ ucfirst($enrollment->course->level) }} tingkat</span>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -180,17 +185,17 @@
                                                 </td>
                                                 <td>
                                                     @if($enrollment->completed_at)
-                                                        <span class="status-badge status-completed">Completed</span>
+                                                        <span class="status-badge status-completed">Selesai</span>
                                                     @elseif($enrollment->progress_percentage > 0)
-                                                        <span class="status-badge status-progress">In Progress</span>
+                                                        <span class="status-badge status-progress">Sedang Berlangsung</span>
                                                     @else
-                                                        <span class="status-badge status-not-started">Not Started</span>
+                                                        <span class="status-badge status-not-started">Belum Dimulai</span>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('enrollments.show', $enrollment) }}" 
                                                        class="btn btn-sm btn-outline-primary" 
-                                                       title="View Details">
+                                                       title="Lihat Detail">
                                                         <i class="mdi mdi-eye"></i>
                                                     </a>
                                                 </td>
@@ -205,11 +210,11 @@
                                 <div class="empty-state-icon">
                                     <i class="mdi mdi-book-open"></i>
                                 </div>
-                                <h3 class="empty-state-title">No Course Enrollments</h3>
-                                <p class="empty-state-description">This student hasn't enrolled in any courses yet.</p>
+                                <h3 class="empty-state-title">Tidak Ada Pendaftaran Kursus</h3>
+                                <p class="empty-state-description">Siswa ini belum mendaftar kursus apa pun.</p>
                                 <div class="empty-state-actions">
                                     <a href="{{ route('courses.index') }}" class="btn btn-primary">
-                                        <i class="mdi mdi-book mr-2"></i> Browse Available Courses
+                                        <i class="mdi mdi-book mr-2"></i> Jelajahi Kursus Tersedia
                                     </a>
                                 </div>
                             </div>
@@ -225,11 +230,11 @@
                     <div class="section-header">
                         <h2 class="section-title">
                             <i class="mdi mdi-help-circle"></i>
-                            Recent Quiz Attempts
+                            Percobaan Kuis Terbaru
                         </h2>
                         @if($student->quizAttempts->count() > 5)
                             <div class="section-actions">
-                                <span class="text-muted small">Showing 5 of {{ $student->quizAttempts->count() }} attempts</span>
+                                <span class="text-muted small">Menampilkan 5 dari {{ $student->quizAttempts->count() }} percobaan</span>
                             </div>
                         @endif
                     </div>
@@ -240,11 +245,11 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Quiz</th>
-                                            <th>Course</th>
-                                            <th>Score</th>
+                                            <th>Kuis</th>
+                                            <th>Kursus</th>
+                                            <th>Skor</th>
                                             <th>Status</th>
-                                            <th>Date</th>
+                                            <th>Tanggal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -265,9 +270,9 @@
                                             </td>
                                             <td>
                                                 @if($attempt->completed_at)
-                                                    <span class="status-badge status-completed">Completed</span>
+                                                    <span class="status-badge status-completed">Selesai</span>
                                                 @else
-                                                    <span class="status-badge status-progress">In Progress</span>
+                                                    <span class="status-badge status-progress">Sedang Berlangsung</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -292,31 +297,31 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="mdi mdi-account"></i>
-                            Student Information
+                            Informasi Siswa
                         </h3>
                     </div>
                     <div class="card-content">
                         <div class="info-grid">
                             <div class="info-item">
-                                <label class="info-label">Full Name</label>
+                                <label class="info-label">Nama Lengkap</label>
                                 <p class="info-value">{{ $student->name }}</p>
                             </div>
                             
                             <div class="info-item">
-                                <label class="info-label">Email Address</label>
+                                <label class="info-label">Alamat Email</label>
                                 <p class="info-value">{{ $student->email }}</p>
                             </div>
                             
                             @if($student->phone)
                             <div class="info-item">
-                                <label class="info-label">Phone Number</label>
+                                <label class="info-label">Nomor Telepon</label>
                                 <p class="info-value">{{ $student->phone }}</p>
                             </div>
                             @endif
                             
                             @if($student->level)
                             <div class="info-item">
-                                <label class="info-label">Student Level</label>
+                                <label class="info-label">Tingkat Siswa</label>
                                 <div class="info-value">
                                     @php
                                         $levelColors = [
@@ -324,21 +329,26 @@
                                             'intermediate' => 'warning',
                                             'advanced' => 'danger'
                                         ];
+                                        $levelLabels = [
+                                            'beginner' => 'Pemula',
+                                            'intermediate' => 'Menengah',
+                                            'advanced' => 'Lanjutan'
+                                        ];
                                     @endphp
                                     <span class="level-badge level-{{ $student->level }}">
-                                        {{ ucfirst($student->level) }}
+                                        {{ $levelLabels[$student->level] ?? ucfirst($student->level) }}
                                     </span>
                                 </div>
                             </div>
                             @endif
                             
                             <div class="info-item">
-                                <label class="info-label">Member Since</label>
+                                <label class="info-label">Anggota Sejak</label>
                                 <p class="info-value">{{ $student->created_at->format('M d, Y') }}</p>
                             </div>
                             
                             <div class="info-item">
-                                <label class="info-label">Last Updated</label>
+                                <label class="info-label">Terakhir Diperbarui</label>
                                 <p class="info-value">{{ $student->updated_at->format('M d, Y') }}</p>
                             </div>
                         </div>
@@ -351,34 +361,34 @@
                         <div class="card-header">
                             <h3 class="card-title">
                                 <i class="mdi mdi-cog"></i>
-                                Quick Actions
+                                Aksi Cepat
                             </h3>
                         </div>
                         <div class="card-content">
                             <div class="admin-info">
                                 <div class="admin-info-item">
-                                    <label class="admin-label">Student ID</label>
+                                    <label class="admin-label">ID Siswa</label>
                                     <p class="admin-value">#{{ $student->id }}</p>
                                 </div>
                                 
                                 <div class="admin-info-item">
-                                    <label class="admin-label">Account Status</label>
+                                    <label class="admin-label">Status Akun</label>
                                     <div class="admin-value">
                                         @if($student->enrollments->count() > 0)
-                                            <span class="status-badge status-active">Active</span>
+                                            <span class="status-badge status-active">Aktif</span>
                                         @else
-                                            <span class="status-badge status-inactive">Inactive</span>
+                                            <span class="status-badge status-inactive">Tidak Aktif</span>
                                         @endif
                                     </div>
                                 </div>
                                 
                                 <div class="admin-info-item">
-                                    <label class="admin-label">Email Status</label>
+                                    <label class="admin-label">Status Email</label>
                                     <div class="admin-value">
                                         @if($student->email_verified_at)
-                                            <span class="status-badge status-verified">Verified</span>
+                                            <span class="status-badge status-verified">Terverifikasi</span>
                                         @else
-                                            <span class="status-badge status-unverified">Unverified</span>
+                                            <span class="status-badge status-unverified">Belum Terverifikasi</span>
                                         @endif
                                     </div>
                                 </div>
@@ -386,21 +396,21 @@
                             
                             <div class="admin-actions">
                                 <a href="{{ route('students.edit', $student) }}" class="btn btn-primary btn-block">
-                                    <i class="mdi mdi-pencil mr-2"></i> Edit Student
+                                    <i class="mdi mdi-pencil mr-2"></i> Edit Siswa
                                 </a>
                                 
                                 <form action="{{ route('students.destroy', $student) }}" method="POST" 
-                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this student? This action cannot be undone.');">
+                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus siswa ini? Tindakan ini tidak dapat dibatalkan.');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-block" {{ $student->enrollments->count() > 0 ? 'disabled' : '' }}>
-                                        <i class="mdi mdi-delete mr-2"></i> Delete Student
+                                        <i class="mdi mdi-delete mr-2"></i> Hapus Siswa
                                     </button>
                                 </form>
                                 
                                 @if($student->enrollments->count() > 0)
                                     <div class="admin-warning">
-                                        <i class="mdi mdi-warning"></i> Cannot delete student with existing enrollments
+                                        <i class="mdi mdi-warning"></i> Tidak dapat menghapus siswa dengan pendaftaran yang ada
                                     </div>
                                 @endif
                             </div>
@@ -413,14 +423,14 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="mdi mdi-chart"></i>
-                            Learning Progress
+                            Kemajuan Pembelajaran
                         </h3>
                     </div>
                     <div class="card-content">
                         <div class="progress-items">
                             <div class="progress-item">
                                 <div class="progress-header">
-                                    <span class="progress-label">Course Completion</span>
+                                    <span class="progress-label">Penyelesaian Kursus</span>
                                     <span class="progress-value">{{ $stats['completed_courses'] }}/{{ $stats['total_enrollments'] }}</span>
                                 </div>
                                 <div class="progress-bar-container">
@@ -430,7 +440,7 @@
                             
                             <div class="progress-item">
                                 <div class="progress-header">
-                                    <span class="progress-label">Quiz Performance</span>
+                                    <span class="progress-label">Performa Kuis</span>
                                     <span class="progress-value">{{ number_format($stats['average_quiz_score'], 1) }}%</span>
                                 </div>
                                 <div class="progress-bar-container">
@@ -440,7 +450,7 @@
                             
                             <div class="progress-item">
                                 <div class="progress-header">
-                                    <span class="progress-label">Total Attempts</span>
+                                    <span class="progress-label">Total Percobaan</span>
                                     <span class="progress-value">{{ $stats['total_quiz_attempts'] }}</span>
                                 </div>
                             </div>
