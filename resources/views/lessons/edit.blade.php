@@ -8,18 +8,18 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Edit Lesson</h3>
-                        <p class="text-muted mb-0">Update "{{ $lesson->title }}" in "{{ $lesson->module->title }}"</p>
+                        <h3 class="font-weight-bold mb-2">Edit Materi</h3>
+                        <p class="text-muted mb-0">Perbarui "{{ $lesson->title }}" di "{{ $lesson->module->title }}"</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('lessons.show', $lesson) }}" class="btn btn-light mr-2">
-                        <i class="mdi mdi-eye"></i> View Lesson
+                        <i class="mdi mdi-eye"></i> Lihat Materi
                     </a>
                     <a href="{{ route('modules.show', $lesson->module) }}" class="btn btn-outline-secondary">
-                        <i class="mdi mdi-arrow-left"></i> Back to Module
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Modul
                     </a>
                 </div>
             </div>
@@ -39,8 +39,8 @@
                     <div>
                         <h5 class="mb-1">{{ $lesson->title }}</h5>
                         <p class="text-muted mb-0">
-                            Lesson {{ $lesson->order }} • {{ ucfirst($lesson->type) }} • 
-                            Module: {{ $lesson->module->title }} • Course: {{ $lesson->module->course->title }}
+                            Materi {{ $lesson->order }} • {{ ucfirst($lesson->type) }} • 
+                            Modul: {{ $lesson->module->title }} • Mata Pelajaran: {{ $lesson->module->course->title }}
                         </p>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="mdi mdi-pencil text-primary"></i> Lesson Information
+                    <i class="mdi mdi-pencil text-primary"></i> Informasi Materi
                 </h4>
 
                 <form action="{{ route('lessons.update', $lesson) }}" method="POST">
@@ -64,14 +64,14 @@
                     
                     <div class="form-group mb-4">
                         <label for="title" class="form-label">
-                            Lesson Title <span class="text-danger">*</span>
+                            Judul Materi <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
                                class="form-control @error('title') is-invalid @enderror" 
                                id="title" 
                                name="title" 
                                value="{{ old('title', $lesson->title) }}" 
-                               placeholder="Enter lesson title"
+                               placeholder="Masukkan judul Materi"
                                required>
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -79,12 +79,12 @@
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="description" class="form-label">Description</label>
+                        <label for="description" class="form-label">Deskripsi</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
                                   id="description" 
                                   name="description" 
                                   rows="3" 
-                                  placeholder="Enter lesson description (optional)">{{ old('description', $lesson->description) }}</textarea>
+                                  placeholder="Masukkan deskripsi Materi (opsional)">{{ old('description', $lesson->description) }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -92,13 +92,13 @@
 
                     <div class="form-group mb-4">
                         <label for="type" class="form-label">
-                            Lesson Type <span class="text-danger">*</span>
+                            Tipe Materi <span class="text-danger">*</span>
                         </label>
                         <select class="form-control @error('type') is-invalid @enderror" 
                                 id="type" 
                                 name="type" 
                                 required>
-                            <option value="">Select lesson type</option>
+                            <option value="">Pilih tipe Materi</option>
                             @foreach($lessonTypes as $type)
                                 <option value="{{ $type }}" {{ old('type', $lesson->type) == $type ? 'selected' : '' }}>
                                     {{ ucfirst($type) }}
@@ -111,7 +111,7 @@
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="content_url" class="form-label">Content URL</label>
+                        <label for="content_url" class="form-label">URL Konten</label>
                         <input type="url" 
                                class="form-control @error('content_url') is-invalid @enderror" 
                                id="content_url" 
@@ -122,22 +122,22 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            URL to video, audio, or external content
+                            URL untuk video, audio, atau konten eksternal
                         </small>
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="content_text" class="form-label">Content Text</label>
+                        <label for="content_text" class="form-label">Teks Konten</label>
                         <textarea class="form-control @error('content_text') is-invalid @enderror" 
                                   id="content_text" 
                                   name="content_text" 
                                   rows="6" 
-                                  placeholder="Enter lesson content text (optional)">{{ old('content_text', $lesson->content_text) }}</textarea>
+                                  placeholder="Masukkan teks konten Materi (opsional)">{{ old('content_text', $lesson->content_text) }}</textarea>
                         @error('content_text')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            Text content for reading lessons or additional information
+                            Konten teks untuk Materi membaca atau informasi tambahan
                         </small>
                     </div>
 
@@ -161,7 +161,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-4">
                                 <label for="order" class="form-label">
-                                    Order <span class="text-danger">*</span>
+                                    Urutan <span class="text-danger">*</span>
                                 </label>
                                 <input type="number" 
                                        class="form-control @error('order') is-invalid @enderror" 
@@ -187,20 +187,20 @@
                                    value="1" 
                                    {{ old('is_free', $lesson->is_free) ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_free">
-                                This lesson is free
+                                Materi ini gratis
                             </label>
                         </div>
                         <small class="form-text text-muted">
-                            Free lessons can be accessed without enrollment
+                            Materi gratis dapat diakses tanpa pendaftaran
                         </small>
                     </div>
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary mr-3">
-                            <i class="mdi mdi-check"></i> Update Lesson
+                            <i class="mdi mdi-check"></i> Perbarui Materi
                         </button>
                         <a href="{{ route('lessons.show', $lesson) }}" class="btn btn-secondary">
-                            <i class="mdi mdi-close"></i> Cancel
+                            <i class="mdi mdi-close"></i> Batal
                         </a>
                     </div>
                 </form>
@@ -214,13 +214,13 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-chart text-info"></i> Lesson Statistics
+                    <i class="mdi mdi-chart text-info"></i> Statistik Materi
                 </h5>
                 
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="mdi mdi-clock text-primary mr-2"></i>
-                        <span class="text-muted">Duration</span>
+                        <span class="text-muted">Durasi</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-primary">{{ $lesson->duration_minutes ? $lesson->duration_minutes . 'm' : '-' }}</h4>
                 </div>
@@ -228,7 +228,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="mdi mdi-calendar text-info mr-2"></i>
-                        <span class="text-muted">Created</span>
+                        <span class="text-muted">Dibuat</span>
                     </div>
                     <h6 class="mb-0 font-weight-bold text-info">{{ $lesson->created_at->format('M d, Y') }}</h6>
                 </div>
@@ -236,7 +236,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center">
                     <div>
                         <i class="mdi mdi-update text-success mr-2"></i>
-                        <span class="text-muted">Last Updated</span>
+                        <span class="text-muted">Pembaruan Terakhir</span>
                     </div>
                     <h6 class="mb-0 font-weight-bold text-success">{{ $lesson->updated_at->format('M d, Y') }}</h6>
                 </div>
@@ -247,7 +247,7 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-folder text-warning"></i> Module Information
+                    <i class="mdi mdi-folder text-warning"></i> Informasi Modul
                 </h5>
                 
                 <div class="module-info">
@@ -256,16 +256,16 @@
                     <p class="text-muted mb-3">{{ Str::limit($lesson->module->description, 100) }}</p>
                     
                     <a href="{{ route('modules.show', $lesson->module) }}" class="btn btn-outline-primary btn-block mb-3">
-                        <i class="mdi mdi-eye mr-2"></i> View Module
+                        <i class="mdi mdi-eye mr-2"></i> Lihat Modul
                     </a>
                     
                     <div class="module-stats">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Lessons:</span>
+                            <span class="text-muted">Materi:</span>
                             <strong>{{ $lesson->module->lessons->count() }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Course:</span>
+                            <span class="text-muted">Mata Pelajaran:</span>
                             <strong>{{ $lesson->module->course->title }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
@@ -281,29 +281,29 @@
         <div class="card mt-3 border-danger">
             <div class="card-body">
                 <h5 class="card-title mb-4 text-danger">
-                    <i class="mdi mdi-delete"></i> Danger Zone
+                    <i class="mdi mdi-delete"></i> Zona Bahaya
                 </h5>
                 
                 <p class="text-muted mb-3 small">
-                    Deleting this lesson will permanently remove it and all its progress data. This action cannot be undone.
+                    Menghapus Materi ini akan menghapusnya secara permanen beserta semua data progresnya. Tindakan ini tidak dapat dibatalkan.
                 </p>
                 
                 @if($lesson->quiz)
                     <div class="alert alert-warning mb-3">
                         <i class="mdi mdi-warning"></i>
-                        <strong>Warning:</strong> This lesson contains a quiz. 
-                        You must delete the quiz before deleting this lesson.
+                        <strong>Peringatan:</strong> Materi ini berisi kuis. 
+                        Anda harus menghapus kuis sebelum menghapus Materi ini.
                     </div>
                 @endif
                 
                 <form action="{{ route('lessons.destroy', $lesson) }}" method="POST" 
-                      onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this lesson? This action cannot be undone.');">
+                      onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus Materi ini? Tindakan ini tidak dapat dibatalkan.');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
                             class="btn btn-danger btn-block" 
                             {{ $lesson->quiz ? 'disabled' : '' }}>
-                        <i class="mdi mdi-delete mr-2"></i> Delete Lesson
+                        <i class="mdi mdi-delete mr-2"></i> Hapus Materi
                     </button>
                 </form>
             </div>

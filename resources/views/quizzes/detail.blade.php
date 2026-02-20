@@ -76,7 +76,7 @@ use Carbon\Carbon;
 
                         <!-- Quiz Rules -->
                         <div class="news_post_text" style="margin-top: 40px;">
-                            <h4 class="mb-3" style="color: #1e40af; font-weight: 600;">Quiz Rules & Requirements</h4>
+                            <h4 class="mb-3" style="color: #1e40af; font-weight: 600;">Aturan & Persyaratan Kuis</h4>
                             
                             <ul style="line-height: 2; color: #555; padding-left: 20px;">
                                 <li class="mb-2"><strong>Total Questions:</strong> {{ $quiz->questions_count }} questions</li>
@@ -94,27 +94,27 @@ use Carbon\Carbon;
                                 @endif
                                 
                                 @if($quiz->shuffle_questions)
-                                <li class="mb-2"><strong>Question Order:</strong> Questions will appear in random order</li>
+                                <li class="mb-2"><strong>Urutan Pertanyaan:</strong> Pertanyaan akan muncul dalam urutan acak</li>
                                 @endif
                                 
                                 @if($quiz->shuffle_answers)
-                                <li class="mb-2"><strong>Answer Order:</strong> Answer options will be shuffled randomly</li>
+                                <li class="mb-2"><strong>Urutan Jawaban:</strong> Opsi jawaban akan diacak secara acak</li>
                                 @endif
                                 
                                 @if($quiz->negative_marking)
-                                <li class="mb-2"><strong>Negative Marking:</strong> Incorrect answers deduct {{ $quiz->negative_mark_value ?? 1 }} point(s)</li>
+                                <li class="mb-2"><strong>Penilaian Negatif:</strong> Jawaban yang salah mengurangi {{ $quiz->negative_mark_value ?? 1 }} poin</li>
                                 @endif
                                 
                                 @if($quiz->require_all_questions)
-                                <li class="mb-2"><strong>Mandatory:</strong> All questions must be answered before submission</li>
+                                <li class="mb-2"><strong>Wajib:</strong> Semua pertanyaan harus dijawab sebelum pengajuan</li>
                                 @endif
                                 
                                 @if($quiz->allow_multiple_attempts)
-                                <li class="mb-2"><strong>Multiple Attempts:</strong> You can take this quiz multiple times
+                                <li class="mb-2"><strong>Upaya Ganda:</strong> Anda dapat mengikuti kuis ini beberapa kali
                                     @if($quiz->max_attempts) (Max {{ $quiz->max_attempts }}) @endif
                                 </li>
                                 @else
-                                <li class="mb-2"><strong>Single Attempt:</strong> You can only take this quiz once</li>
+                                <li class="mb-2"><strong>Upaya Tunggal:</strong> Anda hanya dapat mengikuti kuis ini sekali</li>
                                 @endif
                             </ul>
                         </div>
@@ -125,7 +125,7 @@ use Carbon\Carbon;
                             @if($quiz->pass_message)
                             <div class="mb-3 p-3" style="background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px;">
                                 <strong class="text-success">
-                                    <i class="fas fa-check-circle mr-2"></i>Pass Message
+                                    <i class="fas fa-check-circle mr-2"></i>Pesan Lulus
                                 </strong>
                                 <p class="mb-0 mt-2">{{ $quiz->pass_message }}</p>
                             </div>
@@ -134,7 +134,7 @@ use Carbon\Carbon;
                             @if($quiz->fail_message)
                             <div class="mb-3 p-3" style="background: #f8d7da; border-left: 4px solid #dc3545; border-radius: 4px;">
                                 <strong class="text-danger">
-                                    <i class="fas fa-times-circle mr-2"></i>Fail Message
+                                    <i class="fas fa-times-circle mr-2"></i>Pesan Gagal
                                 </strong>
                                 <p class="mb-0 mt-2">{{ $quiz->fail_message }}</p>
                             </div>
@@ -144,24 +144,24 @@ use Carbon\Carbon;
 
                         <!-- Result Visibility -->
                         <div class="news_post_text" style="margin-top: 40px;">
-                            <h4 class="mb-3" style="color: #1e40af; font-weight: 600;">Result Visibility</h4>
+                            <h4 class="mb-3" style="color: #1e40af; font-weight: 600;">Visibilitas Hasil</h4>
                             
                             @if($quiz->show_results_immediately)
                             <p class="mb-2">
                                 <i class="fas fa-check text-success mr-2"></i>
-                                <strong>Results:</strong> You will see your score immediately after submission
+                                <strong>Hasil:</strong> Anda akan melihat skor Anda segera setelah pengajuan
                             </p>
                             @endif
                             
                             @if($quiz->show_correct_answers)
                             <p class="mb-0">
                                 <i class="fas fa-check text-success mr-2"></i>
-                                <strong>Answers:</strong> Correct answers will be shown after you complete the quiz
+                                <strong>Jawaban:</strong> Jawaban yang benar akan ditampilkan setelah Anda menyelesaikan kuis
                             </p>
                             @else
                             <p class="mb-0 text-muted">
                                 <i class="fas fa-times text-danger mr-2"></i>
-                                <strong>Answers:</strong> Correct answers will not be shown
+                                <strong>Jawaban:</strong> Jawaban yang benar tidak akan ditampilkan
                             </p>
                             @endif
                         </div>
@@ -176,13 +176,13 @@ use Carbon\Carbon;
                     <!-- Ready to Start -->
                     <div class="sidebar_section">
                         <div class="sidebar_section_title">
-                            <h3>Ready to Start?</h3>
+                            <h3>Siap Memulai?</h3>
                         </div>
                         
                         @if($quiz->time_limit_minutes)
                         <p class="text-muted mb-4" style="text-align: center;">
                             <i class="fas fa-clock mr-2" style="color: #ffb606;"></i>
-                            You'll have {{ $quiz->time_limit_minutes }} minutes
+                            Anda akan memiliki {{ $quiz->time_limit_minutes }} menit
                         </p>
                         @endif
                         
@@ -196,31 +196,31 @@ use Carbon\Carbon;
                                 @if($userAttempts > 0)
                                     <div class="alert alert-info mb-4" style="font-size: 0.9rem; padding: 12px;">
                                         <i class="fas fa-info-circle mr-2"></i>
-                                        Attempt {{ $userAttempts + 1 }} of {{ $quiz->max_attempts ?? 'Unlimited' }}
+                                        Upaya {{ $userAttempts + 1 }} dari {{ $quiz->max_attempts ?? 'Tidak Terbatas' }}
                                     </div>
                                 @endif
                                 <div class="button button_1 mb-3" style="width: 100%;">
-                                    <a href="{{ route('quizzes.show', $quiz) }}">Start Quiz</a>
+                                    <a href="{{ route('quizzes.show', $quiz) }}">Mulai Kuis</a>
                                 </div>
                             @else
                                 <div class="alert alert-warning mb-4" style="font-size: 0.9rem; padding: 12px;">
                                     <i class="fas fa-exclamation-triangle mr-2"></i>
                                     @if($quiz->max_attempts)
-                                        Max attempts reached
+                                        Upaya maksimal tercapai
                                     @else
-                                        Quiz already completed
+                                        Kuis sudah selesai
                                     @endif
                                 </div>
                                 <div class="button button_outline mb-3" style="width: 100%;">
-                                    <a href="{{ route('quizzes.show', $quiz) }}">View Results</a>
+                                    <a href="{{ route('quizzes.show', $quiz) }}">Lihat Hasil</a>
                                 </div>
                             @endif
                         @else
                             <div class="button button_1 mb-3" style="width: 100%;">
-                                <a href="{{ route('login') }}">Login to Take Quiz</a>
+                                <a href="{{ route('login') }}">Login untuk Mengikuti Kuis</a>
                             </div>
                             <div class="button button_outline mb-3" style="width: 100%;">
-                                <a href="{{ route('register') }}">Create Account</a>
+                                <a href="{{ route('register') }}">Buat Akun</a>
                             </div>
                         @endauth
                     </div>
@@ -229,7 +229,7 @@ use Carbon\Carbon;
                     @if(optional($quiz->lesson)->module->course)
                     <div class="sidebar_section">
                         <div class="sidebar_section_title">
-                            <h3>Related Course</h3>
+                            <h3>Mata Pelajaran Terkait</h3>
                         </div>
                         <div class="latest_post">
                             @if($quiz->lesson->module->course->thumbnail)
@@ -252,24 +252,24 @@ use Carbon\Carbon;
                     <!-- Quiz Stats -->
                     <div class="sidebar_section">
                         <div class="sidebar_section_title">
-                            <h3>Quiz Stats</h3>
+                            <h3>Statistik Kuis</h3>
                         </div>
                         <ul class="sidebar_list">
                             <li class="sidebar_list_item">
-                                <strong>Questions:</strong> {{ $quiz->questions_count }}
+                                <strong>Pertanyaan:</strong> {{ $quiz->questions_count }}
                             </li>
                             @if($quiz->passing_score)
                             <li class="sidebar_list_item">
-                                <strong>Pass Score:</strong> {{ $quiz->passing_score }}%
+                                <strong>Skor Kelulusan:</strong> {{ $quiz->passing_score }}%
                             </li>
                             @endif
                             @if($quiz->time_limit_minutes)
                             <li class="sidebar_list_item">
-                                <strong>Time Limit:</strong> {{ $quiz->time_limit_minutes }} min
+                                <strong>Batas Waktu:</strong> {{ $quiz->time_limit_minutes }} min
                             </li>
                             @endif
                             <li class="sidebar_list_item">
-                                <strong>Attempts:</strong> {{ $quiz->attempts()->count() }}
+                                <strong>Upaya:</strong> {{ $quiz->attempts()->count() }}
                             </li>
                         </ul>
                     </div>
@@ -277,14 +277,14 @@ use Carbon\Carbon;
                     <!-- Tags -->
                     <div class="sidebar_section">
                         <div class="sidebar_section_title">
-                            <h3>Tags</h3>
+                            <h3>Tag</h3>
                         </div>
                         <div class="tags d-flex flex-row flex-wrap">
-                            <div class="tag"><a href="#">Quiz</a></div>
-                            <div class="tag"><a href="#">Test</a></div>
-                            <div class="tag"><a href="#">Practice</a></div>
-                            <div class="tag"><a href="#">Exam</a></div>
-                            <div class="tag"><a href="#">Assessment</a></div>
+                            <div class="tag"><a href="#">Kuis</a></div>
+                            <div class="tag"><a href="#">Tes</a></div>
+                            <div class="tag"><a href="#">Praktik</a></div>
+                            <div class="tag"><a href="#">Ujian</a></div>
+                            <div class="tag"><a href="#">Penilaian</a></div>
                         </div>
                     </div>
 

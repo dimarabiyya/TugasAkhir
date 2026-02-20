@@ -8,15 +8,15 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Lessons Management</h3>
-                        <p class="text-muted mb-0">Manage course lessons and their content</p>
+                        <h3 class="font-weight-bold mb-2">Manajemen Materi</h3>
+                        <p class="text-muted mb-0">Kelola Materi Mata Pelajaran dan kontennya</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('courses.index') }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Back to Courses
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Mata Pelajaran
                     </a>
                 </div>
             </div>
@@ -31,14 +31,14 @@
             <div class="card-body">
                 <form method="GET" action="{{ route('lessons.index') }}" class="row g-3">
                     <div class="col-md-3">
-                        <label for="search" class="form-label">Search Lessons</label>
+                        <label for="search" class="form-label">Cari Materi</label>
                         <input type="text" class="form-control" id="search" name="search" 
-                               value="{{ request('search') }}" placeholder="Search by title, description, or course...">
+                               value="{{ request('search') }}" placeholder="Cari berdasarkan judul, deskripsi, atau Mata Pelajaran...">
                     </div>
                     <div class="col-md-2">
-                        <label for="module_id" class="form-label">Filter by Module</label>
+                        <label for="module_id" class="form-label">Filter berdasarkan Modul</label>
                         <select class="form-control" id="module_id" name="module_id">
-                            <option value="">All Modules</option>
+                            <option value="">Semua Modul</option>
                             @foreach($modules as $module)
                                 <option value="{{ $module->id }}" {{ request('module_id') == $module->id ? 'selected' : '' }}>
                                     {{ $module->course->title }} - {{ $module->title }}
@@ -47,9 +47,9 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <label for="type" class="form-label">Filter by Type</label>
+                        <label for="type" class="form-label">Filter berdasarkan Tipe</label>
                         <select class="form-control" id="type" name="type">
-                            <option value="">All Types</option>
+                            <option value="">Semua Tipe</option>
                             @foreach($lessonTypes as $type)
                                 <option value="{{ $type }}" {{ request('type') == $type ? 'selected' : '' }}>
                                     {{ ucfirst($type) }}
@@ -58,19 +58,19 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <label for="is_free" class="form-label">Free Status</label>
+                        <label for="is_free" class="form-label">Status Gratis</label>
                         <select class="form-control" id="is_free" name="is_free">
-                            <option value="">All</option>
-                            <option value="1" {{ request('is_free') == '1' ? 'selected' : '' }}>Free Only</option>
-                            <option value="0" {{ request('is_free') == '0' ? 'selected' : '' }}>Paid Only</option>
+                            <option value="">Semua</option>
+                            <option value="1" {{ request('is_free') == '1' ? 'selected' : '' }}>Hanya Gratis</option>
+                            <option value="0" {{ request('is_free') == '0' ? 'selected' : '' }}>Hanya Berbayar</option>
                         </select>
                     </div>
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary mr-3">
-                            <i class="mdi mdi-magnify"></i> Search
+                            <i class="mdi mdi-magnify"></i> Cari
                         </button>
                         <a href="{{ route('lessons.index') }}" class="btn btn-outline-secondary">
-                            <i class="mdi mdi-refresh"></i> Clear
+                            <i class="mdi mdi-refresh"></i> Hapus
                         </a>
                     </div>
                 </form>
@@ -86,11 +86,11 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">
-                        <i class="mdi mdi-book-open text-primary"></i> All Lessons ({{ $lessons->total() }})
+                        <i class="mdi mdi-book-open text-primary"></i> Semua Materi ({{ $lessons->total() }})
                     </h4>
                     @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#selectModuleModal">
-                            <i class="mdi mdi-plus"></i> Create Lesson
+                            <i class="mdi mdi-plus"></i> Buat Materi
                         </button>
                     @endif
                 </div>
@@ -100,14 +100,14 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Order</th>
-                                    <th>Title</th>
-                                    <th>Type</th>
-                                    <th>Module</th>
-                                    <th>Course</th>
-                                    <th>Duration</th>
+                                    <th>Urutan</th>
+                                    <th>Judul</th>
+                                    <th>Tipe</th>
+                                    <th>Modul</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Durasi</th>
                                     <th>Status</th>
-                                    <th>Actions</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -202,17 +202,17 @@
                 @else
                     <div class="text-center py-5">
                         <i class="mdi mdi-book-open" style="font-size: 64px; color: #e3e6f0;"></i>
-                        <h5 class="mt-3 mb-2 text-muted">No lessons found</h5>
+                        <h5 class="mt-3 mb-2 text-muted">Tidak ada Materi yang ditemukan</h5>
                         <p class="text-muted">
                             @if(request()->hasAny(['search', 'module_id', 'type', 'is_free']))
-                                Try adjusting your search criteria
+                                Coba sesuaikan kriteria pencarian Anda
                             @else
-                                No lessons have been created yet
+                                Belum ada Materi yang dibuat
                             @endif
                         </p>
                         @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#selectModuleModal">
-                                <i class="mdi mdi-plus"></i> Create Lesson
+                                <i class="mdi mdi-plus"></i> Buat Materi
                             </button>
                         @endif
                     </div>
@@ -228,12 +228,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="selectModuleModalLabel">
-                    <i class="mdi mdi-folder text-primary"></i> Select Module for New Lesson
+                    <i class="mdi mdi-folder text-primary"></i> Pilih Modul untuk Materi Baru
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-muted mb-4">Choose a module to add a new lesson to:</p>
+                <p class="text-muted mb-4">Pilih modul untuk menambahkan Materi baru:</p>
                 
                 @if($modules->count() > 0)
                     <div class="row">
@@ -244,12 +244,12 @@
                                     <h6 class="card-title">{{ $module->title }}</h6>
                                     <p class="card-text text-muted small">{{ Str::limit($module->description, 80) }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <span class="badge badge-primary">Module {{ $module->order }}</span>
-                                        <small class="text-muted">{{ $module->lessons->count() }} lessons</small>
+                                        <span class="badge badge-primary">Modul {{ $module->order }}</span>
+                                        <small class="text-muted">{{ $module->lessons->count() }} Materi</small>
                                     </div>
                                     <div class="mt-2">
                                         <small class="text-muted">
-                                            <strong>Course:</strong> {{ $module->course->title }}
+                                            <strong>Mata Pelajaran:</strong> {{ $module->course->title }}
                                         </small>
                                     </div>
                                 </div>
@@ -260,16 +260,16 @@
                 @else
                     <div class="text-center py-4">
                         <i class="mdi mdi-folder" style="font-size: 48px; color: #e3e6f0;"></i>
-                        <h6 class="mt-3 mb-2 text-muted">No modules available</h6>
-                        <p class="text-muted">You need to create a module first before adding lessons.</p>
+                        <h6 class="mt-3 mb-2 text-muted">Tidak ada modul yang tersedia</h6>
+                        <p class="text-muted">Anda perlu membuat modul terlebih dahulu sebelum menambahkan Materi.</p>
                         <a href="{{ route('courses.index') }}" class="btn btn-primary">
-                            <i class="mdi mdi-plus"></i> Create Module
+                            <i class="mdi mdi-plus"></i> Buat Modul
                         </a>
                     </div>
                 @endif
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
             </div>
         </div>
     </div>

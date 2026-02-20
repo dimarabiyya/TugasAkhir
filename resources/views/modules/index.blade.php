@@ -8,15 +8,15 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Modules Management</h3>
-                        <p class="text-muted mb-0">Manage course modules and their content</p>
+                        <h3 class="font-weight-bold mb-2">Manajemen Modul</h3>
+                        <p class="text-muted mb-0">Kelola modul Mata Pelajaran dan kontennya</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('courses.index') }}" class="btn btn-light">
-                        <i class="icon-arrow-left"></i> Back to Courses
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -31,14 +31,14 @@
             <div class="card-body">
                 <form method="GET" action="{{ route('modules.index') }}" class="row g-3">
                     <div class="col-md-4">
-                        <label for="search" class="form-label">Search Modules</label>
+                        <label for="search" class="form-label">Cari Modul</label>
                         <input type="text" class="form-control" id="search" name="search" 
-                               value="{{ request('search') }}" placeholder="Search by title, description, or course...">
+                               value="{{ request('search') }}" placeholder="Cari berdasarkan judul, deskripsi, atau Mata Pelajaran...">
                     </div>
                     <div class="col-md-3">
-                        <label for="course_id" class="form-label">Filter by Course</label>
+                        <label for="course_id" class="form-label">Filter berdasarkan Mata Pelajaran</label>
                         <select class="form-control" id="course_id" name="course_id">
-                            <option value="">All Courses</option>
+                            <option value="">Semua Mata Pelajaran</option>
                             @foreach($courses as $course)
                                 <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
                                     {{ $course->title }}
@@ -48,10 +48,10 @@
                     </div>
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary mr-2">
-                            <i class="icon-magnifier"></i> Search
+                            <i class="icon-magnifier"></i> Cari
                         </button>
                         <a href="{{ route('modules.index') }}" class="btn btn-outline-secondary">
-                            <i class="icon-refresh"></i> Clear
+                            <i class="icon-refresh"></i> Hapus
                         </a>
                     </div>
                 </form>
@@ -67,11 +67,11 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">
-                        <i class="icon-folder text-primary"></i> All Modules ({{ $modules->total() }})
+                        <i class="icon-folder text-primary"></i> Semua Modul ({{ $modules->total() }})
                     </h4>
                     @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#selectCourseModal">
-                            <i class="icon-plus"></i> Create Module
+                            <i class="icon-plus"></i> Buat Modul
                         </button>
                     @endif
                 </div>
@@ -81,12 +81,12 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Order</th>
-                                    <th>Title</th>
-                                    <th>Course</th>
-                                    <th>Lessons</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
+                                    <th>Urutan</th>
+                                    <th>Judul</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Pelajaran</th>
+                                    <th>Deskripsi</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,12 +119,12 @@
                                         @if($module->description)
                                             <p class="text-muted mb-0">{{ Str::limit($module->description, 80) }}</p>
                                         @else
-                                            <span class="text-muted">No description</span>
+                                            <span class="text-muted">Tidak ada deskripsi</span>
                                         @endif
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('modules.show', $module) }}" class="btn btn-sm btn-info" title="View">
+                                            <a href="{{ route('modules.show', $module) }}" class="btn btn-sm btn-info" title="Lihat">
                                                 <i class="mdi mdi-eye"></i>
                                             </a>
                                             @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
@@ -132,10 +132,10 @@
                                                     <i class="mdi mdi-pencil"></i>
                                                 </a>
                                                 <form action="{{ route('modules.destroy', $module) }}" method="POST" class="d-inline"
-                                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this module?');">
+                                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus modul ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
                                                         <i class="mdi mdi-delete"></i>
                                                     </button>
                                                 </form>
@@ -155,17 +155,17 @@
                 @else
                     <div class="text-center py-5">
                         <i class="icon-folder" style="font-size: 64px; color: #e3e6f0;"></i>
-                        <h5 class="mt-3 mb-2 text-muted">No modules found</h5>
+                        <h5 class="mt-3 mb-2 text-muted">Tidak ada modul yang ditemukan</h5>
                         <p class="text-muted">
                             @if(request()->hasAny(['search', 'course_id']))
-                                Try adjusting your search criteria
+                                Coba sesuaikan kriteria pencarian Anda
                             @else
-                                No modules have been created yet
+                                Belum ada modul yang dibuat
                             @endif
                         </p>
                         @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#selectCourseModal">
-                                <i class="icon-plus"></i> Create Module
+                                <i class="icon-plus"></i> Buat Modul
                             </button>
                         @endif
                     </div>
@@ -181,12 +181,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="selectCourseModalLabel">
-                    <i class="icon-book text-primary"></i> Select Course for New Module
+                    <i class="icon-book text-primary"></i> Pilih Mata Pelajaran untuk Modul Baru
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-muted mb-4">Choose a course to add a new module to:</p>
+                <p class="text-muted mb-4">Pilih Mata Pelajaran untuk menambahkan modul baru:</p>
                 
                 @if($courses->count() > 0)
                     <div class="row">s
@@ -210,16 +210,16 @@
                 @else
                     <div class="text-center py-4">
                         <i class="icon-book" style="font-size: 48px; color: #e3e6f0;"></i>
-                        <h6 class="mt-3 mb-2 text-muted">No courses available</h6>
-                        <p class="text-muted">You need to create a course first before adding modules.</p>
+                        <h6 class="mt-3 mb-2 text-muted">Tidak ada Mata Pelajaran yang tersedia</h6>
+                        <p class="text-muted">Anda perlu membuat Mata Pelajaran terlebih dahulu sebelum menambahkan modul.</p>
                         <a href="{{ route('courses.create') }}" class="btn btn-primary">
-                            <i class="icon-plus"></i> Create Course
+                            <i class="icon-plus"></i> Buat Mata Pelajaran
                         </a>
                     </div>
                 @endif
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
             </div>
         </div>
     </div>

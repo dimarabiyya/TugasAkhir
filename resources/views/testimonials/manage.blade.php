@@ -5,13 +5,13 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Manage Testimonials</h3>
-                <h6 class="font-weight-normal mb-0">Approve, reject, and manage student testimonials</h6>
+                <h3 class="font-weight-bold">Kelola Testimoni</h3>
+                <h6 class="font-weight-normal mb-0">Setujui, tolak, dan kelola testimoni siswa</h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('testimonials.index') }}" class="btn btn-info" target="_blank">
-                        <i class="icon-eye"></i> View Public Page
+                        <i class="icon-eye"></i> Lihat Halaman Publik
                     </a>
                 </div>
             </div>
@@ -26,7 +26,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="card-title mb-0">Total Testimonials</p>
+                        <p class="card-title mb-0">Total Testimoni</p>
                         <h3 class="mb-0">{{ $stats['total'] }}</h3>
                     </div>
                     <div class="icon-lg bg-primary text-white rounded">
@@ -41,7 +41,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="card-title mb-0">Approved</p>
+                        <p class="card-title mb-0">Disetujui</p>
                         <h3 class="mb-0 text-success">{{ $stats['approved'] }}</h3>
                     </div>
                     <div class="icon-lg bg-success text-white rounded">
@@ -56,7 +56,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="card-title mb-0">Pending</p>
+                        <p class="card-title mb-0">Menunggu</p>
                         <h3 class="mb-0 text-warning">{{ $stats['pending'] }}</h3>
                     </div>
                     <div class="icon-lg bg-warning text-white rounded">
@@ -71,7 +71,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="card-title mb-0">Featured</p>
+                        <p class="card-title mb-0">Unggulan</p>
                         <h3 class="mb-0 text-info">{{ $stats['featured'] }}</h3>
                     </div>
                     <div class="icon-lg bg-info text-white rounded">
@@ -92,28 +92,28 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <input type="text" 
-                                   name="search" 
-                                   class="form-control" 
-                                   placeholder="Search testimonials..." 
-                                   value="{{ request('search') }}">
+                                name="search" 
+                                class="form-control" 
+                                placeholder="Cari testimoni..." 
+                                value="{{ request('search') }}">
                         </div>
                         <div class="col-md-3 mb-3">
                             <select name="status" class="form-control">
-                                <option value="">All Status</option>
-                                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
-                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="">Semua Status</option>
+                                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Disetujui</option>
+                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu</option>
                             </select>
                         </div>
                         <div class="col-md-3 mb-3">
                             <select name="featured" class="form-control">
-                                <option value="">All Testimonials</option>
-                                <option value="1" {{ request('featured') === '1' ? 'selected' : '' }}>Featured Only</option>
-                                <option value="0" {{ request('featured') === '0' ? 'selected' : '' }}>Not Featured</option>
+                                <option value="">Semua Testimoni</option>
+                                <option value="1" {{ request('featured') === '1' ? 'selected' : '' }}>Hanya Unggulan</option>
+                                <option value="0" {{ request('featured') === '0' ? 'selected' : '' }}>Bukan Unggulan</option>
                             </select>
                         </div>
                         <div class="col-md-2 mb-3">
                             <button type="submit" class="btn btn-primary w-100">
-                                <i class="icon-magnifier"></i> Search
+                                <i class="icon-magnifier"></i> Cari
                             </button>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                     <div class="row">
                         <div class="col-12">
                             <a href="{{ route('testimonials.manage') }}" class="btn btn-secondary btn-sm">
-                                <i class="icon-close"></i> Clear Filters
+                                <i class="icon-close"></i> Bersihkan Filter
                             </a>
                         </div>
                     </div>
@@ -141,14 +141,14 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Student</th>
-                                <th>Course</th>
-                                <th>Testimonial</th>
-                                <th>Rating</th>
+                                <th>Siswa</th>
+                                <th>Kursus</th>
+                                <th>Testimoni</th>
+                                <th>Penilaian</th>
                                 <th>Status</th>
-                                <th>Featured</th>
-                                <th>Date</th>
-                                <th>Actions</th>
+                                <th>Unggulan</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -178,7 +178,7 @@
                                     @if($testimonial->course)
                                         <span class="badge badge-info">{{ Str::limit($testimonial->course->title, 30) }}</span>
                                     @else
-                                        <span class="text-muted">General</span>
+                                        <span class="text-muted">Umum</span>
                                     @endif
                                 </td>
                                 <td style="max-width: 300px;">
@@ -204,16 +204,16 @@
                                 </td>
                                 <td>
                                     @if($testimonial->is_approved)
-                                        <span class="badge badge-success">Approved</span>
+                                        <span class="badge badge-success">Disetujui</span>
                                     @else
-                                        <span class="badge badge-warning">Pending</span>
+                                        <span class="badge badge-warning">Menunggu</span>
                                     @endif
                                 </td>
                                 <td>
                                     @if($testimonial->is_approved)
                                         @if($testimonial->is_featured)
                                             <span class="badge badge-info">
-                                                <i class="mdi mdi-star"></i> Featured
+                                                <i class="mdi mdi-star"></i> Unggulan
                                             </span>
                                         @else
                                             <span class="text-muted">-</span>
@@ -251,7 +251,7 @@
                                         <form action="{{ route('testimonials.toggle-featured', $testimonial) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="btn btn-{{ $testimonial->is_featured ? 'info' : 'secondary' }} btn-sm" title="{{ $testimonial->is_featured ? 'Remove from Featured' : 'Mark as Featured' }}">
+                                            <button type="submit" class="btn btn-{{ $testimonial->is_featured ? 'info' : 'secondary' }} btn-sm" title="{{ $testimonial->is_featured ? 'Hapus dari Unggulan' : 'Tandai sebagai Unggulan' }}">
                                                 <i class="mdi mdi-star{{ $testimonial->is_featured ? '' : '-outline' }}"></i>
                                             </button>
                                         </form>
@@ -281,8 +281,8 @@
                             <tr>
                                 <td colspan="8" class="text-center py-4">
                                     <i class="mdi mdi-comment-remove-outline" style="font-size: 48px; color: #ccc;"></i>
-                                    <h5 class="mt-3">No testimonials found</h5>
-                                    <p class="text-muted">Try adjusting your search criteria.</p>
+                                    <h5 class="mt-3">Tidak ada testimoni ditemukan</h5>
+                                    <p class="text-muted">Coba sesuaikan kriteria pencarian Anda.</p>
                                 </td>
                             </tr>
                             @endforelse

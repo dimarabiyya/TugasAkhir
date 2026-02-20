@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
                 <h3 class="font-weight-bold">{{ $enrollment->course->title }}</h3>
                 @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']) && isset($enrollment->user))
                     <h6 class="font-weight-normal mb-2">
-                        <i class="icon-user mr-1"></i> Student: <strong>{{ $enrollment->user->name }}</strong>
+                        <i class="icon-user mr-1"></i> Siswa: <strong>{{ $enrollment->user->name }}</strong>
                     </h6>
                 @endif
                 <h6 class="font-weight-normal mb-0">{{ Str::limit($enrollment->course->description, 100) }}</h6>
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Storage;
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('enrollments.index') }}" class="btn btn-secondary">
-                        <i class="icon-arrow-left"></i> Back
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -33,12 +33,12 @@ use Illuminate\Support\Facades\Storage;
     <div class="col-md-8 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Course Content</h4>
+                <h4 class="card-title mb-4">Konten Kursus</h4>
                 
                 <!-- Progress Overview -->
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5>Overall Progress</h5>
+                        <h5>Kemajuan Keseluruhan</h5>
                         <h5 class="text-primary">{{ $enrollment->progress_percentage }}%</h5>
                     </div>
                     <div class="progress" style="height: 25px;">
@@ -52,7 +52,7 @@ use Illuminate\Support\Facades\Storage;
                 </div>
                 
                 <!-- Modules List -->
-                <h5 class="mb-3">Modules ({{ $enrollment->course->modules->count() }})</h5>
+                <h5 class="mb-3">Modul ({{ $enrollment->course->modules->count() }})</h5>
                 @forelse($enrollment->course->modules as $module)
                 <div class="card mb-3 module-item">
                     <div class="card-body">
@@ -62,9 +62,9 @@ use Illuminate\Support\Facades\Storage;
                                     <i class="icon-layers text-primary"></i>
                                     {{ $module->title }}
                                 </h6>
-                                <small class="text-muted">{{ $module->lessons->count() }} lessons</small>
+                                <small class="text-muted">{{ $module->lessons->count() }} pelajaran</small>
                             </div>
-                            <span class="badge badge-secondary">Module {{ $module->order }}</span>
+                            <span class="badge badge-secondary">Modul {{ $module->order }}</span>
                         </div>
                         
                         @if($module->lessons->isNotEmpty())
@@ -88,7 +88,7 @@ use Illuminate\Support\Facades\Storage;
                                     <div id="collapse{{ $lesson->id }}" class="collapse" 
                                          aria-labelledby="heading{{ $lesson->id }}" data-parent="#lessons{{ $module->id }}">
                                         <div class="card-body">
-                                            <p class="text-muted mb-2">{{ $lesson->description ?? 'No description available.' }}</p>
+                                            <p class="text-muted mb-2">{{ $lesson->description ?? 'Tidak ada deskripsi.' }}</p>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <small class="text-muted">
                                                     <i class="icon-clock"></i> {{ $lesson->duration_minutes ?? 'N/A' }} min
@@ -107,7 +107,7 @@ use Illuminate\Support\Facades\Storage;
                     </div>
                 </div>
                 @empty
-                <p class="text-muted">No modules available yet.</p>
+                <p class="text-muted">Tidak ada modul yang tersedia.</p>
                 @endforelse
             </div>
         </div>
@@ -117,11 +117,11 @@ use Illuminate\Support\Facades\Storage;
     <div class="col-md-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Enrollment Info</h4>
+                <h4 class="card-title mb-4">Informasi Pendaftaran</h4>
                 
                 @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']) && isset($enrollment->user))
                 <div class="mb-4">
-                    <p class="text-muted mb-2">Student</p>
+                    <p class="text-muted mb-2">Siswa</p>
                     <p class="font-weight-bold">{{ $enrollment->user->name }}</p>
                     <p class="text-muted small mb-0">{{ $enrollment->user->email }}</p>
                 </div>
@@ -131,35 +131,35 @@ use Illuminate\Support\Facades\Storage;
                     <p class="text-muted mb-2">Status</p>
                     <span class="badge {{ $enrollment->completed_at ? 'badge-success' : ($enrollment->progress_percentage > 0 ? 'badge-info' : 'badge-warning') }}">
                         @if($enrollment->completed_at)
-                            Completed
+                            Selesai
                         @elseif($enrollment->progress_percentage > 0)
-                            In Progress
+                            Sedang Berlangsung
                         @else
-                            Not Started
+                            Belum Dimulai
                         @endif
                     </span>
                 </div>
                 
                 <div class="mb-4">
-                    <p class="text-muted mb-2">Enrolled Date</p>
+                    <p class="text-muted mb-2">Tanggal Pendaftaran</p>
                     <p class="font-weight-bold">{{ $enrollment->enrolled_at->format('M d, Y') }}</p>
                 </div>
                 
                 @if($enrollment->completed_at)
                 <div class="mb-4">
-                    <p class="text-muted mb-2">Completed Date</p>
+                    <p class="text-muted mb-2">Tanggal Selesai</p>
                     <p class="font-weight-bold">{{ $enrollment->completed_at->format('M d, Y') }}</p>
                 </div>
                 @endif
                 
                 <div class="mb-4">
-                    <p class="text-muted mb-2">Course Level</p>
+                    <p class="text-muted mb-2">Level Kursus</p>
                     <span class="badge badge-info">{{ ucfirst($enrollment->course->level) }}</span>
                 </div>
                 
                 <div class="mb-4">
-                    <p class="text-muted mb-2">Duration</p>
-                    <p class="font-weight-bold">{{ $enrollment->course->duration_hours }} hours</p>
+                    <p class="text-muted mb-2">Durasi</p>
+                    <p class="font-weight-bold">{{ $enrollment->course->duration_hours }} jam</p>
                 </div>
                 
                 <hr>
@@ -168,7 +168,7 @@ use Illuminate\Support\Facades\Storage;
                     <div class="card bg-gradient-primary text-white">
                         <div class="card-body text-center">
                             <h4>{{ $enrollment->progress_percentage }}%</h4>
-                            <p class="mb-0">Complete</p>
+                            <p class="mb-0">Selesai</p>
                         </div>
                     </div>
                 </div>
@@ -178,18 +178,18 @@ use Illuminate\Support\Facades\Storage;
                     <form action="{{ route('enrollments.complete', $enrollment) }}" method="POST" class="mb-3">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="btn btn-success w-100" onclick="return confirm('Mark this course as completed?');">
-                            <i class="icon-check"></i> Mark as Complete
+                        <button type="submit" class="btn btn-success w-100" onclick="return confirm('Tandai kursus ini sebagai selesai?');">
+                            <i class="icon-check"></i> Tandai sebagai Selesai
                         </button>
                     </form>
                     @endif
                     
                     <a href="{{ $enrollment->course->url }}" class="btn btn-primary w-100">
-                        <i class="icon-book"></i> Continue Learning
+                        <i class="icon-book"></i> Lanjutkan Pembelajaran
                     </a>
                 @else
                     <a href="{{ $enrollment->course->url }}" class="btn btn-primary w-100">
-                        <i class="icon-book"></i> View Course
+                        <i class="icon-book"></i> Lihat Kursus
                     </a>
                 @endif
             </div>

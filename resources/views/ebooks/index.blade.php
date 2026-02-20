@@ -20,7 +20,7 @@
 </style>
 
 <!-- Header Section -->
-<div class="row mb-4">
+<div class="row">
     @if(session('success'))
         <div class="col-md-12 mb-4">
             <div class="alert alert-success alert-dismissible fade show d-flex align-items-center bg-success bg-opacity-10 border border-success" role="alert">
@@ -54,8 +54,8 @@
     </div>
 </div>
 <!-- Main Content -->
-<div class="py-1">
-    <div class="container-xl">
+<div class="py-0">
+    <div class="container-fluid px-0">
         @if($ebooks->count() > 0)
             <!-- Products Grid -->
             <div class="row g-4 mb-5">

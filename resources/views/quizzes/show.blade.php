@@ -12,15 +12,15 @@
                             {{ ucfirst($quiz->status) }}
                         </span>
                         @if($quiz->isAvailable())
-                            <span class="badge badge-success">Available</span>
+                            <span class="badge badge-success">Tersedia</span>
                         @else
-                            <span class="badge badge-secondary">Not Available</span>
+                            <span class="badge badge-secondary">Tidak Tersedia</span>
                         @endif
                     </div>
                 </div>
                 <nav aria-label="breadcrumb" class="mt-2">
                     <ol class="breadcrumb" style="background: none; padding: 0; margin: 5px 0;">
-                        <li class="breadcrumb-item"><a href="{{ route('courses.index') }}" class="text-muted">Course</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('courses.index') }}" class="text-muted">Mata Pelajaran</a></li>
                         <li class="breadcrumb-item text-muted">{{ $quiz->lesson->module->course->title ?? 'N/A' }}</li>
                         <li class="breadcrumb-item text-muted">›</li>
                         <li class="breadcrumb-item text-muted">{{ $quiz->lesson->module->title ?? 'N/A' }}</li>
@@ -33,7 +33,7 @@
                 <div class="justify-content-end d-flex">
                     @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                         <a href="{{ route('quiz.questions.index', $quiz) }}" class="btn btn-info mr-2">
-                            <i class="icon-question"></i> Manage Questions
+                            <i class="icon-question"></i> Kelola Pertanyaan
                         </a>
                         <a href="{{ route('quizzes.edit', $quiz) }}" class="btn btn-primary mr-2">
                             <i class="icon-pencil"></i> Edit
@@ -42,12 +42,12 @@
                     @if(auth()->check() && !auth()->user()->hasAnyRole(['admin', 'instructor']))
                         @if($quiz->isAvailable() && $quiz->canUserAttempt(auth()->id()))
                             <a href="{{ route('quiz.taking.start', $quiz) }}" class="btn btn-success mr-2">
-                                <i class="icon-control-play"></i> Start Quiz
+                                <i class="icon-control-play"></i> Mulai Kuis
                             </a>
                         @endif
                     @endif
                     <a href="{{ route('quizzes.index') }}" class="btn btn-light">
-                        <i class="icon-arrow-left"></i> Back
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     <div class="card-body text-center">
                         <i class="icon-target" style="font-size: 40px; color: #667eea;"></i>
                         <h3 class="mt-3 mb-0">{{ $quiz->passing_score }}%</h3>
-                        <p class="text-muted mb-0">Passing Score</p>
+                        <p class="text-muted mb-0">Skor Kelulusan</p>
                     </div>
                 </div>
             </div>
@@ -100,7 +100,7 @@
                     <div class="card-body text-center">
                         <i class="icon-clock" style="font-size: 40px; color: #f5576c;"></i>
                         <h3 class="mt-3 mb-0">{{ $quiz->time_limit_minutes ? $quiz->time_limit_minutes . 'm' : '∞' }}</h3>
-                        <p class="text-muted mb-0">Time Limit</p>
+                        <p class="text-muted mb-0">Batas Waktu</p>
                     </div>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                     <div class="card-body text-center">
                         <i class="icon-question" style="font-size: 40px; color: #fa709a;"></i>
                         <h3 class="mt-3 mb-0">{{ $quiz->questions->count() }}</h3>
-                        <p class="text-muted mb-0">Questions</p>
+                        <p class="text-muted mb-0">Pertanyaan</p>
                     </div>
                 </div>
             </div>
@@ -120,7 +120,7 @@
                     <div class="card-body text-center">
                         <i class="icon-people" style="font-size: 40px; color: #4facfe;"></i>
                         <h3 class="mt-3 mb-0">{{ $quiz->attempts->count() }}</h3>
-                        <p class="text-muted mb-0">Attempts</p>
+                        <p class="text-muted mb-0">Upaya</p>
                     </div>
                 </div>
             </div>
@@ -131,16 +131,16 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="icon-settings text-primary"></i> Quiz Settings
+                    <i class="icon-settings text-primary"></i> Pengaturan Kuis
                 </h5>
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <div class="setting-item">
                             <i class="icon-check text-success mr-2"></i>
-                            <strong>Multiple Attempts:</strong>
+                            <strong>Upaya Ganda:</strong>
                             <span class="badge badge-{{ $quiz->allow_multiple_attempts ? 'success' : 'secondary' }}">
-                                {{ $quiz->allow_multiple_attempts ? 'Yes' : 'No' }}
+                                {{ $quiz->allow_multiple_attempts ? 'Ya' : 'Tidak' }}
                             </span>
                             @if($quiz->allow_multiple_attempts && $quiz->max_attempts)
                                 <span class="text-muted">(Max: {{ $quiz->max_attempts }})</span>
@@ -151,9 +151,9 @@
                     <div class="col-md-6 mb-3">
                         <div class="setting-item">
                             <i class="icon-{{ $quiz->shuffle_questions ? 'refresh' : 'pin' }} text-info mr-2"></i>
-                            <strong>Shuffle Questions:</strong>
+                            <strong>Acak Pertanyaan:</strong>
                             <span class="badge badge-{{ $quiz->shuffle_questions ? 'info' : 'secondary' }}">
-                                {{ $quiz->shuffle_questions ? 'Yes' : 'No' }}
+                                {{ $quiz->shuffle_questions ? 'Ya' : 'Tidak' }}
                             </span>
                         </div>
                     </div>
@@ -161,9 +161,9 @@
                     <div class="col-md-6 mb-3">
                         <div class="setting-item">
                             <i class="icon-{{ $quiz->shuffle_answers ? 'refresh' : 'check' }} text-warning mr-2"></i>
-                            <strong>Shuffle Answers:</strong>
+                            <strong>Acak Jawaban:</strong>
                             <span class="badge badge-{{ $quiz->shuffle_answers ? 'warning' : 'secondary' }}">
-                                {{ $quiz->shuffle_answers ? 'Yes' : 'No' }}
+                                {{ $quiz->shuffle_answers ? 'Ya' : 'Tidak' }}
                             </span>
                         </div>
                     </div>
@@ -171,9 +171,9 @@
                     <div class="col-md-6 mb-3">
                         <div class="setting-item">
                             <i class="icon-eye text-primary mr-2"></i>
-                            <strong>Show Correct Answers:</strong>
+                            <strong>Tampilkan Jawaban yang Benar:</strong>
                             <span class="badge badge-{{ $quiz->show_correct_answers ? 'success' : 'secondary' }}">
-                                {{ $quiz->show_correct_answers ? 'Yes' : 'No' }}
+                                {{ $quiz->show_correct_answers ? 'Ya' : 'Tidak' }}
                             </span>
                         </div>
                     </div>
@@ -181,9 +181,9 @@
                     <div class="col-md-6 mb-3">
                         <div class="setting-item">
                             <i class="icon-minus text-danger mr-2"></i>
-                            <strong>Negative Marking:</strong>
+                            <strong>Penilaian Negatif:</strong>
                             <span class="badge badge-{{ $quiz->negative_marking ? 'danger' : 'secondary' }}">
-                                {{ $quiz->negative_marking ? 'Yes' : 'No' }}
+                                {{ $quiz->negative_marking ? 'Ya' : 'Tidak' }}
                             </span>
                             @if($quiz->negative_marking)
                                 <span class="text-muted">({{ ($quiz->negative_mark_value ?? 0.25) * 100 }}%)</span>
@@ -194,9 +194,9 @@
                     <div class="col-md-6 mb-3">
                         <div class="setting-item">
                             <i class="icon-arrow-left-right text-info mr-2"></i>
-                            <strong>Allow Navigation:</strong>
+                            <strong>Izinkan Navigasi:</strong>
                             <span class="badge badge-{{ $quiz->allow_navigation ? 'success' : 'danger' }}">
-                                {{ $quiz->allow_navigation ? 'Yes' : 'No' }}
+                                {{ $quiz->allow_navigation ? 'Ya' : 'Tidak' }}
                             </span>
                         </div>
                     </div>
@@ -210,19 +210,19 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-3">
-                    <i class="icon-calendar text-info"></i> Schedule
+                    <i class="icon-calendar text-info"></i> Jadwal
                 </h5>
                 <div class="row">
                     @if($quiz->start_date)
                     <div class="col-md-6">
-                        <p class="mb-1"><strong>Start Date:</strong></p>
+                        <p class="mb-1"><strong>Dimulai</strong></p>
                         <p class="text-muted">{{ $quiz->start_date->format('F d, Y H:i') }}</p>
                     </div>
                     @endif
                     
                     @if($quiz->end_date)
                     <div class="col-md-6">
-                        <p class="mb-1"><strong>End Date:</strong></p>
+                        <p class="mb-1"><strong>Berakhir</strong></p>
                         <p class="text-muted">{{ $quiz->end_date->format('F d, Y H:i') }}</p>
                     </div>
                     @endif
@@ -237,10 +237,10 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="card-title mb-0">
-                        <i class="icon-question text-danger"></i> Questions ({{ $quiz->questions->count() }})
+                        <i class="icon-question text-danger"></i> Pertanyaan ({{ $quiz->questions->count() }})
                     </h5>
                     <a href="{{ route('quiz.questions.index', $quiz) }}" class="btn btn-sm btn-outline-primary">
-                        <i class="icon-plus"></i> Add Question
+                        <i class="icon-plus"></i> Tambah Pertanyaan
                     </a>
                 </div>
                 
@@ -250,10 +250,10 @@
                         <thead>
                             <tr>
                                 <th width="50">#</th>
-                                <th>Question</th>
-                                <th>Type</th>
-                                <th>Points</th>
-                                <th>Difficulty</th>
+                                <th>Pertanyaan</th>
+                                <th>Tipe</th>
+                                <th>Poin</th>
+                                <th>Kesulitan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -264,7 +264,7 @@
                                     <strong>{{ Str::limit($question->question_text ?? $question->question, 60) }}</strong>
                                 </td>
                                 <td>
-                                    <span class="badge badge-info">{{ ucfirst(str_replace('_', ' ', $question->type ?? 'Multiple Choice')) }}</span>
+                                        <span class="badge badge-info">{{ $question->type == 'multiple_choice' ? 'Pilihan Ganda' : ucfirst(str_replace('_', ' ', $question->type ?? 'Pilihan Ganda')) }}</span>
                                 </td>
                                 <td><strong>{{ $question->points }}</strong></td>
                                 <td>
@@ -277,7 +277,7 @@
                                             ];
                                         @endphp
                                         <span class="badge badge-{{ $difficultyColors[$question->difficulty] ?? 'secondary' }}">
-                                            {{ ucfirst($question->difficulty) }}
+                                            {{ $question->difficulty == 'easy' ? 'Mudah' : ($question->difficulty == 'medium' ? 'Menengah' : ($question->difficulty == 'hard' ? 'Sulit' : ucfirst($question->difficulty))) }}
                                         </span>
                                     @else
                                         <span class="text-muted">-</span>
@@ -293,10 +293,10 @@
                     <div class="icon-circle-lg bg-light d-inline-flex align-items-center justify-content-center mb-3">
                         <i class="icon-question text-muted" style="font-size: 48px;"></i>
                     </div>
-                    <h5 class="text-muted">No questions yet</h5>
-                    <p class="text-muted mb-3">Add questions to get started</p>
+                    <h5 class="text-muted">Belum ada pertanyaan</h5>
+                    <p class="text-muted mb-3">Tambahkan pertanyaan untuk memulai</p>
                     <a href="{{ route('quiz.questions.create', $quiz) }}" class="btn btn-primary">
-                        <i class="icon-plus"></i> Add First Question
+                        <i class="icon-plus"></i> Tambah Pertanyaan Pertama
                     </a>
                 </div>
                 @endif
@@ -309,17 +309,17 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-3">
-                    <i class="icon-people text-success"></i> Recent Attempts ({{ $quiz->attempts->count() }})
+                    <i class="icon-people text-success"></i> Upaya Terakhir ({{ $quiz->attempts->count() }})
                 </h5>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Student</th>
-                                <th>Attempt</th>
-                                <th>Score</th>
+                                <th>Siswa</th>
+                                <th>Upaya</th>
+                                <th>Skor</th>
                                 <th>Status</th>
-                                <th>Date</th>
+                                <th>Tanggal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -344,11 +344,11 @@
                                 </td>
                                 <td>
                                     @if($attempt->is_passed)
-                                        <span class="badge badge-success">Passed</span>
+                                        <span class="badge badge-success">Lulus</span>
                                     @elseif($attempt->submitted)
-                                        <span class="badge badge-danger">Failed</span>
+                                        <span class="badge badge-danger">Gagal</span>
                                     @else
-                                        <span class="badge badge-warning">In Progress</span>
+                                        <span class="badge badge-warning">Sedang Berlangsung</span>
                                     @endif
                                 </td>
                                 <td>
@@ -370,19 +370,19 @@
         <div class="card sticky-top" style="top: 20px;">
             <div class="card-body">
                 <h5 class="card-title mb-3">
-                    <i class="icon-book text-primary"></i> Course Context
+                    <i class="icon-book text-primary"></i> Konteks Mata Pelajaran
                 </h5>
                 <hr>
                 <div class="mb-3">
-                    <p class="mb-1 text-muted"><i class="icon-graduation mr-2 text-primary"></i><strong>Course:</strong></p>
+                    <p class="mb-1 text-muted"><i class="icon-graduation mr-2 text-primary"></i><strong>Mata Pelajaran:</strong></p>
                     <p class="mb-0">{{ $quiz->lesson->module->course->title ?? 'N/A' }}</p>
                 </div>
                 <div class="mb-3">
-                    <p class="mb-1 text-muted"><i class="icon-folder mr-2 text-info"></i><strong>Module:</strong></p>
+                    <p class="mb-1 text-muted"><i class="icon-folder mr-2 text-info"></i><strong>Modul:</strong></p>
                     <p class="mb-0">{{ $quiz->lesson->module->title ?? 'N/A' }}</p>
                 </div>
                 <div class="mb-3">
-                    <p class="mb-1 text-muted"><i class="icon-note mr-2 text-warning"></i><strong>Lesson:</strong></p>
+                    <p class="mb-1 text-muted"><i class="icon-note mr-2 text-warning"></i><strong>Materi:</strong></p>
                     <p class="mb-0">{{ $quiz->lesson->title ?? 'N/A' }}</p>
                 </div>
             </div>
@@ -393,7 +393,7 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-3">
-                    <i class="icon-chart text-info"></i> Statistics
+                    <i class="icon-chart text-info"></i> Statistik
                 </h5>
                 <hr>
                 @php
@@ -440,17 +440,17 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-3">
-                    <i class="icon-settings"></i> Quick Actions
+                    <i class="icon-settings"></i> Aksi Cepat
                 </h5>
                 <div class="d-flex flex-column">
                     <a href="{{ route('quiz.questions.index', $quiz) }}" class="btn btn-info mb-2">
-                        <i class="icon-question"></i> Manage Questions ({{ $quiz->questions->count() }})
+                        <i class="icon-question"></i> Kelola Pertanyaan ({{ $quiz->questions->count() }})
                     </a>
                     <a href="{{ route('quizzes.edit', $quiz) }}" class="btn btn-primary mb-2">
-                        <i class="icon-pencil"></i> Edit Settings
+                        <i class="icon-pencil"></i> Edit Pengaturan
                     </a>
                     <a href="{{ route('quizzes.index') }}" class="btn btn-light mb-2">
-                        <i class="icon-arrow-left"></i> Back to List
+                        <i class="icon-arrow-left"></i> Kembali ke Daftar
                     </a>
                     <hr>
                     <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" 
@@ -458,7 +458,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger w-100">
-                            <i class="icon-trash"></i> Delete Quiz
+                            <i class="icon-trash"></i> Hapus Kuis
                         </button>
                     </form>
                 </div>
@@ -471,23 +471,23 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-3">
-                    <i class="icon-control-play"></i> Take Quiz
+                    <i class="icon-control-play"></i> Ambil Kuis
                 </h5>
                 
                 @if($quiz->isAvailable())
                     @if($quiz->canUserAttempt(auth()->id()))
                         <a href="{{ route('quiz.taking.start', $quiz) }}" class="btn btn-success btn-block btn-lg">
-                            <i class="icon-play mr-2"></i> Start Quiz
+                            <i class="icon-play mr-2"></i> Mulai Kuis
                         </a>
                         
                         @if($userAttempts && $userAttempts->count() > 0)
                             <hr>
-                            <h6 class="mb-3">Your Attempts ({{ $userAttempts->count() }})</h6>
+                            <h6 class="mb-3">Upaya Anda ({{ $userAttempts->count() }})</h6>
                             @foreach($userAttempts->take(5) as $attempt)
                                 <div class="attempt-item mb-2 p-2 border rounded">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <small class="text-muted">Attempt #{{ $attempt->attempt_number }}</small>
+                                            <small class="text-muted">Upaya #{{ $attempt->attempt_number }}</small>
                                             <div>
                                                 <strong>{{ $attempt->score ?? 0 }}/{{ $attempt->total_points ?? $quiz->questions->sum('points') }}</strong>
                                                 @if($attempt->total_points > 0)
@@ -497,12 +497,12 @@
                                         </div>
                                         <div>
                                             @if($attempt->is_passed)
-                                                <span class="badge badge-success">Passed</span>
+                                                <span class="badge badge-success">Lulus</span>
                                             @elseif($attempt->submitted)
-                                                <span class="badge badge-danger">Failed</span>
+                                                <span class="badge badge-danger">Gagal</span>
                                             @else
                                                 <a href="{{ route('quiz.taking.show', ['quiz' => $quiz, 'attempt' => $attempt]) }}" class="btn btn-sm btn-primary">
-                                                    Continue
+                                                    Lanjutkan
                                                 </a>
                                             @endif
                                         </div>
@@ -515,7 +515,7 @@
                             
                             @if($quiz->allow_multiple_attempts && (!$quiz->max_attempts || $userAttempts->count() < $quiz->max_attempts))
                                 <p class="text-muted small mt-2">
-                                    You can take this quiz {{ $quiz->max_attempts ? ($quiz->max_attempts - $userAttempts->count()) . ' more times' : 'multiple times' }}
+                                    Anda dapat mengikuti kuis ini {{ $quiz->max_attempts ? ($quiz->max_attempts - $userAttempts->count()) . ' kali lagi' : 'berkali-kali' }}
                                 </p>
                             @endif
                         @endif
@@ -523,15 +523,15 @@
                         <div class="alert alert-warning">
                             <i class="icon-info mr-2"></i>
                             @if(!$quiz->allow_multiple_attempts)
-                                You have already attempted this quiz.
+                                Anda telah mencoba kuis ini.
                             @elseif($quiz->max_attempts)
-                                You have reached the maximum number of attempts ({{ $quiz->max_attempts }}).
+                                Anda telah mencapai jumlah upaya maksimal ({{ $quiz->max_attempts }}).
                             @endif
                         </div>
                         
                         @if($bestAttempt)
                             <div class="text-center">
-                                <p class="text-muted mb-2">Best Score</p>
+                                <p class="text-muted mb-2">Skor Terbaik</p>
                                 <h3 class="text-primary">{{ $bestAttempt->score }}/{{ $bestAttempt->total_points }}</h3>
                                 <p class="text-muted">({{ round(($bestAttempt->score / $bestAttempt->total_points) * 100) }}%)</p>
                             </div>
@@ -541,11 +541,11 @@
                     <div class="alert alert-info">
                         <i class="icon-info mr-2"></i>
                         @if($quiz->status !== 'published')
-                            This quiz is not published yet.
+                            Kuis ini belum dipublikasikan.
                         @elseif($quiz->start_date && now() < $quiz->start_date)
-                            This quiz will be available starting {{ $quiz->start_date->format('M d, Y') }}.
+                            Kuis ini akan tersedia mulai {{ $quiz->start_date->format('M d, Y') }}.
                         @elseif($quiz->end_date && now() > $quiz->end_date)
-                            This quiz has ended.
+                            Kuis ini telah berakhir.
                         @endif
                     </div>
                 @endif
@@ -556,16 +556,16 @@
         <!-- Status Info -->
         <div class="card mt-3">
             <div class="card-body">
-                <h6 class="mb-3"><i class="icon-info"></i> Status Information</h6>
+                <h6 class="mb-3"><i class="icon-info"></i> Informasi Status</h6>
                 <p class="mb-2"><small class="text-muted">Status:</small><br>
                    <span class="badge badge-{{ $quiz->status == 'published' ? 'success' : ($quiz->status == 'draft' ? 'warning' : 'secondary') }}">
-                       {{ ucfirst($quiz->status) }}
+                       {{ $quiz->status == 'published' ? 'Dipublikasikan' : ($quiz->status == 'draft' ? 'Draf' : ucfirst($quiz->status)) }}
                    </span>
                 </p>
-                <p class="mb-2"><small class="text-muted">Created:</small><br>
+                <p class="mb-2"><small class="text-muted">Dibuat:</small><br>
                    <small>{{ $quiz->created_at->format('M d, Y') }}</small>
                 </p>
-                <p class="mb-0"><small class="text-muted">Last Updated:</small><br>
+                <p class="mb-0"><small class="text-muted">Terakhir Diperbarui:</small><br>
                    <small>{{ $quiz->updated_at->format('M d, Y') }}</small>
                 </p>
             </div>

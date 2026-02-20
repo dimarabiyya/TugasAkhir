@@ -9,7 +9,7 @@
                     <div>
                         <h3 class="font-weight-bold mb-2">{{ $lesson->title }}</h3>
                         <div class="d-flex align-items-center mb-2">
-                            <span class="badge badge-primary mr-2">Lesson {{ $lesson->order }}</span>
+                            <span class="badge badge-primary mr-2">Materi {{ $lesson->order }}</span>
                             @php
                                 $typeColors = [
                                     'video' => 'info',
@@ -20,12 +20,12 @@
                             @endphp
                             <span class="badge badge-{{ $typeColors[$lesson->type] ?? 'secondary' }} mr-2">{{ ucfirst($lesson->type) }}</span>
                             @if($lesson->is_free)
-                                <span class="badge badge-success">FREE</span>
+                                <span class="badge badge-success">GRATIS</span>
                             @else
-                                <span class="badge badge-secondary">PAID</span>
+                                <span class="badge badge-secondary">BERBAYAR</span>
                             @endif
                         </div>
-                        <p class="text-muted mb-0">Module: {{ $lesson->module->title }} • Course: {{ $lesson->module->course->title }}</p>
+                        <p class="text-muted mb-0">Modul: {{ $lesson->module->title }} • Mata Materi: {{ $lesson->module->course->title }}</p>
                     </div>
                 </div>
             </div>
@@ -33,11 +33,11 @@
                 <div class="justify-content-end d-flex">
                     @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
                         <a href="{{ route('lessons.edit', $lesson) }}" class="btn btn-primary mr-2">
-                            <i class="mdi mdi-pencil"></i> Edit Lesson
+                            <i class="mdi mdi-pencil"></i> Edit Materi
                         </a>
                     @endif
                     <a href="{{ route('modules.show', $lesson->module) }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Back to Module
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Modul
                     </a>
                 </div>
             </div>
@@ -53,7 +53,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="mdi mdi-information text-primary"></i> Lesson Overview
+                    <i class="mdi mdi-information text-primary"></i> Ikhtisar Materi
                 </h4>
                 
                 @if($lesson->description)
@@ -62,7 +62,7 @@
                     </div>
                 @else
                     <div class="mb-4">
-                        <p class="text-muted font-italic">No description provided for this lesson.</p>
+                        <p class="text-muted font-italic">Tidak ada deskripsi yang diberikan untuk Materi ini.</p>
                     </div>
                 @endif
                 
@@ -77,7 +77,7 @@
                                     <i class="mdi mdi-sort-numeric-variant"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Order</p>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Urutan</p>
                                     <h6 class="mb-0 font-weight-bold">{{ $lesson->order }}</h6>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                     <i class="mdi mdi-clock"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Duration</p>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Durasi</p>
                                     <h6 class="mb-0 font-weight-bold">{{ $lesson->duration_minutes ? $lesson->duration_minutes . 'm' : '-' }}</h6>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                                     <i class="mdi mdi-tag"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Type</p>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Tipe</p>
                                     <h6 class="mb-0 font-weight-bold">{{ ucfirst($lesson->type) }}</h6>
                                 </div>
                             </div>
@@ -131,14 +131,14 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="mdi mdi-play-circle text-primary"></i> Lesson Content
+                    <i class="mdi mdi-play-circle text-primary"></i> Konten Materi
                 </h4>
                 
                 @if($lesson->content_url)
                     <div class="mb-4">
-                        <h6 class="mb-2">External Content</h6>
+                        <h6 class="mb-2">Konten Eksternal</h6>
                         <a href="{{ $lesson->content_url }}" target="_blank" class="btn btn-primary">
-                            <i class="mdi mdi-open-in-new mr-2"></i> Open Content
+                            <i class="mdi mdi-open-in-new mr-2"></i> Buka Konten
                         </a>
                         <small class="text-muted d-block mt-2">{{ $lesson->content_url }}</small>
                     </div>
@@ -146,7 +146,7 @@
                 
                 @if($lesson->content_text)
                     <div class="mb-4">
-                        <h6 class="mb-2">Text Content</h6>
+                        <h6 class="mb-2">Konten Teks</h6>
                         <div class="content-text p-3 bg-light rounded">
                             {!! nl2br(e($lesson->content_text)) !!}
                         </div>
@@ -162,10 +162,10 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">
-                        <i class="mdi mdi-help-circle text-primary"></i> Associated Quiz
+                        <i class="mdi mdi-help-circle text-primary"></i> Kuis Terkait
                     </h4>
                     <a href="{{ route('quizzes.show', $lesson->quiz) }}" class="btn btn-sm btn-primary">
-                        <i class="mdi mdi-eye"></i> View Quiz
+                        <i class="mdi mdi-eye"></i> Lihat Kuis
                     </a>
                 </div>
                 
@@ -204,25 +204,25 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-folder text-info"></i> Module Information
+                    <i class="mdi mdi-folder text-info"></i> Informasi Modul
                 </h5>
                 
                 <div class="module-info">
                     <h6 class="mb-2">{{ $lesson->module->title }}</h6>
-                    <p class="text-muted mb-2">Module {{ $lesson->module->order }}</p>
+                    <p class="text-muted mb-2">Modul {{ $lesson->module->order }}</p>
                     <p class="text-muted mb-3">{{ Str::limit($lesson->module->description, 100) }}</p>
                     
                     <a href="{{ route('modules.show', $lesson->module) }}" class="btn btn-outline-primary btn-block mb-3">
-                        <i class="mdi mdi-eye mr-2"></i> View Module
+                        <i class="mdi mdi-eye mr-2"></i> Lihat Modul
                     </a>
                     
                     <div class="module-stats">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Lessons:</span>
+                            <span class="text-muted">Materi:</span>
                             <strong>{{ $lesson->module->lessons->count() }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Course:</span>
+                            <span class="text-muted">Mata Materi:</span>
                             <strong>{{ $lesson->module->course->title }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
@@ -239,48 +239,48 @@
             <div class="card mt-3">
                 <div class="card-body">
                     <h5 class="card-title mb-4">
-                        <i class="mdi mdi-cog"></i> Quick Actions
+                        <i class="mdi mdi-cog"></i> Tindakan Cepat
                     </h5>
                     
                     <div class="action-info mb-3">
-                        <p class="text-muted mb-1 small">Lesson ID</p>
+                        <p class="text-muted mb-1 small">ID Materi</p>
                         <p class="mb-0"><strong>#{{ $lesson->id }}</strong></p>
                     </div>
                     
                     <div class="action-info mb-3">
-                        <p class="text-muted mb-1 small">Created</p>
+                        <p class="text-muted mb-1 small">Dibuat</p>
                         <p class="mb-0"><strong>{{ $lesson->created_at->format('M d, Y') }}</strong></p>
                     </div>
                     
                     <div class="action-info mb-4">
-                        <p class="text-muted mb-1 small">Last Updated</p>
+                        <p class="text-muted mb-1 small">Pembaruan Terakhir</p>
                         <p class="mb-0"><strong>{{ $lesson->updated_at->format('M d, Y') }}</strong></p>
                     </div>
                     
                     <hr>
                     
                     <a href="{{ route('lessons.edit', $lesson) }}" class="btn btn-primary btn-block mb-2">
-                        <i class="mdi mdi-pencil mr-2"></i> Edit Lesson
+                        <i class="mdi mdi-pencil mr-2"></i> Edit Materi
                     </a>
                     
                     @if(!$lesson->quiz)
                         <a href="{{ route('quizzes.create', $lesson) }}" class="btn btn-success btn-block mb-2">
-                            <i class="mdi mdi-plus mr-2"></i> Add Quiz
+                            <i class="mdi mdi-plus mr-2"></i> Tambah Kuis
                         </a>
                     @endif
                     
                     <form action="{{ route('lessons.destroy', $lesson) }}" method="POST" 
-                          onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this lesson? This action cannot be undone.');">
+                          onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus Materi ini? Tindakan ini tidak dapat dibatalkan.');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-block" {{ $lesson->quiz ? 'disabled' : '' }}>
-                            <i class="mdi mdi-delete mr-2"></i> Delete Lesson
+                            <i class="mdi mdi-delete mr-2"></i> Hapus Materi
                         </button>
                     </form>
                     
                     @if($lesson->quiz)
                         <small class="text-muted mt-2 d-block">
-                            <i class="mdi mdi-warning"></i> Cannot delete lesson with existing quiz
+                            <i class="mdi mdi-warning"></i> Tidak dapat menghapus Materi dengan kuis yang ada
                         </small>
                     @endif
                 </div>
@@ -291,13 +291,13 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-chart text-success"></i> Lesson Statistics
+                    <i class="mdi mdi-chart text-success"></i> Statistik Materi
                 </h5>
                 
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="mdi mdi-clock text-primary mr-2"></i>
-                        <span class="text-muted">Duration</span>
+                        <span class="text-muted">Durasi</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-primary">{{ $lesson->duration_minutes ? $lesson->duration_minutes . 'm' : '-' }}</h4>
                 </div>
@@ -305,7 +305,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="mdi mdi-tag text-info mr-2"></i>
-                        <span class="text-muted">Type</span>
+                        <span class="text-muted">Tipe</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-info">{{ ucfirst($lesson->type) }}</h4>
                 </div>
@@ -313,7 +313,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center">
                     <div>
                         <i class="mdi mdi-calendar text-success mr-2"></i>
-                        <span class="text-muted">Age</span>
+                        <span class="text-muted">Usia</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-success">{{ $lesson->created_at->diffForHumans() }}</h4>
                 </div>

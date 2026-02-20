@@ -618,7 +618,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <i class="mdi mdi-help-circle menu-icon"></i>
                             <span class="menu-title">Kuis</span>
                         </a>
                     </li>

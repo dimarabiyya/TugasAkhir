@@ -5,7 +5,7 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12">
-                <h3 class="font-weight-bold">Quiz Results</h3>
+                <h3 class="font-weight-bold">Hasil Kuis</h3>
                 <h6 class="font-weight-normal mb-0">{{ $quiz->title }}</h6>
             </div>
         </div>
@@ -20,7 +20,7 @@
                 <div class="mb-4">
                     <i class="icon-{{ $attempt->is_passed ? 'check-circle' : 'close-circle' }}" style="font-size: 80px; opacity: 0.9;"></i>
                 </div>
-                <h2 class="mb-3">{{ $attempt->is_passed ? 'Congratulations!' : 'Quiz Completed' }}</h2>
+                <h2 class="mb-3">{{ $attempt->is_passed ? 'Selamat!' : 'Kuis Selesai' }}</h2>
                 <div class="result-score mb-4">
                     <h1 class="mb-0" style="font-size: 4rem; font-weight: 700;">
                         {{ $attempt->score }} / {{ $attempt->total_points }}
@@ -29,20 +29,20 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-4">
-                        <p class="mb-1" style="opacity: 0.9;">Passing Score</p>
+                        <p class="mb-1" style="opacity: 0.9;">Skor Kelulusan</p>
                         <h4>{{ $quiz->passing_score }}%</h4>
                     </div>
                     <div class="col-md-4">
-                        <p class="mb-1" style="opacity: 0.9;">Your Score</p>
+                        <p class="mb-1" style="opacity: 0.9;">Skor Anda</p>
                         <h4>{{ number_format($attempt->score_percentage, 1) }}%</h4>
                     </div>
                     <div class="col-md-4">
                         <p class="mb-1" style="opacity: 0.9;">Status</p>
                         <h4>
                             @if($attempt->is_passed)
-                                <span style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px;">PASSED</span>
+                                <span style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px;">LULUS</span>
                             @else
-                                <span style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px;">FAILED</span>
+                                <span style="background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 20px;">GAGAL</span>
                             @endif
                         </h4>
                     </div>
@@ -58,7 +58,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-chart text-primary"></i> Detailed Results
+                    <i class="icon-chart text-primary"></i> Hasil Terperinci
                 </h4>
                 
                 <div class="row mb-4">
@@ -66,28 +66,28 @@
                         <div class="text-center p-3 border rounded">
                             <i class="icon-check text-success" style="font-size: 32px;"></i>
                             <h3 class="mt-2 mb-0">{{ $attempt->correct_answers ?? 0 }}</h3>
-                            <p class="text-muted mb-0">Correct</p>
+                            <p class="text-muted mb-0">Benar</p>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="text-center p-3 border rounded">
                             <i class="icon-close text-danger" style="font-size: 32px;"></i>
                             <h3 class="mt-2 mb-0">{{ $attempt->incorrect_answers ?? 0 }}</h3>
-                            <p class="text-muted mb-0">Incorrect</p>
+                            <p class="text-muted mb-0">Salah</p>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="text-center p-3 border rounded">
                             <i class="icon-question text-warning" style="font-size: 32px;"></i>
                             <h3 class="mt-2 mb-0">{{ $attempt->unanswered_questions ?? 0 }}</h3>
-                            <p class="text-muted mb-0">Unanswered</p>
+                            <p class="text-muted mb-0">Belum Dijawab</p>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="text-center p-3 border rounded">
                             <i class="icon-clock text-info" style="font-size: 32px;"></i>
                             <h3 class="mt-2 mb-0">{{ $attempt->formatted_duration ?? '--' }}</h3>
-                            <p class="text-muted mb-0">Duration</p>
+                            <p class="text-muted mb-0">Durasi</p>
                         </div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
 
                 <!-- Questions Review -->
                 @if($quiz->show_correct_answers && isset($attempt->answers_review))
-                    <h5 class="mb-4">Question Review</h5>
+                    <h5 class="mb-4">Tinjauan Pertanyaan</h5>
                     @php
                         $review = is_array($attempt->answers_review) ? $attempt->answers_review : json_decode($attempt->answers_review, true) ?? [];
                         $questions = $quiz->questions;
@@ -137,11 +137,11 @@
                                             @if($isCorrectAnswer)
                                                 <i class="icon-check text-white mr-2"></i>
                                                 <span class="text-white font-weight-bold">{{ $answer->answer_text }}</span>
-                                                <span class="badge badge-light ml-auto">Correct Answer</span>
+                                                <span class="badge badge-light ml-auto">Jawaban yang Benar</span>
                                             @elseif($userSelected)
                                                 <i class="icon-close text-white mr-2"></i>
                                                 <span class="text-white font-weight-bold">{{ $answer->answer_text }}</span>
-                                                <span class="badge badge-light ml-auto">Your Answer</span>
+                                                <span class="badge badge-light ml-auto">Jawaban Anda</span>
                                             @else
                                                 <span class="text-muted">{{ $answer->answer_text }}</span>
                                             @endif
@@ -153,7 +153,7 @@
                             @if($question->explanation)
                                 <div class="alert alert-info mt-3 mb-0">
                                     <i class="icon-info mr-2"></i>
-                                    <strong>Explanation:</strong> {{ $question->explanation }}
+                                    <strong>Penjelasan:</strong> {{ $question->explanation }}
                                 </div>
                             @endif
                         </div>
@@ -164,11 +164,11 @@
 
                 <div class="text-center mt-4">
                     <a href="{{ $quiz->url }}" class="btn btn-primary mr-2">
-                        <i class="icon-arrow-left mr-2"></i> Back to Quiz
+                        <i class="icon-arrow-left mr-2"></i> Kembali ke Kuis
                     </a>
                     @if($quiz->canUserAttempt(auth()->id()))
                         <a href="{{ route('quiz.taking.start', $quiz) }}" class="btn btn-success">
-                            <i class="icon-refresh mr-2"></i> Try Again
+                            <i class="icon-refresh mr-2"></i> Coba Lagi
                         </a>
                     @endif
                 </div>

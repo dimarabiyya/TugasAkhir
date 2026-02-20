@@ -10,11 +10,11 @@
                     <div>
                         <h3 class="font-weight-bold mb-2">{{ $module->title }}</h3>
                         <div class="d-flex align-items-center mb-2">
-                            <span class="badge badge-primary mr-2">Module {{ $module->order }}</span>
-                            <span class="badge badge-info mr-2">{{ $module->lessons->count() }} {{ Str::plural('Lesson', $module->lessons->count()) }}</span>
+                            <span class="badge badge-primary mr-2">Modul {{ $module->order }}</span>
+                            <span class="badge badge-info mr-2">{{ $module->lessons->count() }} {{ Str::plural('Pelajaran', $module->lessons->count()) }}</span>
                             <span class="badge badge-secondary">{{ $module->course->level }}</span>
                         </div>
-                        <p class="text-muted mb-0">Course: {{ $module->course->title }}</p>
+                        <p class="text-muted mb-0">Mata Pelajaran: {{ $module->course->title }}</p>
                     </div>
                 </div>
             </div>
@@ -22,11 +22,11 @@
                 <div class="justify-content-end d-flex">
                     @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
                         <a href="{{ route('modules.edit', $module) }}" class="btn btn-primary mr-2">
-                            <i class="icon-pencil"></i> Edit Module
+                            <i class="icon-pencil"></i> Edit Modul
                         </a>
                     @endif
                     <a href="{{ route('courses.show', $module->course) }}" class="btn btn-light">
-                        <i class="icon-arrow-left"></i> Back to Course
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -42,7 +42,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-info text-primary"></i> Module Overview
+                    <i class="icon-info text-primary"></i> Ikhtisar Modul
                 </h4>
                 
                 @if($module->description)
@@ -51,7 +51,7 @@
                     </div>
                 @else
                     <div class="mb-4">
-                        <p class="text-muted font-italic">No description provided for this module.</p>
+                        <p class="text-muted font-italic">Tidak ada deskripsi yang diberikan untuk modul ini.</p>
                     </div>
                 @endif
                 
@@ -66,7 +66,7 @@
                                     <i class="icon-folder"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Order</p>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Urutan</p>
                                     <h6 class="mb-0 font-weight-bold">{{ $module->order }}</h6>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                     <i class="icon-note"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Lessons</p>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Pelajaran</p>
                                     <h6 class="mb-0 font-weight-bold">{{ $module->lessons->count() }}</h6>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                                     <i class="icon-calendar"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Created</p>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Dibuat</p>
                                     <h6 class="mb-0 font-weight-bold">{{ $module->created_at->format('M d, Y') }}</h6>
                                 </div>
                             </div>
@@ -107,11 +107,11 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">
-                        <i class="icon-note text-primary"></i> Module Lessons ({{ $module->lessons->count() }})
+                        <i class="icon-note text-primary"></i> Pelajaran Modul ({{ $module->lessons->count() }})
                     </h4>
                     @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
                         <a href="{{ route('lessons.create', $module) }}" class="btn btn-sm btn-primary">
-                            <i class="icon-plus"></i> Add Lesson
+                            <i class="icon-plus"></i> Tambah Pelajaran
                         </a>
                     @endif
                 </div>
@@ -164,11 +164,11 @@
                 @else
                     <div class="text-center py-5">
                         <i class="icon-note" style="font-size: 64px; color: #e3e6f0;"></i>
-                        <h5 class="mt-3 mb-2 text-muted">No lessons yet</h5>
-                        <p class="text-muted">Add lessons to organize module content</p>
+                        <h5 class="mt-3 mb-2 text-muted">Belum ada pelajaran</h5>
+                        <p class="text-muted">Tambahkan pelajaran untuk mengorganisir konten modul</p>
                         @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
                             <a href="{{ route('lessons.create', $module) }}" class="btn btn-primary">
-                                <i class="icon-plus"></i> Add First Lesson
+                                <i class="icon-plus"></i> Tambah Pelajaran Pertama
                             </a>
                         @endif
                     </div>
@@ -185,29 +185,29 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="icon-book text-info"></i> Course Information
+                    <i class="icon-book text-info"></i> Informasi Mata Pelajaran
                 </h5>
                 
                 <div class="course-info">
                     <h6 class="mb-2">{{ $module->course->title }}</h6>
-                    <p class="text-muted mb-2">{{ $module->course->level }} level</p>
+                    <p class="text-muted mb-2">Level {{ $module->course->level }}</p>
                     <p class="text-muted mb-3">{{ Str::limit($module->course->description, 100) }}</p>
                     
                     <a href="{{ route('courses.show', $module->course) }}" class="btn btn-outline-primary btn-block mb-3">
-                        <i class="icon-eye mr-2"></i> View Course
+                        <i class="icon-eye mr-2"></i> Lihat Mata Pelajaran
                     </a>
                     
                     <div class="course-stats">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Modules:</span>
+                            <span class="text-muted">Modul:</span>
                             <strong>{{ $module->course->modules->count() }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Total Lessons:</span>
+                            <span class="text-muted">Total Pelajaran:</span>
                             <strong>{{ $module->course->lessons_count }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-muted">Duration:</span>
+                            <span class="text-muted">Durasi:</span>
                             <strong>{{ $module->course->duration_hours }}h</strong>
                         </div>
                     </div>
@@ -220,46 +220,46 @@
             <div class="card mt-3">
                 <div class="card-body">
                     <h5 class="card-title mb-4">
-                        <i class="icon-settings"></i> Quick Actions
+                        <i class="icon-settings"></i> Tindakan Cepat
                     </h5>
                     
                     <div class="action-info mb-3">
-                        <p class="text-muted mb-1 small">Module ID</p>
+                        <p class="text-muted mb-1 small">ID Modul</p>
                         <p class="mb-0"><strong>#{{ $module->id }}</strong></p>
                     </div>
                     
                     <div class="action-info mb-3">
-                        <p class="text-muted mb-1 small">Created</p>
+                        <p class="text-muted mb-1 small">Dibuat</p>
                         <p class="mb-0"><strong>{{ $module->created_at->format('M d, Y') }}</strong></p>
                     </div>
                     
                     <div class="action-info mb-4">
-                        <p class="text-muted mb-1 small">Last Updated</p>
+                        <p class="text-muted mb-1 small">Pembaruan Terakhir</p>
                         <p class="mb-0"><strong>{{ $module->updated_at->format('M d, Y') }}</strong></p>
                     </div>
                     
                     <hr>
                     
                     <a href="{{ route('modules.edit', $module) }}" class="btn btn-primary btn-block mb-2">
-                        <i class="icon-pencil mr-2"></i> Edit Module
+                        <i class="icon-pencil mr-2"></i> Edit Modul
                     </a>
                     
                     <a href="{{ route('lessons.create', $module) }}" class="btn btn-success btn-block mb-2">
-                        <i class="icon-plus mr-2"></i> Add Lesson
+                        <i class="icon-plus mr-2"></i> Tambah Pelajaran
                     </a>
                     
                     <form action="{{ route('modules.destroy', $module) }}" method="POST" 
-                          onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this module? This action cannot be undone.');">
+                          onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus modul ini? Tindakan ini tidak dapat dibatalkan.');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-block" {{ $module->lessons->count() > 0 ? 'disabled' : '' }}>
-                            <i class="icon-trash mr-2"></i> Delete Module
+                            <i class="icon-trash mr-2"></i> Hapus Modul
                         </button>
                     </form>
                     
                     @if($module->lessons->count() > 0)
                         <small class="text-muted mt-2 d-block">
-                            <i class="icon-warning"></i> Cannot delete module with existing lessons
+                            <i class="icon-warning"></i> Tidak dapat menghapus modul dengan pelajaran yang ada
                         </small>
                     @endif
                 </div>
@@ -270,13 +270,13 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="icon-chart text-success"></i> Module Statistics
+                    <i class="icon-chart text-success"></i> Statistik Modul
                 </h5>
                 
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="icon-note text-primary mr-2"></i>
-                        <span class="text-muted">Lessons</span>
+                        <span class="text-muted">Pelajaran</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-primary">{{ $module->lessons->count() }}</h4>
                 </div>
@@ -284,7 +284,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="icon-folder text-info mr-2"></i>
-                        <span class="text-muted">Order</span>
+                        <span class="text-muted">Urutan</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-info">{{ $module->order }}</h4>
                 </div>
@@ -292,7 +292,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center">
                     <div>
                         <i class="icon-calendar text-success mr-2"></i>
-                        <span class="text-muted">Age</span>
+                        <span class="text-muted">Usia</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-success">{{ $module->created_at->diffForHumans() }}</h4>
                 </div>

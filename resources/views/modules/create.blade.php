@@ -8,15 +8,15 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Create New Module</h3>
-                        <p class="text-muted mb-0">Add a new module to "{{ $course->title }}"</p>
+                        <h3 class="font-weight-bold mb-2">Buat Modul Baru</h3>
+                        <p class="text-muted mb-0">Tambahkan modul baru ke "{{ $course->title }}"</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('courses.show', $course) }}" class="btn btn-light">
-                        <i class="icon-arrow-left"></i> Back to Course
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     </div>
                     <div>
                         <h5 class="mb-1">{{ $course->title }}</h5>
-                        <p class="text-muted mb-0">{{ $course->level }} • {{ $course->modules->count() }} existing modules</p>
+                        <p class="text-muted mb-0">{{ $course->level }} • {{ $course->modules->count() }} modul yang ada</p>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-plus text-primary"></i> Module Information
+                    <i class="icon-plus text-primary"></i> Informasi Modul
                 </h4>
 
                 <form action="{{ route('modules.store', $course) }}" method="POST">
@@ -57,14 +57,14 @@
                     
                     <div class="form-group mb-4">
                         <label for="title" class="form-label">
-                            Module Title <span class="text-danger">*</span>
+                            Judul Modul <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
                                class="form-control @error('title') is-invalid @enderror" 
                                id="title" 
                                name="title" 
                                value="{{ old('title') }}" 
-                               placeholder="Enter module title"
+                               placeholder="Masukkan judul modul"
                                required>
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -72,12 +72,12 @@
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="description" class="form-label">Description</label>
+                        <label for="description" class="form-label">Deskripsi</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
                                   id="description" 
                                   name="description" 
                                   rows="4" 
-                                  placeholder="Enter module description (optional)">{{ old('description') }}</textarea>
+                                  placeholder="Masukkan deskripsi modul (opsional)">{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -85,7 +85,7 @@
 
                     <div class="form-group mb-4">
                         <label for="order" class="form-label">
-                            Order <span class="text-danger">*</span>
+                            Urutan <span class="text-danger">*</span>
                         </label>
                         <input type="number" 
                                class="form-control @error('order') is-invalid @enderror" 
@@ -98,16 +98,16 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            The order determines the sequence of modules in the course
+                            Urutan menentukan urutan modul dalam Mata Pelajaran
                         </small>
                     </div>
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary mr-2">
-                            <i class="icon-check"></i> Create Module
+                            <i class="icon-check"></i> Buat Modul
                         </button>
                         <a href="{{ route('courses.show', $course) }}" class="btn btn-secondary">
-                            <i class="icon-close"></i> Cancel
+                            <i class="icon-close"></i> Batal
                         </a>
                     </div>
                 </form>
@@ -121,13 +121,13 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="icon-chart text-info"></i> Course Statistics
+                    <i class="icon-chart text-info"></i> Statistik Mata Pelajaran
                 </h5>
                 
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="icon-folder text-primary mr-2"></i>
-                        <span class="text-muted">Modules</span>
+                        <span class="text-muted">Modul</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-primary">{{ $course->modules->count() }}</h4>
                 </div>
@@ -135,7 +135,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="icon-note text-info mr-2"></i>
-                        <span class="text-muted">Total Lessons</span>
+                        <span class="text-muted">Total Pelajaran</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-info">{{ $course->lessons_count }}</h4>
                 </div>
@@ -143,7 +143,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center">
                     <div>
                         <i class="icon-clock text-success mr-2"></i>
-                        <span class="text-muted">Duration</span>
+                        <span class="text-muted">Durasi</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-success">{{ $course->duration_hours }}h</h4>
                 </div>
@@ -155,7 +155,7 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="icon-list text-warning"></i> Existing Modules
+                    <i class="icon-list text-warning"></i> Modul yang Ada
                 </h5>
                 
                 <div class="modules-list">
@@ -165,7 +165,7 @@
                             <span class="badge badge-primary mr-2">{{ $module->order }}</span>
                             <div style="flex: 1;">
                                 <h6 class="mb-1 font-weight-bold">{{ $module->title }}</h6>
-                                <small class="text-muted">{{ $module->lessons->count() }} lessons</small>
+                                <small class="text-muted">{{ $module->lessons->count() }} pelajaran</small>
                             </div>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                     
                     @if($course->modules->count() > 5)
                         <p class="text-muted mb-0 small text-center">
-                            + {{ $course->modules->count() - 5 }} more modules
+                            + {{ $course->modules->count() - 5 }} modul lainnya
                         </p>
                     @endif
                 </div>

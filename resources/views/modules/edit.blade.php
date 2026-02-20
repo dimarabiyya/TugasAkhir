@@ -8,18 +8,18 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Edit Module</h3>
-                        <p class="text-muted mb-0">Update "{{ $module->title }}" in "{{ $module->course->title }}"</p>
+                        <h3 class="font-weight-bold mb-2">Edit Modul</h3>
+                        <p class="text-muted mb-0">Perbarui "{{ $module->title }}" di "{{ $module->course->title }}"</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('modules.show', $module) }}" class="btn btn-light mr-2">
-                        <i class="icon-eye"></i> View Module
+                        <i class="icon-eye"></i> Lihat Modul
                     </a>
                     <a href="{{ route('courses.show', $module->course) }}" class="btn btn-outline-secondary">
-                        <i class="icon-arrow-left"></i> Back to Course
+                        <i class="icon-arrow-left"></i> Kembali ke Mata Pelajaran
                     </a>
                 </div>
             </div>
@@ -39,8 +39,8 @@
                     <div>
                         <h5 class="mb-1">{{ $module->title }}</h5>
                         <p class="text-muted mb-0">
-                            Module {{ $module->order }} • {{ $module->lessons->count() }} lessons • 
-                            Course: {{ $module->course->title }}
+                            Modul {{ $module->order }} • {{ $module->lessons->count() }} pelajaran • 
+                            Mata Pelajaran: {{ $module->course->title }}
                         </p>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-pencil text-primary"></i> Module Information
+                    <i class="icon-pencil text-primary"></i> Informasi Modul
                 </h4>
 
                 <form action="{{ route('modules.update', $module) }}" method="POST">
@@ -64,14 +64,14 @@
                     
                     <div class="form-group mb-4">
                         <label for="title" class="form-label">
-                            Module Title <span class="text-danger">*</span>
+                            Judul Modul <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
                                class="form-control @error('title') is-invalid @enderror" 
                                id="title" 
                                name="title" 
                                value="{{ old('title', $module->title) }}" 
-                               placeholder="Enter module title"
+                               placeholder="Masukkan judul modul"
                                required>
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -79,12 +79,12 @@
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="description" class="form-label">Description</label>
+                        <label for="description" class="form-label">Deskripsi</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
                                   id="description" 
                                   name="description" 
                                   rows="4" 
-                                  placeholder="Enter module description (optional)">{{ old('description', $module->description) }}</textarea>
+                                  placeholder="Masukkan deskripsi modul (opsional)">{{ old('description', $module->description) }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -92,7 +92,7 @@
 
                     <div class="form-group mb-4">
                         <label for="order" class="form-label">
-                            Order <span class="text-danger">*</span>
+                            Urutan <span class="text-danger">*</span>
                         </label>
                         <input type="number" 
                                class="form-control @error('order') is-invalid @enderror" 
@@ -105,16 +105,16 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            The order determines the sequence of modules in the course
+                            Urutan menentukan urutan modul dalam Mata Pelajaran
                         </small>
                     </div>
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary mr-2">
-                            <i class="icon-check"></i> Update Module
+                            <i class="icon-check"></i> Perbarui Modul
                         </button>
                         <a href="{{ route('modules.show', $module) }}" class="btn btn-secondary">
-                            <i class="icon-close"></i> Cancel
+                            <i class="icon-close"></i> Batal
                         </a>
                     </div>
                 </form>
@@ -128,13 +128,13 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="icon-chart text-info"></i> Module Statistics
+                    <i class="icon-chart text-info"></i> Statistik Modul
                 </h5>
                 
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="icon-note text-primary mr-2"></i>
-                        <span class="text-muted">Lessons</span>
+                        <span class="text-muted">Pelajaran</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-primary">{{ $module->lessons->count() }}</h4>
                 </div>
@@ -142,7 +142,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="icon-calendar text-info mr-2"></i>
-                        <span class="text-muted">Created</span>
+                        <span class="text-muted">Dibuat</span>
                     </div>
                     <h6 class="mb-0 font-weight-bold text-info">{{ $module->created_at->format('M d, Y') }}</h6>
                 </div>
@@ -150,7 +150,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center">
                     <div>
                         <i class="icon-clock text-success mr-2"></i>
-                        <span class="text-muted">Last Updated</span>
+                        <span class="text-muted">Pembaruan Terakhir</span>
                     </div>
                     <h6 class="mb-0 font-weight-bold text-success">{{ $module->updated_at->format('M d, Y') }}</h6>
                 </div>
@@ -161,7 +161,7 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="icon-book text-warning"></i> Course Information
+                    <i class="icon-book text-warning"></i> Informasi Mata Pelajaran
                 </h5>
                 
                 <div class="course-info">
@@ -171,15 +171,15 @@
                     
                     <div class="course-stats">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Modules:</span>
+                            <span class="text-muted">Modul:</span>
                             <strong>{{ $module->course->modules->count() }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Total Lessons:</span>
+                            <span class="text-muted">Total Pelajaran:</span>
                             <strong>{{ $module->course->lessons_count }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-muted">Duration:</span>
+                            <span class="text-muted">Durasi:</span>
                             <strong>{{ $module->course->duration_hours }}h</strong>
                         </div>
                     </div>
@@ -191,29 +191,29 @@
         <div class="card mt-3 border-danger">
             <div class="card-body">
                 <h5 class="card-title mb-4 text-danger">
-                    <i class="icon-trash"></i> Danger Zone
+                    <i class="icon-trash"></i> Zona Bahaya
                 </h5>
                 
                 <p class="text-muted mb-3 small">
-                    Deleting this module will permanently remove it and all its lessons. This action cannot be undone.
+                    Menghapus modul ini akan menghapusnya secara permanen beserta semua pelajarannya. Tindakan ini tidak dapat dibatalkan.
                 </p>
                 
                 @if($module->lessons->count() > 0)
                     <div class="alert alert-warning mb-3">
                         <i class="icon-warning"></i>
-                        <strong>Warning:</strong> This module contains {{ $module->lessons->count() }} lessons. 
-                        You must delete all lessons before deleting this module.
+                        <strong>Peringatan:</strong> Modul ini berisi {{ $module->lessons->count() }} pelajaran. 
+                        Anda harus menghapus semua pelajaran sebelum menghapus modul ini.
                     </div>
                 @endif
                 
                 <form action="{{ route('modules.destroy', $module) }}" method="POST" 
-                      onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this module? This action cannot be undone.');">
+                      onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus modul ini? Tindakan ini tidak dapat dibatalkan.');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
                             class="btn btn-danger btn-block" 
                             {{ $module->lessons->count() > 0 ? 'disabled' : '' }}>
-                        <i class="icon-trash mr-2"></i> Delete Module
+                        <i class="icon-trash mr-2"></i> Hapus Modul
                     </button>
                 </form>
             </div>

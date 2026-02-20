@@ -5,13 +5,13 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Edit Question</h3>
+                <h3 class="font-weight-bold">Edit Pertanyaan</h3>
                 <h6 class="font-weight-normal mb-0">{{ $quiz->title }}</h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('quiz.questions.index', $quiz) }}" class="btn btn-secondary">
-                        <i class="icon-arrow-left"></i> Back
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -28,10 +28,10 @@
                     @method('PUT')
                     
                     <div class="form-group">
-                        <label for="question_text" class="form-label">Question Text <span class="text-danger">*</span></label>
+                        <label for="question_text" class="form-label">Teks Pertanyaan <span class="text-danger">*</span></label>
                         <textarea class="form-control @error('question_text') is-invalid @enderror" 
                                   id="question_text" name="question_text" rows="3" required
-                                  placeholder="Enter the question...">{{ old('question_text', $question->question_text ?? $question->question) }}</textarea>
+                                  placeholder="Masukkan pertanyaan...">{{ old('question_text', $question->question_text ?? $question->question) }}</textarea>
                         @error('question_text')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -40,10 +40,10 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
+                                <label for="type" class="form-label">Tipe <span class="text-danger">*</span></label>
                                 <select class="form-control @error('type') is-invalid @enderror" 
                                         id="type" name="type" required>
-                                    <option value="">Select type...</option>
+                                    <option value="">Pilih tipe...</option>
                                     @foreach($questionTypes as $value => $label)
                                         <option value="{{ $value }}" {{ old('type', $question->type) == $value ? 'selected' : '' }}>
                                             {{ $label }}
@@ -58,7 +58,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="points" class="form-label">Points <span class="text-danger">*</span></label>
+                                <label for="points" class="form-label">Poin <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('points') is-invalid @enderror" 
                                        id="points" name="points" value="{{ old('points', $question->points ?? 1) }}" 
                                        min="1" required>
@@ -70,13 +70,13 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="difficulty" class="form-label">Difficulty</label>
+                                <label for="difficulty" class="form-label">Kesulitan</label>
                                 <select class="form-control @error('difficulty') is-invalid @enderror" 
                                         id="difficulty" name="difficulty">
-                                    <option value="">Select difficulty...</option>
-                                    <option value="easy" {{ old('difficulty', $question->difficulty) == 'easy' ? 'selected' : '' }}>Easy</option>
-                                    <option value="medium" {{ old('difficulty', $question->difficulty) == 'medium' ? 'selected' : '' }}>Medium</option>
-                                    <option value="hard" {{ old('difficulty', $question->difficulty) == 'hard' ? 'selected' : '' }}>Hard</option>
+                                    <option value="">Pilih kesulitan...</option>
+                                    <option value="easy" {{ old('difficulty', $question->difficulty) == 'easy' ? 'selected' : '' }}>Mudah</option>
+                                    <option value="medium" {{ old('difficulty', $question->difficulty) == 'medium' ? 'selected' : '' }}>Menengah</option>
+                                    <option value="hard" {{ old('difficulty', $question->difficulty) == 'hard' ? 'selected' : '' }}>Sulit</option>
                                 </select>
                                 @error('difficulty')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -86,10 +86,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="explanation" class="form-label">Explanation</label>
+                        <label for="explanation" class="form-label">Penjelasan</label>
                         <textarea class="form-control @error('explanation') is-invalid @enderror" 
                                   id="explanation" name="explanation" rows="2"
-                                  placeholder="Optional explanation for the correct answer">{{ old('explanation', $question->explanation) }}</textarea>
+                                  placeholder="Penjelasan opsional untuk jawaban yang benar">{{ old('explanation', $question->explanation) }}</textarea>
                         @error('explanation')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -98,7 +98,7 @@
                     <hr class="my-4">
 
                     <!-- Answers Section -->
-                    <h5 class="mb-3"><i class="icon-options text-success"></i> Answers</h5>
+                    <h5 class="mb-3"><i class="icon-options text-success"></i> Jawaban</h5>
                     <div id="answers-container">
                         @foreach($question->answers as $index => $answer)
                         <div class="answer-item card mb-3" data-index="{{ $index }}">
@@ -118,7 +118,7 @@
                                                    id="correct_{{ $index }}"
                                                    {{ old("answers.{$index}.is_correct", $answer->is_correct) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="correct_{{ $index }}">
-                                                Correct Answer
+                                                Jawaban yang Benar
                                             </label>
                                         </div>
                                     </div>
@@ -134,13 +134,13 @@
                     </div>
 
                     <button type="button" class="btn btn-outline-success" id="add-answer">
-                        <i class="icon-plus"></i> Add Answer
+                        <i class="icon-plus"></i> Tambah Jawaban
                     </button>
 
                     <hr class="my-4">
 
                     <div class="form-group">
-                        <label for="order" class="form-label">Question Order</label>
+                        <label for="order" class="form-label">Urutan Pertanyaan</label>
                         <input type="number" class="form-control @error('order') is-invalid @enderror" 
                                id="order" name="order" value="{{ old('order', $question->order) }}" 
                                min="1">
@@ -151,10 +151,10 @@
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">
-                            <i class="icon-check"></i> Update Question
+                            <i class="icon-check"></i> Perbarui Pertanyaan
                         </button>
                         <a href="{{ route('quiz.questions.index', $quiz) }}" class="btn btn-secondary ml-2">
-                            Cancel
+                            Batal
                         </a>
                     </div>
                 </form>

@@ -5,13 +5,13 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Edit Your Testimonial</h3>
-                <h6 class="font-weight-normal mb-0">Update your testimonial</h6>
+                <h3 class="font-weight-bold">Edit Testimoni Anda</h3>
+                <h6 class="font-weight-normal mb-0">Perbarui testimoni Anda</h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('testimonials.index') }}" class="btn btn-secondary">
-                        <i class="icon-arrow-left"></i> Back to Testimonials
+                        <i class="icon-arrow-left"></i> Kembali ke Testimoni
                     </a>
                 </div>
             </div>
@@ -28,15 +28,15 @@
                     @method('PUT')
                     
                     <div class="form-group">
-                        <label for="course_id" class="form-label">Course (Optional)</label>
+                        <label for="course_id" class="form-label">Kursus (Opsional)</label>
                         <select class="form-control @error('course_id') is-invalid @enderror" 
                                 id="course_id" name="course_id">
-                            <option value="">General Testimonial</option>
+                            <option value="">Testimoni Umum</option>
                             @foreach($enrolledCourses ?? [] as $course)
                             <option value="{{ $course->id }}" {{ old('course_id', $testimonial->course_id) == $course->id ? 'selected' : '' }}>
                                 {{ $course->title }}
                                 @if($course->instructor)
-                                    - by {{ $course->instructor->name }}
+                                    - oleh {{ $course->instructor->name }}
                                 @endif
                             </option>
                             @endforeach
@@ -44,11 +44,11 @@
                         @error('course_id')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <small class="form-text text-muted">Select a course if this testimonial is about a specific course you've taken.</small>
+                        <small class="form-text text-muted">Pilih kursus jika testimoni ini tentang kursus tertentu yang Anda ikuti.</small>
                     </div>
 
                     <div class="form-group">
-                        <label for="rating" class="form-label">Rating (Optional)</label>
+                        <label for="rating" class="form-label">Penilaian (Opsional)</label>
                         <div class="rating-input">
                             @for($i = 5; $i >= 1; $i--)
                             <input type="radio" 
@@ -67,16 +67,16 @@
                         @error('rating')
                             <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
-                        <small class="form-text text-muted">Rate your overall experience (1-5 stars).</small>
+                        <small class="form-text text-muted">Nilai pengalaman Anda secara keseluruhan (1-5 bintang).</small>
                     </div>
 
                     <div class="form-group">
-                        <label for="testimonial_text" class="form-label">Your Testimonial <span class="text-danger">*</span></label>
+                        <label for="testimonial_text" class="form-label">Testimoni Anda <span class="text-danger">*</span></label>
                         <textarea class="form-control @error('testimonial_text') is-invalid @enderror" 
                                   id="testimonial_text" 
                                   name="testimonial_text" 
                                   rows="8" 
-                                  placeholder="Share your experience, what you learned, how it helped you, etc. (Minimum 20 characters)"
+                                  placeholder="Bagikan pengalaman Anda, apa yang Anda pelajari, bagaimana membantu Anda, dll. (Minimal 20 karakter)"
                                   required>{{ old('testimonial_text', $testimonial->testimonial_text) }}</textarea>
                         <small class="form-text text-muted">
                             <span id="char-count">0</span> / 1000 characters (Minimum 20 characters required)
@@ -88,15 +88,15 @@
 
                     <div class="alert alert-info">
                         <i class="icon-info"></i>
-                        <strong>Note:</strong> Your testimonial will be reviewed again before being published after editing.
+                        <strong>Catatan:</strong> Testimoni Anda akan ditinjau kembali sebelum dipublikasikan setelah diedit.
                     </div>
 
                     <div class="form-group mt-4">
                         <button type="submit" class="btn btn-primary">
-                            <i class="icon-check"></i> Update Testimonial
+                            <i class="icon-check"></i> Perbarui Testimoni
                         </button>
                         <a href="{{ route('testimonials.index') }}" class="btn btn-secondary">
-                            Cancel
+                            Batal
                         </a>
                     </div>
                 </form>

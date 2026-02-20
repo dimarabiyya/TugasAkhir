@@ -6,11 +6,11 @@
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                    <h3 class="font-weight-bold">Quizzes Management</h3>
-                    <h6 class="font-weight-normal mb-0">Manage all quizzes for your lessons</h6>
+                    <h3 class="font-weight-bold">Manajemen Kuis</h3>
+                    <p class="text-muted">Kelola semua kuis untuk pelajaran Anda</p>
                 @else
-                    <h3 class="font-weight-bold">Available Quizzes</h3>
-                    <h6 class="font-weight-normal mb-0">Test your knowledge with these quizzes</h6>
+                    <h3 class="font-weight-bold">Kuis yang Tersedia</h3>
+                    <p class="text-muted">Uji pengetahuan Anda dengan kuis-kuis ini</p>
                 @endif
             </div>
             <div class="col-12 col-xl-4">
@@ -18,16 +18,16 @@
                     @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                         @if(isset($lessons) && $lessons && $lessons->count() > 0)
                             <a href="{{ url('/lessons/' . $lessons->first()->id . '/quizzes/create') }}" class="btn btn-primary mr-3">
-                                <i class="mdi mdi-plus"></i> Create Quiz
+                                <i class="mdi mdi-plus"></i> Buat Kuis
                             </a>
                         @else
-                            <button type="button" class="btn btn-primary mr-3" disabled title="No lessons available">
-                                <i class="mdi mdi-plus"></i> Create Quiz
+                            <button type="button" class="btn btn-primary mr-3" disabled title="Tidak ada Materi yang tersedia">
+                                <i class="mdi mdi-plus"></i> Buat Kuis
                             </button>
                         @endif
                     @endif
                     <a href="{{ route('quizzes.index') }}" class="btn btn-secondary ml-3">
-                        <i class="mdi mdi-refresh"></i> Refresh
+                        <i class="mdi mdi-refresh"></i> Segarkan
                     </a>
                 </div>
             </div>
@@ -96,14 +96,14 @@
                     <table id="quizzesTable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Quiz Title</th>
-                                <th>Course</th>
-                                <th>Lesson</th>
+                                <th>Judul Kuis</th>
+                                <th>Mata Pelajaran</th>
+                                <th>Materi</th>
                                 <th>Status</th>
-                                <th>Score/Time</th>
-                                <th>Questions</th>
-                                <th>Attempts</th>
-                                <th>Actions</th>
+                                <th>Skor/Waktu</th>
+                                <th>Pertanyaan</th>
+                                <th>Upaya</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -428,7 +428,7 @@
     })(jQuery);
     
     function confirmDelete(url) {
-        if (confirm('Are you sure you want to delete this quiz? This action cannot be undone.')) {
+        if (confirm('Apakah Anda yakin ingin menghapus kuis ini? Tindakan ini tidak dapat dibatalkan.')) {
             var form = document.createElement('form');
             form.method = 'POST';
             form.action = url;

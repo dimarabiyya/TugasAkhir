@@ -5,13 +5,13 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Edit Quiz</h3>
-                <h6 class="font-weight-normal mb-0">Update quiz information</h6>
+                <h3 class="font-weight-bold">Edit Kuis</h3>
+                <h6 class="font-weight-normal mb-0">Perbarui informasi kuis</h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ $quiz->url }}" class="btn btn-secondary">
-                        <i class="icon-arrow-left"></i> Back
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -28,33 +28,33 @@
                     @method('PUT')
                     
                     <!-- Basic Information -->
-                    <h5 class="mb-4"><i class="icon-note text-primary"></i> Basic Information</h5>
+                    <h5 class="mb-4"><i class="icon-note text-primary"></i> Informasi Dasar</h5>
                     
                     <div class="form-group">
-                        <label for="title" class="form-label">Quiz Title <span class="text-danger">*</span></label>
+                        <label for="title" class="form-label">Judul Kuis <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('title') is-invalid @enderror" 
                                id="title" name="title" value="{{ old('title', $quiz->title) }}" 
-                               placeholder="Enter quiz title" required>
+                               placeholder="Masukkan judul kuis" required>
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     
                     <div class="form-group">
-                        <label for="description" class="form-label">Description</label>
+                        <label for="description" class="form-label">Deskripsi</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
                                   id="description" name="description" rows="3" 
-                                  placeholder="Enter quiz description (optional)">{{ old('description', $quiz->description) }}</textarea>
+                                  placeholder="Masukkan deskripsi kuis (opsional)">{{ old('description', $quiz->description) }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="instructions" class="form-label">Instructions</label>
+                        <label for="instructions" class="form-label">Instruksi</label>
                         <textarea class="form-control @error('instructions') is-invalid @enderror" 
                                   id="instructions" name="instructions" rows="3" 
-                                  placeholder="Instructions for students taking this quiz">{{ old('instructions', $quiz->instructions) }}</textarea>
+                                  placeholder="Instruksi untuk siswa yang mengikuti kuis ini">{{ old('instructions', $quiz->instructions) }}</textarea>
                         @error('instructions')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -63,12 +63,12 @@
                     <hr class="my-4">
 
                     <!-- Assessment Settings -->
-                    <h5 class="mb-4"><i class="icon-target text-success"></i> Assessment Settings</h5>
+                    <h5 class="mb-4"><i class="icon-target text-success"></i> Pengaturan Penilaian</h5>
                     
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="passing_score" class="form-label">Passing Score (%) <span class="text-danger">*</span></label>
+                                <label for="passing_score" class="form-label">Skor Kelulusan (%) <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('passing_score') is-invalid @enderror" 
                                        id="passing_score" name="passing_score" value="{{ old('passing_score', $quiz->passing_score) }}" 
                                        min="0" max="100" required>
@@ -80,7 +80,7 @@
                         
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="time_limit_minutes" class="form-label">Time Limit (Minutes)</label>
+                                <label for="time_limit_minutes" class="form-label">Batas Waktu (Menit)</label>
                                 <input type="number" class="form-control @error('time_limit_minutes') is-invalid @enderror" 
                                        id="time_limit_minutes" name="time_limit_minutes" value="{{ old('time_limit_minutes', $quiz->time_limit_minutes) }}" 
                                        min="1" placeholder="No limit">
@@ -109,7 +109,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="start_date" class="form-label">Start Date</label>
+                                <label for="start_date" class="form-label">Tanggal Mulai</label>
                                 <input type="datetime-local" class="form-control @error('start_date') is-invalid @enderror" 
                                        id="start_date" name="start_date" 
                                        value="{{ old('start_date', $quiz->start_date ? $quiz->start_date->format('Y-m-d\TH:i') : '') }}">
@@ -135,7 +135,7 @@
                     <hr class="my-4">
 
                     <!-- Attempts Settings -->
-                    <h5 class="mb-4"><i class="icon-refresh text-info"></i> Attempts Settings</h5>
+                    <h5 class="mb-4"><i class="icon-refresh text-info"></i> Pengaturan Upaya</h5>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -169,7 +169,7 @@
                     <hr class="my-4">
 
                     <!-- Quiz Display Settings -->
-                    <h5 class="mb-4"><i class="icon-screen-desktop text-warning"></i> Display Settings</h5>
+                    <h5 class="mb-4"><i class="icon-screen-desktop text-warning"></i> Pengaturan Tampilan</h5>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -242,7 +242,7 @@
                     <hr class="my-4">
 
                     <!-- Results Settings -->
-                    <h5 class="mb-4"><i class="icon-chart text-danger"></i> Results Settings</h5>
+                    <h5 class="mb-4"><i class="icon-chart text-danger"></i> Pengaturan Hasil</h5>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -273,7 +273,7 @@
                     <hr class="my-4">
 
                     <!-- Negative Marking -->
-                    <h5 class="mb-4"><i class="icon-minus text-secondary"></i> Negative Marking</h5>
+                    <h5 class="mb-4"><i class="icon-minus text-secondary"></i> Penilaian Negatif</h5>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -307,7 +307,7 @@
                     <hr class="my-4">
 
                     <!-- Messages -->
-                    <h5 class="mb-4"><i class="icon-bubble text-info"></i> Custom Messages</h5>
+                    <h5 class="mb-4"><i class="icon-bubble text-info"></i> Pesan Kustom</h5>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -333,10 +333,10 @@
                     
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">
-                            <i class="icon-check"></i> Update Quiz
+                            <i class="icon-check"></i> Perbarui Kuis
                         </button>
                         <a href="{{ route('quizzes.show', $quiz) }}" class="btn btn-secondary ml-2">
-                            Cancel
+                            Batal
                         </a>
                     </div>
                 </form>

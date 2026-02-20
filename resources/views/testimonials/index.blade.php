@@ -7,8 +7,8 @@
     <div class="home_background_container prlx_parent">
         <div class="home_background prlx" style="background-image:url({{ asset('images/landing/testimonials_background.jpg') }})"></div>
     </div>
-    <div class="home_content">
-        <h1>Testimonials</h1>
+        <div class="home_content">
+        <h1>Testimoni</h1>
     </div>
 </div>
 
@@ -19,8 +19,8 @@
         <div class="row">
             <div class="col">
                 <div class="elements_title text-center">
-                    <h1>What Our Students Say</h1>
-                    <p class="text-muted mt-3">Read testimonials from students who have experienced our courses</p>
+                    <h1>Apa Kata Siswa Kami</h1>
+                    <p class="text-muted mt-3">Baca testimoni dari siswa yang telah mengikuti kursus kami</p>
                 </div>
             </div>
         </div>
@@ -33,15 +33,15 @@
                         <form action="{{ route('testimonials.index') }}" method="GET">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <input type="text" 
-                                           name="search" 
-                                           class="form-control" 
-                                           placeholder="Search testimonials..." 
-                                           value="{{ request('search') }}">
+                                     <input type="text" 
+                                         name="search" 
+                                         class="form-control" 
+                                         placeholder="Cari testimoni..." 
+                                         value="{{ request('search') }}">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <select name="course_id" class="form-control">
-                                        <option value="">All Courses</option>
+                                        <option value="">Semua Kursus</option>
                                         @foreach($courses ?? [] as $course)
                                         <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
                                             {{ $course->title }}
@@ -59,11 +59,11 @@
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <button type="submit" class="button button_1 mr-2">
-                                        <span>Search</span>
+                                        <span>Cari</span>
                                     </button>
                                     @if(request()->hasAny(['search', 'course_id', 'featured']))
                                     <a href="{{ route('testimonials.index') }}" class="button button_outline">
-                                        <span>Clear Filters</span>
+                                        <span>Bersihkan Filter</span>
                                     </a>
                                     @endif
                                 </div>
@@ -80,12 +80,12 @@
                 @auth
                 @if(auth()->user()->hasRole('student'))
                 <a href="{{ route('testimonials.create') }}" class="button button_1">
-                    <span>Share Your Experience</span>
+                    <span>Bagikan Pengalaman Anda</span>
                 </a>
                 @endif
                 @else
                 <a href="{{ route('login') }}" class="button button_1">
-                    <span>Login to Share Your Experience</span>
+                    <span>Masuk untuk Membagikan Pengalaman</span>
                 </a>
                 @endauth
             </div>
@@ -193,18 +193,18 @@
         <div class="row">
             <div class="col text-center py-5">
                 <i class="fas fa-comments" style="font-size: 64px; color: #ccc;"></i>
-                <h4 class="mt-3">No testimonials found</h4>
+                <h4 class="mt-3">Tidak ada testimoni ditemukan</h4>
                 <p class="text-muted">
                     @if(request()->hasAny(['search', 'course_id', 'featured']))
-                        Try adjusting your search criteria.
+                        Coba sesuaikan kriteria pencarian Anda.
                     @else
-                        No testimonials have been published yet.
+                        Belum ada testimoni yang dipublikasikan.
                     @endif
                 </p>
                 @auth
                 @if(auth()->user()->hasRole('student'))
                 <a href="{{ route('testimonials.create') }}" class="button button_1 mt-3">
-                    <span>Be the First to Share</span>
+                    <span>Jadilah yang Pertama Membagikan</span>
                 </a>
                 @endif
                 @endauth

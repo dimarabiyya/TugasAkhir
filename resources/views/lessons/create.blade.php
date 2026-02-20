@@ -8,15 +8,15 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Create New Lesson</h3>
-                        <p class="text-muted mb-0">Add a new lesson to "{{ $module->title }}"</p>
+                        <h3 class="font-weight-bold mb-2">Buat Materi Baru</h3>
+                        <p class="text-muted mb-0">Tambahkan Materi baru ke "{{ $module->title }}"</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('modules.show', $module) }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Back to Module
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Modul
                     </a>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     </div>
                     <div>
                         <h5 class="mb-1">{{ $module->title }}</h5>
-                        <p class="text-muted mb-0">{{ $module->course->title }} • {{ $module->lessons->count() }} existing lessons</p>
+                        <p class="text-muted mb-0">{{ $module->course->title }} • {{ $module->lessons->count() }} Materi yang ada</p>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="mdi mdi-plus text-primary"></i> Lesson Information
+                    <i class="mdi mdi-plus text-primary"></i> Informasi Materi
                 </h4>
 
                 <form action="{{ route('lessons.store', $module) }}" method="POST">
@@ -57,14 +57,14 @@
                     
                     <div class="form-group mb-4">
                         <label for="title" class="form-label">
-                            Lesson Title <span class="text-danger">*</span>
+                            Judul Materi <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
                                class="form-control @error('title') is-invalid @enderror" 
                                id="title" 
                                name="title" 
                                value="{{ old('title') }}" 
-                               placeholder="Enter lesson title"
+                               placeholder="Masukkan judul Materi"
                                required>
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -72,12 +72,12 @@
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="description" class="form-label">Description</label>
+                        <label for="description" class="form-label">Deskripsi</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
                                   id="description" 
                                   name="description" 
                                   rows="3" 
-                                  placeholder="Enter lesson description (optional)">{{ old('description') }}</textarea>
+                                  placeholder="Masukkan deskripsi Materi (opsional)">{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -85,13 +85,13 @@
 
                     <div class="form-group mb-4">
                         <label for="type" class="form-label">
-                            Lesson Type <span class="text-danger">*</span>
+                            Tipe Materi <span class="text-danger">*</span>
                         </label>
                         <select class="form-control @error('type') is-invalid @enderror" 
                                 id="type" 
                                 name="type" 
                                 required>
-                            <option value="">Select lesson type</option>
+                            <option value="">Pilih tipe Materi</option>
                             @foreach($lessonTypes as $type)
                                 <option value="{{ $type }}" {{ old('type') == $type ? 'selected' : '' }}>
                                     {{ ucfirst($type) }}
@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="content_url" class="form-label">Content URL</label>
+                        <label for="content_url" class="form-label">URL Konten</label>
                         <input type="url" 
                                class="form-control @error('content_url') is-invalid @enderror" 
                                id="content_url" 
@@ -115,29 +115,29 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            URL to video, audio, or external content
+                            URL untuk video, audio, atau konten eksternal
                         </small>
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="content_text" class="form-label">Content Text</label>
+                        <label for="content_text" class="form-label">Teks Konten</label>
                         <textarea class="form-control @error('content_text') is-invalid @enderror" 
                                   id="content_text" 
                                   name="content_text" 
                                   rows="6" 
-                                  placeholder="Enter lesson content text (optional)">{{ old('content_text') }}</textarea>
+                                  placeholder="Masukkan teks konten Materi (opsional)">{{ old('content_text') }}</textarea>
                         @error('content_text')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            Text content for reading lessons or additional information
+                            Konten teks untuk Materi membaca atau informasi tambahan
                         </small>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-4">
-                                <label for="duration_minutes" class="form-label">Duration (minutes)</label>
+                                <label for="duration_minutes" class="form-label">Durasi (menit)</label>
                                 <input type="number" 
                                        class="form-control @error('duration_minutes') is-invalid @enderror" 
                                        id="duration_minutes" 
@@ -154,7 +154,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-4">
                                 <label for="order" class="form-label">
-                                    Order <span class="text-danger">*</span>
+                                    Urutan <span class="text-danger">*</span>
                                 </label>
                                 <input type="number" 
                                        class="form-control @error('order') is-invalid @enderror" 
@@ -173,10 +173,10 @@
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary mr-3">
-                            <i class="mdi mdi-check"></i> Create Lesson
+                            <i class="mdi mdi-check"></i> Buat Materi
                         </button>
                         <a href="{{ route('modules.show', $module) }}" class="btn btn-secondary">
-                            <i class="mdi mdi-close"></i> Cancel
+                            <i class="mdi mdi-close"></i> Batal
                         </a>
                     </div>
                 </form>
@@ -190,13 +190,13 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-chart text-info"></i> Module Statistics
+                    <i class="mdi mdi-chart text-info"></i> Statistik Modul
                 </h5>
                 
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="mdi mdi-book-open text-primary mr-2"></i>
-                        <span class="text-muted">Lessons</span>
+                        <span class="text-muted">Materi</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-primary">{{ $module->lessons->count() }}</h4>
                 </div>
@@ -204,7 +204,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="mdi mdi-folder text-info mr-2"></i>
-                        <span class="text-muted">Order</span>
+                        <span class="text-muted">Urutan</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-info">{{ $module->order }}</h4>
                 </div>
@@ -212,7 +212,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center">
                     <div>
                         <i class="mdi mdi-calendar text-success mr-2"></i>
-                        <span class="text-muted">Created</span>
+                        <span class="text-muted">Dibuat</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-success">{{ $module->created_at->format('M d, Y') }}</h4>
                 </div>
@@ -223,7 +223,7 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-book text-warning"></i> Course Information
+                    <i class="mdi mdi-book text-warning"></i> Informasi Mata Pelajaran
                 </h5>
                 
                 <div class="course-info">
@@ -232,20 +232,20 @@
                     <p class="text-muted mb-3">{{ Str::limit($module->course->description, 100) }}</p>
                     
                     <a href="{{ route('courses.show', $module->course) }}" class="btn btn-outline-primary btn-block mb-3">
-                        <i class="mdi mdi-eye mr-2"></i> View Course
+                        <i class="mdi mdi-eye mr-2"></i> Lihat Mata Pelajaran
                     </a>
                     
                     <div class="course-stats">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Modules:</span>
+                            <span class="text-muted">Modul:</span>
                             <strong>{{ $module->course->modules->count() }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Total Lessons:</span>
+                            <span class="text-muted">Total Materi:</span>
                             <strong>{{ $module->course->lessons_count }}</strong>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-muted">Duration:</span>
+                            <span class="text-muted">Durasi:</span>
                             <strong>{{ $module->course->duration_hours }}h</strong>
                         </div>
                     </div>
@@ -258,7 +258,7 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-list text-warning"></i> Existing Lessons
+                    <i class="mdi mdi-list text-warning"></i> Materi yang Ada
                 </h5>
                 
                 <div class="lessons-list">
@@ -276,7 +276,7 @@
                     
                     @if($module->lessons->count() > 5)
                         <p class="text-muted mb-0 small text-center">
-                            + {{ $module->lessons->count() - 5 }} more lessons
+                            + {{ $module->lessons->count() - 5 }} Materi lainnya
                         </p>
                     @endif
                 </div>

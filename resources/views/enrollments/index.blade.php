@@ -10,18 +10,18 @@ use Illuminate\Support\Facades\Storage;
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                    <h3 class="font-weight-bold">All Enrollments</h3>
-                    <h6 class="font-weight-normal mb-0">View and manage student enrollments</h6>
+                    <h3 class="font-weight-bold">Semua Progress Siswa</h3>
+                    <p class="text-muted">Lihat dan kelola progress siswa</p>
                 @else
-                    <h3 class="font-weight-bold">My Enrollments</h3>
-                    <h6 class="font-weight-normal mb-0">Track your learning progress</h6>
+                    <h3 class="font-weight-bold">Progress Saya</h3>
+                    <p class="text-muted">Lacak kemajuan pembelajaran Anda</p>
                 @endif
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     @if(!auth()->check() || !auth()->user()->hasAnyRole(['admin', 'instructor']))
                         <a href="{{ route('courses.index') }}" class="btn btn-primary">
-                            <i class="icon-plus"></i> Browse Courses
+                            <i class="mdi mdi-eye"></i> Jelajahi Kursus
                         </a>
                     @endif
                 </div>
@@ -40,14 +40,11 @@ use Illuminate\Support\Facades\Storage;
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>User</th>
-                                <th>Course</th>
+                                <th>Pengguna</th>
+                                <th>Kursus</th>
                                 <th>Status</th>
-                                <th>Progress</th>
-                                <th>Enrolled At</th>
-                                <th>Completed At</th>
-                                <th>Payment Status</th>
-                                <th>Actions</th>
+                                <th>Kemajuan</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
 
@@ -59,11 +56,10 @@ use Illuminate\Support\Facades\Storage;
                                 <td>{{ $enroll->course->title }}</td>
                                 <td>{{ $enroll->status }}</td>
                                 <td>{{ $enroll->progress }}%</td>
-                                <td>{{ $enroll->created_at }}</td>
-                                <td>{{ $enroll->completed_at ?? '-' }}</td>
-                                <td>{{ $enroll->payment_status }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary">Detail</button>
+                                    <a href="{{ route('enrollments.show', $enroll) }}" class="btn btn-sm btn-primary">
+                                        <i class="icon-info"></i> Detail
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
@@ -263,18 +259,18 @@ use Illuminate\Support\Facades\Storage;
                 order: [[sortColumn, 'desc']],
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search enrollments...",
-                    lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ enrollments",
-                    infoEmpty: "No enrollments available",
-                    infoFiltered: "(filtered from _MAX_ total enrollments)",
+                    searchPlaceholder: "Cari pendaftaran...",
+                    lengthMenu: "Tampilkan _MENU_ entri",
+                    info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ pendaftaran",
+                    infoEmpty: "Tidak ada pendaftaran tersedia",
+                    infoFiltered: "(disaring dari _MAX_ total pendaftaran)",
                     paginate: {
-                        first: "First",
-                        last: "Last",
-                        next: "Next",
-                        previous: "Previous"
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Berikutnya",
+                        previous: "Sebelumnya"
                     },
-                    emptyTable: "No enrollments found"
+                    emptyTable: "Tidak ada pendaftaran ditemukan"
                 },
                 columnDefs: [
                     {
@@ -296,7 +292,7 @@ use Illuminate\Support\Facades\Storage;
                 var datatable = $(this);
                 // SEARCH - Add the placeholder for Search and Turn this into in-line form control
                 var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-                search_input.attr('placeholder', 'Search enrollments...');
+                search_input.attr('placeholder', 'Cari pendaftaran...');
                 search_input.removeClass('form-control-sm');
                 // LENGTH - Inline-Form control
                 var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');

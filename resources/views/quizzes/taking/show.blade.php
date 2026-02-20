@@ -27,7 +27,7 @@
                                 </div>
                             @endif
                             <div class="mt-2">
-                                <span class="badge badge-info">Question <span id="current-question">1</span> of {{ $questions->count() }}</span>
+                                <span class="badge badge-info">Pertanyaan <span id="current-question">1</span> dari {{ $questions->count() }}</span>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                     <div id="progress-bar" class="progress-bar bg-gradient-primary" role="progressbar" style="width: 0%"></div>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
-                    <small class="text-muted">Answered: <span id="answered-count">0</span></small>
+                    <small class="text-muted">Terjawab: <span id="answered-count">0</span></small>
                     <small class="text-muted">Total: {{ $questions->count() }}</small>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                                     class="question-nav-btn" 
                                     data-question="{{ $index + 1 }}"
                                     data-question-id="{{ $q->id }}"
-                                    title="Question {{ $index + 1 }}">
+                                    title="Pertanyaan {{ $index + 1 }}">
                                 {{ $index + 1 }}
                             </button>
                         @endforeach
@@ -86,11 +86,11 @@
                     <div class="question-header mb-4">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <span class="badge badge-primary mb-2">Question {{ $index + 1 }}</span>
-                                <span class="badge badge-warning">{{ $question->points }} Points</span>
+                                <span class="badge badge-primary mb-2">Pertanyaan {{ $index + 1 }}</span>
+                                <span class="badge badge-warning">{{ $question->points }} Poin</span>
                                 @if($question->difficulty)
                                     <span class="badge badge-{{ $question->difficulty == 'easy' ? 'success' : ($question->difficulty == 'medium' ? 'warning' : 'danger') }}">
-                                        {{ ucfirst($question->difficulty) }}
+                                        {{ $question->difficulty == 'easy' ? 'Mudah' : ($question->difficulty == 'medium' ? 'Menengah' : 'Sulit') }}
                                     </span>
                                 @endif
                             </div>
@@ -134,7 +134,7 @@
                     @if($question->explanation && $quiz->show_correct_answers)
                         <div class="alert alert-info mt-3 explanation-box">
                             <i class="icon-info mr-2"></i>
-                            <strong>Explanation:</strong> {{ $question->explanation }}
+                            <strong>Penjelasan:</strong> {{ $question->explanation }}
                         </div>
                     @endif
                 </div>
@@ -149,17 +149,17 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <button type="button" id="prev-btn" class="btn btn-outline-primary" style="display: none;">
-                                <i class="icon-arrow-left mr-2"></i> Previous
+                                <i class="icon-arrow-left mr-2"></i> Sebelumnya
                             </button>
                             <div class="text-center">
-                                <span class="text-muted" id="question-counter">Question 1 of {{ $questions->count() }}</span>
+                                <span class="text-muted" id="question-counter">Pertanyaan 1 dari {{ $questions->count() }}</span>
                             </div>
                             <div>
                                 <button type="button" id="next-btn" class="btn btn-primary" {{ $questions->count() <= 1 ? 'style="display: none;"' : '' }}>
-                                    Next <i class="icon-arrow-right ml-2"></i>
+                                    Berikutnya <i class="icon-arrow-right ml-2"></i>
                                 </button>
                                 <button type="button" id="submit-btn" class="btn btn-success ml-2" {{ $questions->count() <= 1 ? '' : 'style="display: none;"' }}>
-                                    <i class="icon-check mr-2"></i> Submit Quiz
+                                    <i class="icon-check mr-2"></i> Kirim Kuis
                                 </button>
                             </div>
                         </div>
@@ -336,7 +336,7 @@ if (timeLimit > 0) {
             
             if (timeRemaining <= 0) {
                 clearInterval(timerInterval);
-                console.log('Time is up! Auto-submitting quiz via AJAX...');
+                console.log('Waktu habis! Mengirim kuis secara otomatis via AJAX...');
                 // Disable form inputs before submit
                 document.getElementById('quiz-form').querySelectorAll('input, button').forEach(el => {
                     if (el.id !== 'quiz-form') {
@@ -386,7 +386,7 @@ function showQuestion(index) {
     // Update navigation
     currentQuestion = index;
     document.getElementById('current-question').textContent = index;
-    document.getElementById('question-counter').textContent = `Question ${index} of ${totalQuestions}`;
+    document.getElementById('question-counter').textContent = `Pertanyaan ${index} dari ${totalQuestions}`;
     
     // Update nav buttons
     updateNavButtons();
@@ -489,7 +489,7 @@ document.querySelectorAll('.answer-input').forEach(input => {
             }
         })
         .catch(error => {
-            console.error('Error saving answer:', error);
+            console.error('Gagal menyimpan jawaban:', error);
         });
     });
 });
@@ -500,19 +500,19 @@ document.getElementById('submit-btn')?.addEventListener('click', function(e) {
     console.log('Submit button clicked');
     
     const answered = document.querySelectorAll('.answer-input:checked').length;
-    console.log('Answered questions: ' + answered + ' / ' + totalQuestions);
+    console.log('Pertanyaan yang terjawab: ' + answered + ' / ' + totalQuestions);
     
     let confirmMessage = '';
     if (answered === 0) {
-        confirmMessage = 'You haven\'t answered any questions. Are you sure you want to submit?';
+        confirmMessage = 'Anda belum menjawab pertanyaan apapun. Apakah Anda yakin ingin mengirim?';
     } else if (answered < totalQuestions) {
-        confirmMessage = `You have answered ${answered} out of ${totalQuestions} questions. Are you sure you want to submit?`;
+        confirmMessage = `Anda telah menjawab ${answered} dari ${totalQuestions} pertanyaan. Apakah Anda yakin ingin mengirim?`;
     } else {
-        confirmMessage = 'Are you sure you want to submit your quiz? This action cannot be undone.';
+        confirmMessage = 'Apakah Anda yakin ingin mengirim kuis Anda? Tindakan ini tidak dapat dibatalkan.';
     }
     
     if (!confirm(confirmMessage)) {
-        console.log('Submit cancelled by user');
+        console.log('Pengiriman dibatalkan oleh pengguna');
         return;
     }
     
@@ -525,7 +525,7 @@ document.getElementById('submit-btn')?.addEventListener('click', function(e) {
     
     // Get form data before disabling
     const formData = new FormData(document.getElementById('quiz-form'));
-    console.log('Form data keys:', Array.from(formData.keys()));
+    console.log('Kunci data form:', Array.from(formData.keys()));
     
     // Disable form
     const form = document.getElementById('quiz-form');
@@ -535,7 +535,7 @@ document.getElementById('submit-btn')?.addEventListener('click', function(e) {
 
     // Allow page unload (prevent beforeunload prompt) and submit via AJAX helper
     allowBeforeUnload = true;
-    console.log('Submitting via AJAX helper');
+    console.log('Mengirim melalui pembantu AJAX');
     submitQuizViaAjax();
 });
 
@@ -576,11 +576,7 @@ document.querySelectorAll('.answer-input:checked').forEach(input => {
 setInterval(function() {
     fetch('{{ route('quiz.taking.progress', ['quiz' => $quiz, 'attempt' => $attempt]) }}')
         .then(response => response.json())
-        .catch(error => console.log('Session keep-alive request'));
-}, 1 * 60 * 1000);
-
-// Submit quiz via AJAX (used for timer auto-submit and unified submit)
-function submitQuizViaAjax() {
+            .catch(error => console.log('Permintaan tetap hidup sesi'));
     // allow unload to avoid beforeunload prompt during intentional submit
     allowBeforeUnload = true;
     const form = document.getElementById('quiz-form');
@@ -604,7 +600,7 @@ function submitQuizViaAjax() {
     })
     .then(async response => {
         if (response.status === 419) {
-            alert('Session expired. Please reload the page and submit again.');
+            alert('Sesi telah berakhir. Silakan muat ulang halaman dan kirim lagi.');
             return;
         }
         const data = await response.json().catch(() => null);
@@ -618,7 +614,7 @@ function submitQuizViaAjax() {
         }
     })
     .catch(error => {
-        console.error('Auto-submit failed:', error);
+        console.error('Pengiriman otomatis gagal:', error);
         // fallback to normal submit
         form.submit();
     });

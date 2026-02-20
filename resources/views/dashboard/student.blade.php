@@ -9,7 +9,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h2 class="text-white mb-2">Welcome back, {{ auth()->user()->name }}!</h2>
-                        <p class="text-white mb-0" style="opacity: 0.9;">Continue your learning journey with Smart Edu LMS</p>
+                        <p class="text-white mb-0" style="opacity: 0.9;">Continue your learning journey with LMS SMKN 40 Jakarta</p>
                     </div>
                     <div>
                         <i class="icon-graduation" style="font-size: 64px; opacity: 0.3;"></i>

@@ -5,13 +5,13 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Add New Question</h3>
+                <h3 class="font-weight-bold">Tambah Pertanyaan Baru</h3>
                 <h6 class="font-weight-normal mb-0">{{ $quiz->title }}</h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('quiz.questions.index', $quiz) }}" class="btn btn-secondary">
-                        <i class="icon-arrow-left"></i> Back
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -27,10 +27,10 @@
                     @csrf
                     
                     <div class="form-group">
-                        <label for="question" class="form-label">Question Text <span class="text-danger">*</span></label>
+                        <label for="question" class="form-label">Teks Pertanyaan <span class="text-danger">*</span></label>
                         <textarea class="form-control @error('question') is-invalid @enderror" 
                                   id="question" name="question" rows="3" required
-                                  placeholder="Enter the question...">{{ old('question') }}</textarea>
+                                  placeholder="Masukkan pertanyaan...">{{ old('question') }}</textarea>
                         @error('question')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -39,10 +39,10 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
+                                <label for="type" class="form-label">Tipe <span class="text-danger">*</span></label>
                                 <select class="form-control @error('type') is-invalid @enderror" 
                                         id="type" name="type" required>
-                                    <option value="">Select type...</option>
+                                    <option value="">Pilih tipe...</option>
                                     @foreach($questionTypes as $value => $label)
                                         <option value="{{ $value }}" {{ old('type') == $value ? 'selected' : '' }}>
                                             {{ $label }}
@@ -57,7 +57,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="points" class="form-label">Points <span class="text-danger">*</span></label>
+                                <label for="points" class="form-label">Poin <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('points') is-invalid @enderror" 
                                        id="points" name="points" value="{{ old('points', 1) }}" 
                                        min="1" required>
@@ -69,13 +69,13 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="difficulty" class="form-label">Difficulty</label>
+                                <label for="difficulty" class="form-label">Kesulitan</label>
                                 <select class="form-control @error('difficulty') is-invalid @enderror" 
                                         id="difficulty" name="difficulty">
-                                    <option value="">Select difficulty...</option>
-                                    <option value="easy" {{ old('difficulty') == 'easy' ? 'selected' : '' }}>Easy</option>
-                                    <option value="medium" {{ old('difficulty') == 'medium' ? 'selected' : '' }}>Medium</option>
-                                    <option value="hard" {{ old('difficulty') == 'hard' ? 'selected' : '' }}>Hard</option>
+                                    <option value="">Pilih kesulitan...</option>
+                                    <option value="easy" {{ old('difficulty') == 'easy' ? 'selected' : '' }}>Mudah</option>
+                                    <option value="medium" {{ old('difficulty') == 'medium' ? 'selected' : '' }}>Menengah</option>
+                                    <option value="hard" {{ old('difficulty') == 'hard' ? 'selected' : '' }}>Sulit</option>
                                 </select>
                                 @error('difficulty')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -85,10 +85,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="explanation" class="form-label">Explanation</label>
+                        <label for="explanation" class="form-label">Penjelasan</label>
                         <textarea class="form-control @error('explanation') is-invalid @enderror" 
                                   id="explanation" name="explanation" rows="2"
-                                  placeholder="Optional explanation for the correct answer">{{ old('explanation') }}</textarea>
+                                  placeholder="Penjelasan opsional untuk jawaban yang benar">{{ old('explanation') }}</textarea>
                         @error('explanation')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -97,14 +97,14 @@
                     <hr class="my-4">
 
                     <!-- Answers Section -->
-                    <h5 class="mb-3"><i class="icon-options text-success"></i> Answers</h5>
+                    <h5 class="mb-3"><i class="icon-options text-success"></i> Jawaban</h5>
                     <div id="answers-container">
                         <div class="answer-item card mb-3" data-index="0">
                             <div class="card-body">
                                 <div class="form-row align-items-center">
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" name="answers[0][text]" 
-                                               placeholder="Enter answer option..." required>
+                                           placeholder="Masukkan opsi jawaban..." required>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-check">
@@ -112,7 +112,7 @@
                                             <input class="form-check-input" type="checkbox" name="answers[0][is_correct]" 
                                                    value="1" id="correct_0">
                                             <label class="form-check-label" for="correct_0">
-                                                Correct Answer
+                                                Jawaban yang Benar
                                             </label>
                                         </div>
                                     </div>
@@ -153,28 +153,28 @@
                     </div>
 
                     <button type="button" class="btn btn-outline-success" id="add-answer">
-                        <i class="icon-plus"></i> Add Answer
+                        <i class="icon-plus"></i> Tambah Jawaban
                     </button>
 
                     <hr class="my-4">
 
                     <div class="form-group">
-                        <label for="order" class="form-label">Question Order</label>
+                        <label for="order" class="form-label">Urutan Pertanyaan</label>
                         <input type="number" class="form-control @error('order') is-invalid @enderror" 
                                id="order" name="order" value="{{ old('order', $quiz->questions->count() + 1) }}" 
                                min="1">
                         @error('order')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <small class="form-text text-muted">Leave empty to add at the end</small>
+                        <small class="form-text text-muted">Biarkan kosong untuk menambahkan di akhir</small>
                     </div>
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">
-                            <i class="icon-check"></i> Create Question
+                            <i class="icon-check"></i> Buat Pertanyaan
                         </button>
                         <a href="{{ route('quiz.questions.index', $quiz) }}" class="btn btn-secondary ml-2">
-                            Cancel
+                            Batal
                         </a>
                     </div>
                 </form>
