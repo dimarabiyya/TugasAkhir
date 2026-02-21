@@ -10,6 +10,7 @@
     --primary-white: #FFFFFF;
     --primary-red: #DC143C;
     --secondary-yellow: #FFD700;
+    --primary-gray: #fafafa;
     --button-blue: #0066CC;
     --text-dark: #2C3E50;
     --text-light: #6C757D;
@@ -23,7 +24,7 @@
 }
 
 .header_side {
-    background: var(--primary-red) !important;
+    background: var(--primary-gray) !important;
 }
 
 .main_nav_item a:hover {

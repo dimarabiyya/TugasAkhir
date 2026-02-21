@@ -735,7 +735,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('enrollments.index') }}">
                             <i class="mdi mdi-account-group menu-icon"></i>
-                            <span class="menu-title">My Enrollments</span>
+                            <span class="menu-title">Progress Pelajaran</span>
                         </a>
                     </li>
                     <li class="nav-item">
