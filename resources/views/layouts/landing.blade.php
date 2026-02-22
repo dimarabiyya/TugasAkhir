@@ -34,7 +34,7 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('skydash/css/style.css') }}">
     
-    <link href="images/landing/logo40.png" type="" rel="shortcut icon">
+    <link href="images/landing/Logo40.png" type="" rel="shortcut icon">
     @stack('styles')
     
     <style>
