@@ -362,16 +362,16 @@
                         <div class="grid grid-cols-3 gap-4 text-center {{ $errors->any() ? 'animate-shake' : '' }}">
                             <div class="relative group">
                                 <div class="{{ $errors->any() ? 'bg-red-100 bg-opacity-20 border-red-300' : 'bg-white bg-opacity-10 border-white border-opacity-20' }} rounded-xl p-4 sm:p-5 backdrop-blur-sm border transition-all duration-300 group-hover:bg-opacity-20 group-hover:scale-105">
-                                    <div class="text-3xl sm:text-4xl font-bold gold-text">1000+</div>
-                                    <div class="text-sm sm:text-base text-white opacity-80">Students</div>
+                                    <div class="text-3xl sm:text-4xl font-bold gold-text">100+</div>
+                                    <div class="text-sm sm:text-base text-white opacity-80">Siswa</div>
                                 </div>
                                 <!-- Decorative Corner -->
                                 <div class="absolute -top-1 -right-1 w-4 h-4 {{ $errors->any() ? 'bg-red-400' : 'bg-yellow-400' }} rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
                             <div class="relative group">
                                 <div class="{{ $errors->any() ? 'bg-red-100 bg-opacity-20 border-red-300' : 'bg-white bg-opacity-10 border-white border-opacity-20' }} rounded-xl p-4 sm:p-5 backdrop-blur-sm border transition-all duration-300 group-hover:bg-opacity-20 group-hover:scale-105">
-                                    <div class="text-3xl sm:text-4xl font-bold gold-text">100+</div>
-                                    <div class="text-sm sm:text-base text-white opacity-80">Courses</div>
+                                    <div class="text-3xl sm:text-4xl font-bold gold-text">1</div>
+                                    <div class="text-sm sm:text-base text-white opacity-80">Sekolah</div>
                                 </div>
                                 <!-- Decorative Corner -->
                                 <div class="absolute -top-1 -right-1 w-4 h-4 {{ $errors->any() ? 'bg-red-400' : 'bg-blue-300' }} rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -379,7 +379,7 @@
                             <div class="relative group">
                                 <div class="{{ $errors->any() ? 'bg-red-100 bg-opacity-20 border-red-300' : 'bg-white bg-opacity-10 border-white border-opacity-20' }} rounded-xl p-4 sm:p-5 backdrop-blur-sm border transition-all duration-300 group-hover:bg-opacity-20 group-hover:scale-105">
                                     <div class="text-3xl sm:text-4xl font-bold gold-text">99%</div>
-                                    <div class="text-sm sm:text-base text-white opacity-80">Success</div>
+                                    <div class="text-sm sm:text-base text-white opacity-80">Sukses</div>
                                 </div>
                                 <!-- Decorative Corner -->
                                 <div class="absolute -top-1 -right-1 w-4 h-4 {{ $errors->any() ? 'bg-red-400' : 'bg-green-300' }} rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"></div>

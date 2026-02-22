@@ -7,8 +7,8 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Absensi Management</h3>
-                        <p class="text-muted mb-0">Manage student accounts and their learning progress</p>
+                        <h3 class="font-weight-bold mb-2">Absensi</h3>
+                        <p class="text-muted mb-0">Kelola segala absensi dan kehadiran siswa</p>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                         </a>
                     @endif
                     <a href="{{ route('dashboard') }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Back to Dashboard
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Dashboard
                     </a>
                 </div>
             </div>

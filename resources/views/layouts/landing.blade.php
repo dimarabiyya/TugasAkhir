@@ -90,7 +90,7 @@
                         <div class="col-lg-3 footer_col">
                             <div class="logo_container">
                                 <div class="logo">
-                                    <img src="{{ asset('images/landing/Logo40.png') }}" alt="Learning Management System SMKN 40 Logo">
+                                    <img src="{{ asset('images/landing/Logo40.png') }}" style="width: 150px; height: 150px;" alt="Learning Management System SMKN 40 Logo">
                                     <span></span>
                                 </div>
                             </div>
@@ -124,33 +124,6 @@
                             </div>
                         </div>
                         
-                        <!-- Contact -->
-                        <div class="col-lg-3 footer_col">
-                            <div class="footer_column_title">Contact</div>
-                            <div class="footer_column_content">
-                                <ul>
-                                    <li class="footer_contact_item">
-                                        <div class="footer_contact_icon">
-                                            <img src="{{ asset('images/landing/placeholder.svg') }}" alt="">
-                                        </div>
-                                        Jakarta, Indonesia
-                                    </li>
-                                    <li class="footer_contact_item">
-                                        <div class="footer_contact_icon">
-                                            <img src="{{ asset('images/landing/smartphone.svg') }}" alt="">
-                                        </div>
-                                        +62 234 5678 910
-                                    </li>
-                                    <li class="footer_contact_item">
-                                        <div class="footer_contact_icon">
-                                            <img src="{{ asset('images/landing/envelope.svg') }}" alt="">
-                                        </div>
-                                        smkn40jakarta@gmail.com
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
                         <!-- Contact -->
                         <div class="col-lg-3 footer_col">
                             <div class="footer_column_title">Contact</div>
@@ -214,7 +187,7 @@
     <script src="{{ asset('plugins/scrollTo/jquery.scrollTo.min.js') }}"></script>
     <script src="{{ asset('plugins/OwlCarousel2-2.2.1/owl.carousel.js') }}"></script>
     <script src="{{ asset('js/landing/custom.js') }}"></script>
-    
+
     @stack('scripts')
 </body>
 </html>
