@@ -91,7 +91,7 @@
                     </div>
                     <div class="stat-card-content">
                         <h3 class="stat-number">{{ $stats['completed_courses'] }}</h3>
-                        <p class="stat-label">Kursus Selesai</p>
+                        <p class="stat-label">Mata Pelajaran Selesai</p>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
                     </div>
                     <div class="stat-card-content">
                         <h3 class="stat-number">{{ $stats['total_lessons_completed'] }}</h3>
-                        <p class="stat-label">Pelajaran Selesai</p>
+                        <p class="stat-label">Materi Selesai</p>
                     </div>
                 </div>
             </div>
@@ -133,11 +133,11 @@
                     <div class="section-header">
                         <h2 class="section-title">
                             <i class="mdi mdi-book-open"></i>
-                            Pendaftaran Kursus
+                            Mata Pelajaran
                         </h2>
                         <div class="section-actions">
                             <a href="{{ route('courses.index') }}" class="btn btn-outline-primary btn-sm">
-                                <i class="mdi mdi-plus"></i> Jelajahi Kursus
+                                <i class="mdi mdi-plus"></i> Jelajahi Mata Pelajaran
                             </a>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Kursus</th>
+                                                <th>Mata Pelajaran</th>
                                                 <th>Terdaftar</th>
                                                 <th>Kemajuan</th>
                                                 <th>Status</th>
@@ -210,11 +210,11 @@
                                 <div class="empty-state-icon">
                                     <i class="mdi mdi-book-open"></i>
                                 </div>
-                                <h3 class="empty-state-title">Tidak Ada Pendaftaran Kursus</h3>
-                                <p class="empty-state-description">Siswa ini belum mendaftar kursus apa pun.</p>
+                                <h3 class="empty-state-title">Tidak Ada Mata Pelajaran</h3>
+                                <p class="empty-state-description">Siswa belum mengambil Mata Pelajaran apa pun.</p>
                                 <div class="empty-state-actions">
                                     <a href="{{ route('courses.index') }}" class="btn btn-primary">
-                                        <i class="mdi mdi-book mr-2"></i> Jelajahi Kursus Tersedia
+                                        <i class="mdi mdi-book mr-2"></i> Jelajahi Mata Pelajaran Tersedia
                                     </a>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                                     <thead>
                                         <tr>
                                             <th>Kuis</th>
-                                            <th>Kursus</th>
+                                            <th>Mata Pelajaran</th>
                                             <th>Skor</th>
                                             <th>Status</th>
                                             <th>Tanggal</th>
@@ -430,7 +430,7 @@
                         <div class="progress-items">
                             <div class="progress-item">
                                 <div class="progress-header">
-                                    <span class="progress-label">Penyelesaian Kursus</span>
+                                    <span class="progress-label">Penyelesaian Mata Pelajaran</span>
                                     <span class="progress-value">{{ $stats['completed_courses'] }}/{{ $stats['total_enrollments'] }}</span>
                                 </div>
                                 <div class="progress-bar-container">

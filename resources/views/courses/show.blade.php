@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Storage;
 @endphp
 
 @section('content')
-<!-- Header Section -->
 <div class="row">
     <div class="col-md-12 grid-margin">
         <div class="row">
@@ -20,15 +19,20 @@ use Illuminate\Support\Facades\Storage;
                                     'intermediate' => 'warning',
                                     'advanced' => 'danger'
                                 ];
+                                $levelLabels = [
+                                    'beginner' => 'Pemula',
+                                    'intermediate' => 'Menengah',
+                                    'advanced' => 'Mahir'
+                                ];
                             @endphp
                             <span class="badge badge-{{ $levelColors[$course->level] ?? 'info' }} mr-2">
-                                {{ ucfirst($course->level) }}
+                                {{ $levelLabels[$course->level] ?? ucfirst($course->level) }}
                             </span>
                             <span class="badge badge-{{ $course->is_published ? 'success' : 'warning' }} mr-2">
-                                {{ $course->is_published ? 'Published' : 'Draft' }}
+                                {{ $course->is_published ? 'Diterbitkan' : 'Draft' }}
                             </span>
                             @if($course->price == 0)
-                                <span class="badge badge-info">FREE</span>
+                                <span class="badge badge-info">GRATIS</span>
                             @endif
                         </div>
                         <p class="text-muted mb-0">{{ Str::limit($course->description, 100) }}</p>
@@ -43,7 +47,7 @@ use Illuminate\Support\Facades\Storage;
                         </a>
                     @endif
                     <a href="{{ route('courses.index') }}" class="btn btn-light">
-                        <i class="icon-arrow-left"></i> Back
+                        <i class="icon-arrow-left"></i> Kembali
                     </a>
                 </div>
             </div>
@@ -51,7 +55,6 @@ use Illuminate\Support\Facades\Storage;
     </div>
 </div>
 
-<!-- Course Hero Section -->
 <div class="row">
     <div class="col-md-12 grid-margin">
         <div class="card" style="overflow: hidden; border: none;">
@@ -67,14 +70,12 @@ use Illuminate\Support\Facades\Storage;
 </div>
 
 <div class="row">
-    <!-- Main Content -->
     <div class="col-md-8 grid-margin stretch-card">
         
-        <!-- Course Information Card -->
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-info text-primary"></i> About This Course
+                    <i class="icon-info text-primary"></i> Tentang Mata Pelajaran Ini
                 </h4>
 
                 <div class="mb-4">
@@ -83,7 +84,6 @@ use Illuminate\Support\Facades\Storage;
 
                 <hr class="my-4">
 
-                <!-- Course Stats Grid -->
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <div class="info-card p-3 border rounded">
@@ -92,8 +92,8 @@ use Illuminate\Support\Facades\Storage;
                                     <i class="icon-grid"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Level</p>
-                                    <h6 class="mb-0 font-weight-bold">{{ ucfirst($course->level) }}</h6>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Tingkat</p>
+                                    <h6 class="mb-0 font-weight-bold">{{ $levelLabels[$course->level] ?? ucfirst($course->level) }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -105,8 +105,8 @@ use Illuminate\Support\Facades\Storage;
                                     <i class="icon-clock"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Duration</p>
-                                    <h6 class="mb-0 font-weight-bold">{{ $course->duration_hours }} Hours</h6>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Durasi</p>
+                                    <h6 class="mb-0 font-weight-bold">{{ $course->duration_hours }} Jam</h6>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +118,7 @@ use Illuminate\Support\Facades\Storage;
                                     <i class="icon-folder"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Modules</p>
+                                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Modul</p>
                                     <h6 class="mb-0 font-weight-bold">{{ $course->modules->count() }}</h6>
                                 </div>
                             </div>
@@ -128,15 +128,14 @@ use Illuminate\Support\Facades\Storage;
 
                 <hr class="my-4">
 
-                <!-- Modules Section (moved inside About card) -->
                 <div class="modules-section">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h4 class="card-title mb-0">
-                            <i class="icon-folder text-primary"></i> Course Modules ({{ $course->modules->count() }})
+                            <i class="icon-folder text-primary"></i> Modul Mata Pelajaran ({{ $course->modules->count() }})
                         </h4>
                         @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor')))
                             <a href="{{ route('modules.create', $course) }}" class="btn btn-sm btn-primary">
-                                <i class="icon-plus"></i> Add Module
+                                <i class="icon-plus"></i> Tambah Modul
                             </a>
                         @endif
                     </div>
@@ -150,11 +149,11 @@ use Illuminate\Support\Facades\Storage;
                                         <div style="flex: 1;">
                                             <div class="d-flex align-items-center mb-2">
                                                 <span class="badge badge-primary mr-2" style="min-width: 80px;">
-                                                    Module {{ $module->order }}
+                                                    Modul {{ $module->order }}
                                                 </span>
                                                 @if($module->lessons->count() > 0)
                                                     <span class="badge badge-info">
-                                                        {{ $module->lessons->count() }} {{ Str::plural('Lesson', $module->lessons->count()) }}
+                                                        {{ $module->lessons->count() }} Materi
                                                     </span>
                                                 @endif
                                             </div>
@@ -177,7 +176,7 @@ use Illuminate\Support\Facades\Storage;
                                                     @endforeach
                                                     @if($module->lessons->count() > 3)
                                                         <p class="text-muted mb-0 small">
-                                                            + {{ $module->lessons->count() - 3 }} more {{ Str::plural('lesson', $module->lessons->count() - 3) }}
+                                                            + {{ $module->lessons->count() - 3 }} materi lainnya
                                                         </p>
                                                     @endif
                                                 </div>
@@ -198,11 +197,11 @@ use Illuminate\Support\Facades\Storage;
                     @else
                         <div class="text-center py-5">
                             <i class="icon-folder" style="font-size: 64px; color: #e3e6f0;"></i>
-                            <h5 class="mt-3 mb-2 text-muted">No modules yet</h5>
-                            <p class="text-muted">Add modules to organize course content</p>
+                            <h5 class="mt-3 mb-2 text-muted">Belum ada modul</h5>
+                            <p class="text-muted">Tambahkan modul untuk mengatur konten Mata Pelajaran</p>
                             @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor')))
                                 <a href="{{ route('modules.create', $course) }}" class="btn btn-primary">
-                                    <i class="icon-plus"></i> Add First Module
+                                    <i class="icon-plus"></i> Tambah Modul Pertama
                                 </a>
                             @endif
                         </div>
@@ -213,11 +212,9 @@ use Illuminate\Support\Facades\Storage;
         
     </div>
     
-    <!-- Sidebar -->
     <div class="col-md-4 grid-margin">
         
         @if(auth()->check() && !auth()->user()->hasAnyRole(['admin', 'instructor']))
-            <!-- Student Enrollment Section -->
             <div class="card enrollment-card sticky-top" style="top: 20px; border: 2px solid #667eea;">
                 <div class="card-body">
                     @if($isEnrolled)
@@ -225,14 +222,14 @@ use Illuminate\Support\Facades\Storage;
                             <div class="icon-circle-lg bg-gradient-success text-white d-inline-flex align-items-center justify-content-center mb-3">
                                 <i class="icon-check-circle" style="font-size: 32px;"></i>
                             </div>
-                            <h5 class="mb-1">Enrolled!</h5>
-                            <p class="text-muted small mb-0">You're enrolled in this course</p>
+                            <h5 class="mb-1">Sudah Bergabung!</h5>
+                            <p class="text-muted small mb-0">Anda ada di dalam Mata Pelajaran ini</p>
                         </div>
                         
                         @if($enrollment)
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-muted"><strong>Progress</strong></span>
+                                    <span class="text-muted"><strong>Progres</strong></span>
                                     <span class="font-weight-bold text-primary">{{ $enrollment->progress_percentage }}%</span>
                                 </div>
                                 <div class="progress mb-3" style="height: 24px; border-radius: 12px;">
@@ -241,21 +238,21 @@ use Illuminate\Support\Facades\Storage;
                                     </div>
                                 </div>
                                 <p class="text-muted small mb-0">
-                                    <i class="icon-calendar mr-1"></i>Enrolled: {{ $enrollment->enrolled_at->format('M d, Y') }}
+                                    <i class="icon-calendar mr-1"></i>Tanggal Gabung: {{ $enrollment->enrolled_at->translatedFormat('d M Y') }}
                                 </p>
                             </div>
                         @endif
                         
                         <a href="{{ $course->url }}" class="btn btn-primary btn-block btn-lg mb-2">
-                            <i class="icon-control-play mr-2"></i> Continue Learning
+                            <i class="icon-control-play mr-2"></i> Lanjutkan Belajar
                         </a>
                         
                         <form action="{{ route('enrollments.destroy', $enrollment) }}" method="POST" 
-                              onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to unenroll from this course?');">
+                              onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin berhenti berlangganan Mata Pelajaran ini?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-outline-danger btn-block">
-                                <i class="icon-close mr-1"></i> Unenroll
+                                <i class="icon-close mr-1"></i> Berhenti Berlangganan
                             </button>
                         </form>
                     @else
@@ -266,9 +263,9 @@ use Illuminate\Support\Facades\Storage;
                             <h5 class="mb-2">{{ Str::limit($course->title, 40) }}</h5>
                             <div class="mb-3">
                                 @if($course->price > 0)
-                                    <h2 class="text-primary font-weight-bold mb-0">${{ number_format($course->price, 2) }}</h2>
+                                    <h2 class="text-primary font-weight-bold mb-0">Rp{{ number_format($course->price, 0, ',', '.') }}</h2>
                                 @else
-                                    <span class="badge badge-success" style="font-size: 1.25rem; padding: 10px 20px;">FREE</span>
+                                    <span class="badge badge-success" style="font-size: 1.25rem; padding: 10px 20px;">GRATIS</span>
                                 @endif
                             </div>
                         </div>
@@ -278,30 +275,30 @@ use Illuminate\Support\Facades\Storage;
                                 @csrf
                                 <input type="hidden" name="course_id" value="{{ $course->id }}">
                                 <button type="submit" class="btn btn-primary btn-block btn-lg mb-3">
-                                    <i class="icon-plus mr-2"></i> Enroll Now
+                                    <i class="icon-plus mr-2"></i> Gabung Sekarang
                                 </button>
                             </form>
                         @else
                             <button class="btn btn-secondary btn-block btn-lg mb-3" disabled>
-                                <i class="icon-lock mr-2"></i> Course Not Available
+                                <i class="icon-lock mr-2"></i> Mata Pelajaran Belum Tersedia
                             </button>
                         @endif
                         
                         <div class="course-info-list">
                             <div class="info-item d-flex justify-content-between align-items-center py-2 border-top">
-                                <span class="text-muted"><i class="icon-clock mr-2"></i>Duration</span>
-                                <strong>{{ $course->duration_hours }} Hours</strong>
+                                <span class="text-muted"><i class="icon-clock mr-2"></i>Durasi</span>
+                                <strong>{{ $course->duration_hours }} Jam</strong>
                             </div>
                             <div class="info-item d-flex justify-content-between align-items-center py-2 border-top">
-                                <span class="text-muted"><i class="icon-grid mr-2"></i>Level</span>
-                                <strong>{{ ucfirst($course->level) }}</strong>
+                                <span class="text-muted"><i class="icon-grid mr-2"></i>Tingkat</span>
+                                <strong>{{ $levelLabels[$course->level] ?? ucfirst($course->level) }}</strong>
                             </div>
                             <div class="info-item d-flex justify-content-between align-items-center py-2 border-top">
-                                <span class="text-muted"><i class="icon-folder mr-2"></i>Modules</span>
+                                <span class="text-muted"><i class="icon-folder mr-2"></i>Modul</span>
                                 <strong>{{ $course->modules->count() }}</strong>
                             </div>
                             <div class="info-item d-flex justify-content-between align-items-center py-2 border-top">
-                                <span class="text-muted"><i class="icon-note mr-2"></i>Lessons</span>
+                                <span class="text-muted"><i class="icon-note mr-2"></i>Materi</span>
                                 <strong>{{ $course->lessons_count }}</strong>
                             </div>
                         </div>
@@ -311,42 +308,41 @@ use Illuminate\Support\Facades\Storage;
         @endif
         
         @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor')))
-            <!-- Admin/Instructor Actions -->
             <div class="card sticky-top" style="top: 20px;">
                 <div class="card-body">
                     <h5 class="card-title mb-4">
-                        <i class="icon-settings"></i> Quick Actions
+                        <i class="icon-settings"></i> Aksi Cepat
                     </h5>
                     
                     <div class="action-info mb-3">
                         <p class="text-muted mb-1 small">Status</p>
                         <span class="badge badge-{{ $course->is_published ? 'success' : 'warning' }}">
-                            {{ $course->is_published ? 'Published' : 'Draft' }}
+                            {{ $course->is_published ? 'Diterbitkan' : 'Draft' }}
                         </span>
                     </div>
                     
                     <div class="action-info mb-3">
-                        <p class="text-muted mb-1 small">Created</p>
-                        <p class="mb-0"><strong>{{ $course->created_at->format('M d, Y') }}</strong></p>
+                        <p class="text-muted mb-1 small">Dibuat Pada</p>
+                        <p class="mb-0"><strong>{{ $course->created_at->translatedFormat('d M Y') }}</strong></p>
                     </div>
                     
                     <div class="action-info mb-4">
-                        <p class="text-muted mb-1 small">Last Updated</p>
-                        <p class="mb-0"><strong>{{ $course->updated_at->format('M d, Y') }}</strong></p>
+                        <p class="text-muted mb-1 small">Terakhir Diperbarui</p>
+                        <p class="mb-0"><strong>{{ $course->updated_at->translatedFormat('d M Y') }}</strong></p>
                     </div>
                     
                     <hr>
                     
                     <a href="{{ route('courses.edit', $course) }}" class="btn btn-primary btn-block mb-2">
-                        <i class="icon-pencil mr-2"></i> Edit Course
+                        <i class="icon-pencil mr-2"></i> Edit Mata Pelajaran
                     </a>
                     
                     <form action="{{ route('courses.destroy', $course) }}" method="POST" 
-                          onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this course? This action cannot be undone.');">
+                          onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus Mata Pelajaran ini? Tindakan ini tidak dapat dibatalkan.');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-block mb-2">
-                            <i class="icon-trash mr-2"></i> Delete Course
+                            <i class="icon-trash mr-2"></i> Hapus Mata Pelajaran
                         </button>
                     </form>
                     
@@ -356,7 +352,7 @@ use Illuminate\Support\Facades\Storage;
                             @method('PATCH')
                             <button type="submit" class="btn btn-{{ $course->is_published ? 'warning' : 'success' }} btn-block">
                                 <i class="icon-{{ $course->is_published ? 'eye-off' : 'eye' }} mr-2"></i> 
-                                {{ $course->is_published ? 'Unpublish' : 'Publish' }}
+                                {{ $course->is_published ? 'Jadikan Draft' : 'Terbitkan' }}
                             </button>
                         </form>
                     @endif
@@ -364,17 +360,16 @@ use Illuminate\Support\Facades\Storage;
             </div>
         @endif
         
-        <!-- Statistics Card -->
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="icon-chart text-info"></i> Statistics
+                    <i class="icon-chart text-info"></i> Statistik
                 </h5>
                 
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="icon-people text-primary mr-2"></i>
-                        <span class="text-muted">Enrollments</span>
+                        <span class="text-muted">Jumlah Siswa</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-primary">{{ $course->enrollments->count() }}</h4>
                 </div>
@@ -382,7 +377,7 @@ use Illuminate\Support\Facades\Storage;
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="icon-folder text-info mr-2"></i>
-                        <span class="text-muted">Modules</span>
+                        <span class="text-muted">Modul</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-info">{{ $course->modules->count() }}</h4>
                 </div>
@@ -390,7 +385,7 @@ use Illuminate\Support\Facades\Storage;
                 <div class="stat-item d-flex justify-content-between align-items-center">
                     <div>
                         <i class="icon-note text-success mr-2"></i>
-                        <span class="text-muted">Lessons</span>
+                        <span class="text-muted">Materi</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-success">{{ $course->lessons_count }}</h4>
                 </div>

@@ -5,26 +5,22 @@
 use Illuminate\Support\Str;
 @endphp
 
-<!-- Home -->
 <div class="home">
     <div class="home_background_container prlx_parent">
         <div class="home_background prlx" style="background-image:url({{ asset('images/landing/courses_background.jpg') }})"></div>
     </div>
     <div class="home_content">
-        <h1>Course Details</h1>
+        <h1>Detail Kursus</h1>
     </div>
 </div>
 
-<!-- News -->
 <div class="news">
     <div class="container">
         <div class="row">
             
-            <!-- Course Post Column -->
             <div class="col-lg-8">
                 
                 <div class="news_post_container">
-                    <!-- Course Post -->
                     <div class="news_post">
                         <div class="news_post_image">
                             @if($course->thumbnail)
@@ -37,7 +33,7 @@ use Illuminate\Support\Str;
                             <div class="news_post_date_container">
                                 <div class="news_post_date d-flex flex-column align-items-center justify-content-center">
                                     <div>{{ $course->created_at->format('d') }}</div>
-                                    <div>{{ strtolower($course->created_at->format('M')) }}</div>
+                                    <div>{{ strtolower($course->created_at->translatedFormat('M')) }}</div>
                                 </div>
                             </div>
                             <div class="news_post_title_container">
@@ -54,7 +50,7 @@ use Illuminate\Support\Str;
                                     </span>
                                     <span>|</span>
                                     <span class="news_post_comments">
-                                        <a href="#">{{ $course->modules->count() }} Modules</a>
+                                        <a href="#">{{ $course->modules->count() }} Modul</a>
                                     </span>
                                 </div>
                             </div>
@@ -64,14 +60,12 @@ use Illuminate\Support\Str;
                             <p>{!! nl2br(e($course->description)) !!}</p>
                         </div>
 
-                        <!-- Course Highlights -->
                         <div class="news_post_quote">
-                            <p class="news_post_quote_text"><span>W</span>hat you'll learn in this comprehensive course designed for {{ ucfirst($course->level) }} level students.</p>
+                            <p class="news_post_quote_text"><span>A</span>pa yang akan Anda pelajari dalam kursus komprehensif ini yang dirancang khusus untuk siswa tingkat {{ $course->level == 'beginner' ? 'Pemula' : ($course->level == 'intermediate' ? 'Menengah' : 'Mahir') }}.</p>
                         </div>
 
-                        <!-- Course Modules -->
                         <div class="news_post_text" style="margin-top: 40px;">
-                            <h4 class="mb-4" style="color: #1e40af; font-weight: 600;">Course Modules</h4>
+                            <h4 class="mb-4" style="color: #1e40af; font-weight: 600;">Kurikulum Kursus</h4>
                             
                             @forelse($course->modules as $index => $module)
                             <div class="mb-4" style="border-left: 4px solid #ffb606; padding-left: 20px; padding-top: 10px; padding-bottom: 10px;">
@@ -84,7 +78,7 @@ use Illuminate\Support\Str;
                                 @endif
                                 <p class="mb-0">
                                     <i class="fas fa-book mr-2" style="color: #ffb606;"></i>
-                                    <strong>{{ $module->lessons->count() }}</strong> Lessons
+                                    <strong>{{ $module->lessons->count() }}</strong> Materi Pelajaran
                                 </p>
                                 
                                 @if($module->lessons->count() > 0)
@@ -95,7 +89,7 @@ use Illuminate\Support\Str;
                                         {{ $lesson->title }}
                                         @if($lesson->duration_minutes)
                                         <span class="text-muted ml-2">
-                                            <i class="fas fa-clock"></i> {{ $lesson->duration_minutes }} min
+                                            <i class="fas fa-clock"></i> {{ $lesson->duration_minutes }} menit
                                         </span>
                                         @endif
                                     </li>
@@ -104,37 +98,36 @@ use Illuminate\Support\Str;
                                 @endif
                             </div>
                             @empty
-                            <p class="text-muted">No modules available yet.</p>
+                            <p class="text-muted">Belum ada modul yang tersedia.</p>
                             @endforelse
                         </div>
 
-                        <!-- What You'll Learn -->
                         <div class="news_post_text" style="margin-top: 40px;">
-                            <h4 class="mb-3" style="color: #1e40af; font-weight: 600;">What You'll Learn</h4>
+                            <h4 class="mb-3" style="color: #1e40af; font-weight: 600;">Manfaat Kursus</h4>
                             
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <p class="mb-0">
                                         <i class="fas fa-certificate mr-2" style="color: #ffb606;"></i>
-                                        <strong>Get Certified</strong> - Earn a certificate of completion
+                                        <strong>Dapatkan Sertifikat</strong> - Peroleh sertifikat kelulusan
                                     </p>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <p class="mb-0">
                                         <i class="fas fa-wifi mr-2" style="color: #ffb606;"></i>
-                                        <strong>Online Learning</strong> - Learn at your own pace
+                                        <strong>Belajar Online</strong> - Belajar sesuai kecepatan Anda
                                     </p>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <p class="mb-0">
                                         <i class="fas fa-headset mr-2" style="color: #ffb606;"></i>
-                                        <strong>Expert Support</strong> - Get help from instructors
+                                        <strong>Dukungan Ahli</strong> - Bantuan langsung dari instruktur
                                     </p>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <p class="mb-0">
                                         <i class="fas fa-sync-alt mr-2" style="color: #ffb606;"></i>
-                                        <strong>Lifetime Access</strong> - Access materials forever
+                                        <strong>Akses Selamanya</strong> - Akses materi tanpa batas waktu
                                     </p>
                                 </div>
                             </div>
@@ -143,24 +136,22 @@ use Illuminate\Support\Str;
                 </div>
             </div>
 
-            <!-- Sidebar Column -->
             <div class="col-lg-4">
                 <div class="sidebar">
 
-                    <!-- Enrollment -->
                     <div class="sidebar_section">
                         <div class="sidebar_section_title">
-                            <h3>Enroll Now</h3>
+                            <h3>Gabung Sekarang</h3>
                         </div>
                         <div class="mb-4 text-center">
                             <h2 class="mb-3" style="color: #ffb606; font-weight: 700;">
                                 @if($course->price == 0)
-                                    FREE
+                                    GRATIS
                                 @else
-                                    ${{ number_format($course->price, 0) }}
+                                    Rp{{ number_format($course->price, 0, ',', '.') }}
                                 @endif
                             </h2>
-                            <p class="text-muted mb-4">Start your learning journey today!</p>
+                            <p class="text-muted mb-4">Mulai perjalanan belajar Anda hari ini!</p>
                         </div>
                         
                         @auth
@@ -169,48 +160,46 @@ use Illuminate\Support\Str;
                             @endphp
                             @if($enrolled)
                                 <div class="button button_1 mb-3" style="width: 100%;">
-                                    <a href="{{ route('courses.show', $course) }}">Continue Learning</a>
+                                    <a href="{{ route('courses.show', $course) }}">Lanjutkan Belajar</a>
                                 </div>
                             @else
                                 <div class="button button_1 mb-3" style="width: 100%;">
-                                    <a href="{{ route('courses.show', $course) }}">Enroll Now</a>
+                                    <a href="{{ route('courses.show', $course) }}">Daftar Sekarang</a>
                                 </div>
                             @endif
                         @else
                             <div class="button button_1 mb-3" style="width: 100%;">
-                                <a href="{{ route('login') }}">Login to Enroll</a>
+                                <a href="{{ route('login') }}">Login untuk Daftar</a>
                             </div>
                             <div class="button button_outline mb-3" style="width: 100%;">
-                                <a href="{{ route('register') }}">Create Account</a>
+                                <a href="{{ route('register') }}">Buat Akun Baru</a>
                             </div>
                         @endauth
                     </div>
 
-                    <!-- Course Stats -->
                     <div class="sidebar_section">
                         <div class="sidebar_section_title">
-                            <h3>Course Stats</h3>
+                            <h3>Statistik Kursus</h3>
                         </div>
                         <ul class="sidebar_list">
                             <li class="sidebar_list_item">
-                                <strong>Modules:</strong> {{ $course->modules->count() }}
+                                <strong>Modul:</strong> {{ $course->modules->count() }}
                             </li>
                             <li class="sidebar_list_item">
-                                <strong>Lessons:</strong> {{ $course->lessons_count }}
+                                <strong>Pelajaran:</strong> {{ $course->lessons_count }}
                             </li>
                             <li class="sidebar_list_item">
-                                <strong>Duration:</strong> {{ $course->duration_hours ?? 0 }} Hours
+                                <strong>Durasi:</strong> {{ $course->duration_hours ?? 0 }} Jam
                             </li>
                             <li class="sidebar_list_item">
-                                <strong>Level:</strong> {{ ucfirst($course->level) }}
+                                <strong>Tingkat:</strong> {{ $course->level == 'beginner' ? 'Pemula' : ($course->level == 'intermediate' ? 'Menengah' : 'Mahir') }}
                             </li>
                             <li class="sidebar_list_item">
-                                <strong>Language:</strong> English
+                                <strong>Bahasa:</strong> Indonesia
                             </li>
                         </ul>
                     </div>
 
-                    <!-- Latest Courses -->
                     @php
                         $latestCourses = \App\Models\Course::where('is_published', true)
                             ->where('id', '!=', $course->id)
@@ -221,7 +210,7 @@ use Illuminate\Support\Str;
                     @if($latestCourses->count() > 0)
                     <div class="sidebar_section">
                         <div class="sidebar_section_title">
-                            <h3>Latest courses</h3>
+                            <h3>Kursus Terbaru</h3>
                         </div>
                         <div class="latest_posts">
                             @foreach($latestCourses as $latestCourse)
@@ -236,7 +225,7 @@ use Illuminate\Support\Str;
                                 </div>
                                 <div class="latest_post_meta">
                                     <span class="latest_post_author">
-                                        <a href="{{ route('courses.detail', $latestCourse) }}">View Course</a>
+                                        <a href="{{ route('courses.detail', $latestCourse) }}">Lihat Kursus</a>
                                     </span>
                                 </div>
                             </div>
@@ -245,16 +234,15 @@ use Illuminate\Support\Str;
                     </div>
                     @endif
 
-                    <!-- Tags -->
                     <div class="sidebar_section">
                         <div class="sidebar_section_title">
-                            <h3>Tags</h3>
+                            <h3>Tagar</h3>
                         </div>
                         <div class="tags d-flex flex-row flex-wrap">
-                            <div class="tag"><a href="#">{{ ucfirst($course->level) }}</a></div>
-                            <div class="tag"><a href="#">Course</a></div>
-                            <div class="tag"><a href="#">Learning</a></div>
-                            <div class="tag"><a href="#">Education</a></div>
+                            <div class="tag"><a href="#">{{ $course->level == 'beginner' ? 'Pemula' : ($course->level == 'intermediate' ? 'Menengah' : 'Mahir') }}</a></div>
+                            <div class="tag"><a href="#">Kursus</a></div>
+                            <div class="tag"><a href="#">Belajar</a></div>
+                            <div class="tag"><a href="#">Edukasi</a></div>
                             <div class="tag"><a href="#">Online</a></div>
                         </div>
                     </div>

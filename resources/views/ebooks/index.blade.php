@@ -64,8 +64,17 @@
                     <div class="card h-100 border-0 shadow-sm overflow-hidden transition-all" style="transition: all 0.3s ease;">
                         <!-- Cover Image -->
                         <div class="position-relative bg-gradient gradient-primary d-flex align-items-center justify-content-center overflow-hidden" style="aspect-ratio: 3/4; cursor: pointer;">
-                            @if($ebook->cover_image)
-                                <img src="{{ asset('storage/' . $ebook->cover_image) }}" alt="{{ $ebook->title }}" class="w-100 h-100 object-fit-cover" loading="lazy" style="transition: transform 0.3s ease;">
+                           @if($ebook->cover_image)
+                                @php
+                                    // Cek apakah di database sudah ada kata 'covers/' atau belum
+                                    $imagePath = Str::contains($ebook->cover_image, 'covers/') 
+                                                ? $ebook->cover_image 
+                                                : 'covers/' . $ebook->cover_image;
+                                @endphp
+                                <img src="{{ asset('storage/' . $imagePath) }}" 
+                                    alt="{{ $ebook->title }}" 
+                                    class="w-100 h-100 object-fit-cover" 
+                                    loading="lazy">
                             @else
                                 <i class="icon-book text-white" style="font-size: 64px; opacity: 0.5;"></i>
                             @endif

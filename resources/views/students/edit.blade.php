@@ -8,18 +8,18 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3 class="font-weight-bold mb-2">Edit Student</h3>
-                        <p class="text-muted mb-0">Update "{{ $student->name }}" information</p>
+                        <h3 class="font-weight-bold mb-2">Edit Siswa</h3>
+                        <p class="text-muted mb-0">Perbarui informasi "{{ $student->name }}"</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('students.show', $student) }}" class="btn btn-light mr-2">
-                        <i class="mdi mdi-eye"></i> View Student
+                        <i class="mdi mdi-eye"></i> Lihat Siswa
                     </a>
                     <a href="{{ route('students.index') }}" class="btn btn-outline-secondary">
-                        <i class="mdi mdi-arrow-left"></i> Back to Students
+                        <i class="mdi mdi-arrow-left"></i> Kembali ke Daftar Siswa
                     </a>
                 </div>
             </div>
@@ -41,9 +41,9 @@
                     <div>
                         <h5 class="mb-1">{{ $student->name }}</h5>
                         <p class="text-muted mb-0">
-                            Student ID: #{{ $student->id }} • 
-                            {{ $student->enrollments->count() }} enrollments • 
-                            Joined {{ $student->created_at->format('M d, Y') }}
+                            ID Siswa: #{{ $student->id }} • 
+                            {{ $student->enrollments->count() }} Mata Pelajaran yang diikuti • 
+                            Bergabung {{ $student->created_at->format('M d, Y') }}
                         </p>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="mdi mdi-account-edit text-primary"></i> Student Information
+                    <i class="mdi mdi-account-edit text-primary"></i> Informasi Siswa
                 </h4>
 
                 <form action="{{ route('students.update', $student) }}" method="POST">
@@ -67,14 +67,14 @@
                     
                     <div class="form-group mb-4">
                         <label for="name" class="form-label">
-                            Full Name <span class="text-danger">*</span>
+                            Nama Lengkap <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
                                class="form-control @error('name') is-invalid @enderror" 
                                id="name" 
                                name="name" 
                                value="{{ old('name', $student->name) }}" 
-                               placeholder="Enter student's full name"
+                               placeholder="Masukkan nama lengkap siswa"
                                required>
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -83,76 +83,76 @@
 
                     <div class="form-group mb-4">
                         <label for="email" class="form-label">
-                            Email Address <span class="text-danger">*</span>
+                            Alamat Email <span class="text-danger">*</span>
                         </label>
                         <input type="email" 
                                class="form-control @error('email') is-invalid @enderror" 
                                id="email" 
                                name="email" 
                                value="{{ old('email', $student->email) }}" 
-                               placeholder="Enter student's email address"
+                               placeholder="Masukkan alamat email siswa"
                                required>
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            This will be used for login and notifications
+                            Ini akan digunakan untuk login dan notifikasi
                         </small>
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="phone" class="form-label">Phone Number</label>
+                        <label for="phone" class="form-label">Nomor Telepon</label>
                         <input type="text" 
                                class="form-control @error('phone') is-invalid @enderror" 
                                id="phone" 
                                name="phone" 
                                value="{{ old('phone', $student->phone) }}" 
-                               placeholder="Enter student's phone number">
+                               placeholder="Masukkan nomor telepon siswa">
                         @error('phone')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="level" class="form-label">Student Level</label>
+                        <label for="level" class="form-label">Tingkat Siswa</label>
                         <select class="form-control @error('level') is-invalid @enderror" 
                                 id="level" 
                                 name="level">
-                            <option value="">Select student level (optional)</option>
-                            <option value="beginner" {{ old('level', $student->level) == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                            <option value="intermediate" {{ old('level', $student->level) == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                            <option value="advanced" {{ old('level', $student->level) == 'advanced' ? 'selected' : '' }}>Advanced</option>
+                            <option value="">Pilih tingkat siswa (opsional)</option>
+                            <option value="beginner" {{ old('level', $student->level) == 'beginner' ? 'selected' : '' }}>Pemula</option>
+                            <option value="intermediate" {{ old('level', $student->level) == 'intermediate' ? 'selected' : '' }}>Menengah</option>
+                            <option value="advanced" {{ old('level', $student->level) == 'advanced' ? 'selected' : '' }}>Lanjutan</option>
                         </select>
                         @error('level')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            This helps categorize students by their skill level
+                            Ini membantu mengkategorikan siswa berdasarkan tingkat keterampilan mereka
                         </small>
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="password" class="form-label">New Password</label>
+                        <label for="password" class="form-label">Kata Sandi Baru</label>
                         <input type="password" 
                                class="form-control @error('password') is-invalid @enderror" 
                                id="password" 
                                name="password" 
-                               placeholder="Enter new password (leave blank to keep current)">
+                               placeholder="Masukkan kata sandi baru (biarkan kosong untuk tetap menggunakan yang lama)">
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            Leave blank to keep the current password
+                            Biarkan kosong untuk mempertahankan kata sandi saat ini
                         </small>
                     </div>
 
                     <div class="form-group mb-4">
-                        <label for="password_confirmation" class="form-label">Confirm New Password</label>
+                        <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi Baru</label>
                         <input type="password" 
                                class="form-control @error('password_confirmation') is-invalid @enderror" 
                                id="password_confirmation" 
                                name="password_confirmation" 
-                               placeholder="Confirm the new password">
+                               placeholder="Konfirmasi kata sandi baru">
                         @error('password_confirmation')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -160,10 +160,10 @@
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary mr-3">
-                            <i class="mdi mdi-check"></i> Update Student
+                            <i class="mdi mdi-check"></i> Perbarui Siswa
                         </button>
                         <a href="{{ route('students.show', $student) }}" class="btn btn-secondary">
-                            <i class="mdi mdi-close"></i> Cancel
+                            <i class="mdi mdi-close"></i> Batal
                         </a>
                     </div>
                 </form>
@@ -177,13 +177,13 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-chart text-info"></i> Student Statistics
+                    <i class="mdi mdi-chart text-info"></i> Statistik Siswa
                 </h5>
                 
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="mdi mdi-book text-primary mr-2"></i>
-                        <span class="text-muted">Enrollments</span>
+                        <span class="text-muted">Mata Pelajaran yang diikuti</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-primary">{{ $student->enrollments->count() }}</h4>
                 </div>
@@ -191,7 +191,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <div>
                         <i class="mdi mdi-check-circle text-success mr-2"></i>
-                        <span class="text-muted">Completed</span>
+                        <span class="text-muted">Selesai</span>
                     </div>
                     <h4 class="mb-0 font-weight-bold text-success">{{ $student->enrollments->where('completed_at', '!=', null)->count() }}</h4>
                 </div>
@@ -199,7 +199,7 @@
                 <div class="stat-item d-flex justify-content-between align-items-center">
                     <div>
                         <i class="mdi mdi-calendar text-info mr-2"></i>
-                        <span class="text-muted">Member Since</span>
+                        <span class="text-muted">Bergabung Sejak</span>
                     </div>
                     <h6 class="mb-0 font-weight-bold text-info">{{ $student->created_at->format('M Y') }}</h6>
                 </div>
@@ -210,30 +210,30 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="mdi mdi-account-check text-warning"></i> Account Status
+                    <i class="mdi mdi-account-check text-warning"></i> Status Akun
                 </h5>
                 
                 <div class="status-list">
                     <div class="status-item d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted">Email Status:</span>
+                        <span class="text-muted">Status Email:</span>
                         @if($student->email_verified_at)
-                            <span class="badge badge-success">Verified</span>
+                            <span class="badge badge-success">Terverifikasi</span>
                         @else
-                            <span class="badge badge-warning">Unverified</span>
+                            <span class="badge badge-warning">Belum Terverifikasi</span>
                         @endif
                     </div>
                     
                     <div class="status-item d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted">Account Status:</span>
+                        <span class="text-muted">Status Akun:</span>
                         @if($student->enrollments->count() > 0)
-                            <span class="badge badge-success">Active</span>
+                            <span class="badge badge-success">Aktif</span>
                         @else
-                            <span class="badge badge-secondary">Inactive</span>
+                            <span class="badge badge-secondary">Tidak Aktif</span>
                         @endif
                     </div>
                     
                     <div class="status-item d-flex justify-content-between align-items-center">
-                        <span class="text-muted">Last Login:</span>
+                        <span class="text-muted">Login Terakhir:</span>
                         <small class="text-muted">{{ $student->updated_at->diffForHumans() }}</small>
                     </div>
                 </div>
@@ -244,35 +244,35 @@
         <div class="card mt-3 border-danger">
             <div class="card-body">
                 <h5 class="card-title mb-4 text-danger">
-                    <i class="mdi mdi-delete"></i> Danger Zone
+                    <i class="mdi mdi-delete"></i> Zona Berbahaya
                 </h5>
                 
                 <p class="text-muted mb-3 small">
-                    Deleting this student will permanently remove their account and all associated data. This action cannot be undone.
+                    Menghapus siswa ini akan menghapus akun dan semua data terkait secara permanen. Aksi ini tidak dapat dibatalkan.
                 </p>
                 
                 @if($student->enrollments->count() > 0)
                     <div class="alert alert-warning mb-3">
                         <i class="mdi mdi-warning"></i>
-                        <strong>Warning:</strong> This student has {{ $student->enrollments->count() }} enrollment(s). 
-                        You must remove all enrollments before deleting this student.
+                        <strong>Peringatan:</strong> Siswa ini memiliki {{ $student->enrollments->count() }} pendaftaran. 
+                        Anda harus menghapus seluruh pendaftaran sebelum menghapus siswa ini.
                     </div>
                 @endif
                 
                 <form action="{{ route('students.destroy', $student) }}" method="POST" 
-                      onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this student? This action cannot be undone.');">
+                      onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus siswa ini? Aksi ini tidak dapat dibatalkan.');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
                             class="btn btn-danger btn-block" 
                             {{ $student->enrollments->count() > 0 ? 'disabled' : '' }}>
-                        <i class="mdi mdi-delete mr-2"></i> Delete Student
+                        <i class="mdi mdi-delete mr-2"></i> Hapus Siswa
                     </button>
                 </form>
                 
                 @if($student->enrollments->count() > 0)
                     <small class="text-muted mt-2 d-block">
-                        <i class="mdi mdi-warning"></i> Cannot delete student with existing enrollments
+                        <i class="mdi mdi-warning"></i> Tidak dapat menghapus siswa dengan pendaftaran yang masih ada
                     </small>
                 @endif
             </div>
