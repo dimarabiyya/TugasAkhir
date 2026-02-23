@@ -176,14 +176,18 @@
                                             <a href="{{ route('quiz.questions.index', $quiz) }}" 
                                                class="btn btn-warning" 
                                                title="Manage Questions">
-                                                <i class="icon-question"></i>
+                                                <i class="mdi mdi-plus"></i>
                                             </a>
-                                            <button type="button" 
-                                                    class="btn btn-danger" 
-                                                    onclick="confirmDelete('{{ route('quizzes.destroy', $quiz) }}')" 
-                                                    title="Delete">
-                                                <i class="mdi mdi-delete"></i>
-                                            </button>
+                                            
+                                            <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" 
+                                                onsubmit="event.preventDefault(); confirmDelete(event);">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger w-100">
+                                                    <i class="icon-trash"></i>
+                                                </button>
+                                            </form>
+                                            
                                         @elseif(auth()->check() && !auth()->user()->hasAnyRole(['admin', 'instructor']))
                                             @if($quiz->isAvailable() && $quiz->canUserAttempt(auth()->id()))
                                                 <a href="{{ route('quiz.taking.start', $quiz) }}" 

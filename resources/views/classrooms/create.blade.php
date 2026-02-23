@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
                         </div>
 
                         <div class="form-group">
-                            <label>Pilih Instruktur (Guru)</label>
+                            <label>Wali Kelas</label>
                             <select name="instructor_id" class="form-control select2" style="width:100%">
                                 <option value="">-- Pilih Guru --</option>
                                 @foreach($instructors as $instructor)
@@ -30,7 +30,9 @@ use Illuminate\Support\Facades\Storage;
 
                         <div class="form-group">
                             <label>Assign Siswa ke Kelas</label>
-                            <select name="student_ids[]" class="form-control select2" multiple="multiple" style="width:100%">
+                            <select name="student_ids[]" class="form-control select2" multiple="multiple" style="width:100%; height: 38px;">
+                                 @foreach($students as $student)
+                                    <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
                                 @foreach($students as $student)
                                     <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
                                 @endforeach

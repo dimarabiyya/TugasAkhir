@@ -330,3 +330,164 @@
         </div>
     </div>
 </div>
+
+@push('styles')
+<style>
+    /* Avatar Styling */
+    .avatar-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #e3e6f0;
+        transition: all 0.3s ease;
+    }
+    
+    .avatar-image:hover {
+        border-color: #667eea;
+        transform: scale(1.05);
+    }
+    
+    .sidebar-avatar-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e3e6f0;
+    }
+    
+    .avatar-preview-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #e3e6f0;
+    }
+    
+    .avatar-container {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .avatar-section {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #e3e6f0;
+    }
+    
+    .avatar-info {
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+    
+    .avatar-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .avatar-preview-container {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #e3e6f0;
+    }
+    
+    /* Legacy avatar circle for fallback */
+    .avatar-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .account-stats {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+    }
+    
+    .card.border-danger {
+        border-color: #dc3545 !important;
+    }
+    
+    .badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+    
+    .badge-success {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .badge-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    
+    /* File input styling */
+    .form-control[type="file"] {
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .form-control[type="file"]::-webkit-file-upload-button {
+        background-color: #667eea;
+        color: white;
+        border: none;
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.25rem;
+        margin-right: 0.5rem;
+        cursor: pointer;
+    }
+    
+    .form-control[type="file"]::-webkit-file-upload-button:hover {
+        background-color: #5a6fd8;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script>
+function previewAvatar(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            // Update preview in modal
+            document.getElementById('avatar-preview-modal').src = e.target.result;
+            
+            // Update main avatar preview
+            document.getElementById('avatar-preview').src = e.target.result;
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Auto-refresh page after successful avatar upload
+@if(session('status') === 'avatar-updated' || session('status') === 'avatar-deleted')
+    setTimeout(function() {
+        location.reload();
+    }, 2000);
+@endif
+</script>
+@endpush
+@endsection

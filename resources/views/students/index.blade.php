@@ -15,7 +15,7 @@
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
-                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
+                    @if(auth()->user()->hasRole('admin'))
                         <a href="{{ route('students.create') }}" class="btn btn-primary mr-2">
                             <i class="mdi mdi-plus"></i> Tambah Siswa
                         </a>
@@ -210,7 +210,8 @@
                                 Belum ada siswa yang terdaftar
                             @endif
                         </p>
-                        @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
+
+                        @if(auth()->user()->hasRole('admin'))
                             <a href="{{ route('students.create') }}" class="btn btn-primary">
                                 <i class="mdi mdi-plus"></i> Tambah Siswa Pertama
                             </a>

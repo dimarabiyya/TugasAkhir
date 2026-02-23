@@ -80,22 +80,23 @@ class LessonController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Module $module): View
+    public function create(Request $request)
     {
-        $this->checkManagePermission();
+        $user = auth()->user();
         
-        // KEAMANAN: Cek apakah instruktur memiliki module ini
-        if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
-            if ($module->course->instructor_id !== auth()->id()) {
-                abort(403, 'Unauthorized access to this module.');
-            }
+        // Logika filter seperti yang kita bahas sebelumnya
+        $query = Lesson::with('module.course');
+
+        if ($user->hasRole('instructor') && !$user->hasRole('admin')) {
+            $query->whereHas('module.course', function($q) use ($user) {
+                $q->where('instructor_id', $user->id);
+            });
         }
-        
-        // Get the next order number for this module
-        $nextOrder = $module->lessons()->max('order') + 1;
-        $lessonTypes = ['video', 'reading', 'audio', 'interactive'];
-        
-        return view('lessons.create', compact('module', 'nextOrder', 'lessonTypes'));
+
+        $lessons = $query->get(); // Variabel jamak
+
+        // Pastikan di compact namanya 'lessons'
+        return view('quizzes.create', compact('lessons'));
     }
 
     /**
@@ -112,6 +113,11 @@ class LessonController extends Controller
 
         $validated = $request->validated();
         
+        // LOGIKA OTOMATIS: Jika durasi kosong, isi dengan 30
+        if (empty($validated['duration_minutes'])) {
+            $validated['duration_minutes'] = 30;
+        }
+
         // SETTING MANUAL:
         $validated['module_id'] = $module->id;
         $validated['is_free'] = 1; 
@@ -123,9 +129,6 @@ class LessonController extends Controller
             ->with('success', 'Lesson created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Lesson $lesson): View
     {
         // Cek akses lesson
@@ -174,10 +177,13 @@ class LessonController extends Controller
             }
         }
 
-        $validated = $request->validated();
+       $validated = $request->validated();
+    
+        // LOGIKA OTOMATIS: Tambahkan juga di fungsi update agar aman
+        if (empty($validated['duration_minutes'])) {
+            $validated['duration_minutes'] = 30;
+        }
         
-        // SETTING MANUAL:
-        // Kita paksa 0 agar update tidak error karena field hilang dari request
         $validated['is_free'] = 0; 
 
         $lesson->update($validated);

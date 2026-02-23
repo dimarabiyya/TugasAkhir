@@ -27,8 +27,8 @@ use Illuminate\Support\Facades\Storage;
                         </div>
 
                         <div class="form-group">
-                            <label>Instruktur (Guru Pengampu)</label>
-                            <select name="instructor_id" class="form-control select2" style="width:100%">
+                            <label> Wali Kelas</label>
+                            <select name="instructor_id" class="form-control select2" style="width:100%; height: 38px;">
                                 @foreach($instructors as $instructor)
                                     <option value="{{ $instructor->id }}" 
                                         {{ old('instructor_id', $classroom->instructor_id) == $instructor->id ? 'selected' : '' }}>

@@ -137,16 +137,16 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-4">
-                                <label for="duration_minutes" class="form-label">Durasi (menit)</label>
+                                <label for="duration_minutes" class="form-label">Durasi (menit) <span class="text-danger">*</span></label>
                                 <input type="number" 
-                                       class="form-control @error('duration_minutes') is-invalid @enderror" 
-                                       id="duration_minutes" 
-                                       name="duration_minutes" 
-                                       value="{{ old('duration_minutes') }}" 
-                                       min="1"
-                                       max="999"
-                                       placeholder="30">
-                                @error('duration_minutes')
+                                    class="form-control @error('duration_minutes') is-invalid @enderror" 
+                                    id="duration_minutes" 
+                                    name="duration_minutes" 
+                                    value="{{ old('duration_minutes', 30) }}" 
+                                    min="1"
+                                    max="999"
+                                    placeholder="30"
+                                    required> @error('duration_minutes')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -246,7 +246,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted">Durasi:</span>
-                            <strong>{{ $module->course->duration_hours }}h</strong>
+                            <strong>{{ $module->course->duration_hours }}</strong>
                         </div>
                     </div>
                 </div>

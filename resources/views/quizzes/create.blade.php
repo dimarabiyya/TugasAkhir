@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <h3 class="font-weight-bold">Buat Kuis Baru</h3>
-                <h6 class="font-weight-normal mb-0">Buat kuis baru untuk: {{ $lesson->title }}</h6>
+                <h6 class="font-weight-normal mb-0">Silakan pilih materi untuk kuis ini pada form di bawah.</h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
@@ -30,6 +30,29 @@
                     <h5 class="mb-3">
                         <i class="icon-info text-primary mr-2"></i> Informasi Dasar
                     </h5>
+                    
+                    <div class="form-group mb-3">
+                        <label for="lesson_id" class="form-label font-weight-bold">Pilih Materi <span class="text-danger">*</span></label>
+                        <select class="form-control @error('lesson_id') is-invalid @enderror" 
+                                id="lesson_id" name="lesson_id" required>
+                            <option value="">-- Pilih Materi untuk Kuis Ini --</option>
+                            @foreach($lessons as $lesson)
+                                <option value="{{ $lesson['id'] }}" {{ old('lesson_id') == $lesson['id'] ? 'selected' : '' }}>
+                                    {{ $lesson['title'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('lesson_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-text text-muted">
+                            @if(auth()->user()->hasRole('admin'))
+                                Menampilkan semua materi yang tersedia.
+                            @else
+                                Menampilkan materi dari mata pelajaran yang Anda ampu.
+                            @endif
+                        </small>
+                    </div>
                     
                     <div class="form-group mb-3">
                         <label for="title" class="form-label font-weight-bold">Judul Kuis <span class="text-danger">*</span></label>
