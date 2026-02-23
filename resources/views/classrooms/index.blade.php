@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\Storage;
                             <thead>
                                 <tr>
                                     <th>Nama Kelas</th>
-                                    <th>Instruktur</th>
+                                    <th>Wali Kelas</th>
                                     <th>Jumlah Siswa</th>
                                     <th>Aksi</th>
                                 </tr>

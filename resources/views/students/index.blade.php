@@ -91,7 +91,7 @@
                                     <th>Email</th>
                                     <th>Telepon</th>
                                     <th>Tingkat</th>
-                                    <th>Pendaftaran</th>
+                                    <th>Jumlah Mapel</th>
                                     <th>Status</th>
                                     <th>Bergabung</th>
                                     <th>Aksi</th>
