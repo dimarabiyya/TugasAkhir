@@ -50,30 +50,12 @@ class QuizController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-  public function create(Request $request)
+    public function create(Lesson $lesson)
     {
-        $user = auth()->user();
-        
-        // Inisialisasi query
-        $lessonsQuery = Lesson::query()->with('module.course');
-
-        if ($user->hasRole('instructor') && !$user->hasRole('admin')) {
-            // Jika Instruktur: Hanya ambil materi dari course yang dia ampu
-            $lessonsQuery->whereHas('module.course', function($q) use ($user) {
-                $q->where('instructor_id', $user->id);
-            });
-        }
-        // Jika Admin: Tidak perlu filter (ambil semua)
-
-        $lessons = $lessonsQuery->get()->map(function($lesson) {
-            return [
-                'id' => $lesson->id,
-                'title' => $lesson->title . " (Modul: " . $lesson->module->title . " - " . $lesson->module->course->title . ")"
-            ];
-        });
-
-        return view('quizzes.create', compact('lessons'));
+        $this->checkManagePermission();
+        return view('quizzes.create', compact('lesson'));
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -172,26 +154,10 @@ class QuizController extends Controller
      */
     public function edit(Quiz $quiz)
     {
-        $user = auth()->user();
+        $this->checkManagePermission();
+        $quiz->load('lesson.module.course');
         
-        // 1. Ambil list materi berdasarkan Role (sama seperti logika Create)
-        $lessonsQuery = Lesson::with('module.course');
-
-        if ($user->hasRole('instructor') && !$user->hasRole('admin')) {
-            // Filter: Hanya materi dari course milik instruktur ini
-            $lessonsQuery->whereHas('module.course', function($q) use ($user) {
-                $q->where('instructor_id', $user->id);
-            });
-
-            // Keamanan tambahan: Pastikan instruktur tidak mengedit kuis milik orang lain lewat URL
-            if ($quiz->lesson->module->course->instructor_id !== $user->id) {
-                abort(403, 'Anda tidak memiliki akses ke kuis ini.');
-            }
-        }
-
-        $lessons = $lessonsQuery->get();
-
-        return view('quizzes.edit', compact('quiz', 'lessons'));
+        return view('quizzes.edit', compact('quiz'));
     }
 
     /**
@@ -201,7 +167,6 @@ class QuizController extends Controller
     {
         $this->checkManagePermission();
         $validated = $request->validate([
-            'lesson_id' => 'required|exists:lessons,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'passing_score' => 'required|numeric|min:0|max:100',
@@ -238,8 +203,8 @@ class QuizController extends Controller
 
         $quiz->update($validated);
 
-        return redirect()->route('quizzes.show', $quiz)
-            ->with('success', 'Kuis berhasil diperbarui.');
+        return redirect()->route('quizzes.index')
+            ->with('success', 'Quiz updated successfully.');
     }
 
     /**

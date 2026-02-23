@@ -30,24 +30,6 @@
                     <!-- Basic Information -->
                     <h5 class="mb-4"><i class="icon-note text-primary"></i> Informasi Dasar</h5>
                     
-                    <div class="form-group mb-4">
-                        <label for="lesson_id" class="form-label font-weight-bold">Materi Terkait <span class="text-danger">*</span></label>
-                        <select class="form-control @error('lesson_id') is-invalid @enderror" 
-                                id="lesson_id" name="lesson_id" required>
-                            <option value="">-- Pilih Materi --</option>
-                            @foreach($lessons as $lesson)
-                                <option value="{{ $lesson->id }}" 
-                                    {{ old('lesson_id', $quiz->lesson_id) == $lesson->id ? 'selected' : '' }}>
-                                    {{ $lesson->title }} ({{ $lesson->module->course->title }})
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('lesson_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <small class="text-muted">Pindahkan kuis ini ke materi atau mata pelajaran lain jika diperlukan.</small>
-                    </div>
-
                     <div class="form-group">
                         <label for="title" class="form-label">Judul Kuis <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('title') is-invalid @enderror" 
@@ -372,13 +354,6 @@ document.getElementById('allow_multiple_attempts').addEventListener('change', fu
 document.getElementById('negative_marking').addEventListener('change', function() {
     document.getElementById('negative_mark_container').style.display = this.checked ? '' : 'none';
 });
-
-    $(document).ready(function() {
-        $('#lesson_id').select2({
-            placeholder: "Cari Materi...",
-            allowClear: true
-        });
-    });
 </script>
 @endpush
 @endsection

@@ -102,13 +102,8 @@ Route::middleware(['auth'])->group(function () {
 // Admin/Instructor only - Quiz management
 Route::middleware(['auth'])->group(function () {
     Route::get('/quizzes/manage', [QuizController::class, 'index'])->name('quizzes.index');
-    
-    // Route Create & Store yang baru (Tanpa {lesson} di URL agar fleksibel)
-    Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
-    Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
-    
-    Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
-    
+    Route::get('/lessons/{lesson}/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+    Route::post('/lessons/{lesson}/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
     Route::get('/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
     Route::put('/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
@@ -122,6 +117,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/quizzes/{quiz}/questions/{question}', [QuizQuestionController::class, 'destroy'])->name('quiz.questions.destroy');
     Route::post('/quizzes/{quiz}/questions/reorder', [QuizQuestionController::class, 'reorder'])->name('quiz.questions.reorder');
     
+    // Show quiz - must be last to avoid conflicts
     Route::get('/quizzes/{quiz}/{slug?}', [QuizController::class, 'show'])->name('quizzes.show');
 });
 
