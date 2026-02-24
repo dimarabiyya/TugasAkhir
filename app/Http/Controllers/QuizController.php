@@ -15,36 +15,50 @@ class QuizController extends Controller
     private function checkManagePermission()
     {
         if (!auth()->user()->hasAnyRole(['admin', 'instructor'])) {
-            abort(403, 'Only admins and instructors can manage quizzes.');
+            abort(403, 'Hanya admin dan Guru yang dapat mengelola quiz.');
         }
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $quizzes = Quiz::with(['lesson.module.course'])
-            ->when(request('search'), function ($query) {
-                $search = request('search');
-                $query->where('title', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%");
-            })
-            ->when(request('lesson_id'), function ($query) {
-                $query->where('lesson_id', request('lesson_id'));
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        $user = auth()->user();
 
-        // Get all lessons for admin/instructor to create quiz
-        $lessons = null;
-        if (auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor'])) {
-            $lessons = Lesson::with(['module.course'])
-                ->orderBy('created_at', 'desc')
-                ->get();
+        $query = Quiz::with([
+            'lesson.module.course.classroom',
+            'questions',
+            'attempts'
+        ]);
+
+        // =====================
+        // STUDENT
+        // =====================
+        if ($user->hasRole('student')) {
+            $query->where('status', 'published')
+                ->whereHas(
+                    'lesson.module.course.classroom.students',
+                    function ($q) use ($user) {
+                        $q->where('users.id', $user->id);
+                    }
+                );
         }
 
-        return view('quizzes.index', compact('quizzes', 'lessons'));
+        // =====================
+        // INSTRUCTOR
+        // =====================
+        elseif ($user->hasRole('instructor')) {
+            $query->whereHas(
+                'lesson.module.course.classroom',
+                function ($q) use ($user) {
+                    $q->where('instructor_id', $user->id);
+                }
+            );
+        }
+
+        // ADMIN → tanpa filter
+
+        $quizzes = $query->latest()->paginate(10);
+
+        return view('quizzes.index', compact('quizzes'));
     }
 
     /**

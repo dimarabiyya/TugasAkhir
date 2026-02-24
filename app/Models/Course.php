@@ -54,7 +54,9 @@ class Course extends Model
     public function transactions() { return $this->hasMany(Transaction::class); }
     public function instructor() { return $this->belongsTo(User::class, 'instructor_id'); }
     public function testimonials() { return $this->hasMany(Testimonial::class); }
-
+    public function classroom() {
+        return $this->belongsTo(Classroom::class);
+    }
     public function getLessonsCountAttribute()
     {
         return $this->modules->sum(function ($module) {
@@ -85,7 +87,5 @@ class Course extends Model
     public function getScoutKey() { return $this->id; }
     public function getScoutKeyName() { return 'id'; }
 
-    public function classroom() {
-        return $this->belongsTo(Classroom::class);
-    }
+    
 }

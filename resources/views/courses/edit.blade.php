@@ -5,8 +5,8 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Buat Mata Pelajaran Baru</h3>
-                <h6 class="font-weight-normal mb-0">Tambahkan Mata Pelajaran baru ke platform pembelajaran Anda</h6>
+                <h3 class="font-weight-bold">Edit Mata Pelajaran</h3>
+                <h6 class="font-weight-normal mb-0">Kelola Mata Pelajaran ke platform pembelajaran Anda</h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
@@ -23,15 +23,15 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <form id="courseForm" action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data" onsubmit="event.preventDefault(); handleFormSubmit(this);">
+                <form id="courseForm" action="{{ route('courses.update', $course->id) }}" method="POST" enctype="multipart/form-data" onsubmit="event.preventDefault(); handleFormSubmit(this);">
                     @csrf
-                    
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label for="title" class="form-label">Judul Mata Pelajaran <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('title') is-invalid @enderror" 
-                                       id="title" name="title" value="{{ old('title') }}" placeholder="Masukkan judul Mata Pelajaran" required>
+                                       id="title" name="title" value="{{ old('title', $course->title) }}" placeholder="Masukkan judul Mata Pelajaran" required>
                                 @error('title')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -41,7 +41,7 @@
                                 <label for="description" class="form-label">Deskripsi <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" 
                                           id="description" name="description" rows="6" 
-                                          placeholder="Masukkan deskripsi Mata Pelajaran" required>{{ old('description') }}</textarea>
+                                          placeholder="Masukkan deskripsi Mata Pelajaran" required>{{ old('description', $course->description) }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -54,9 +54,9 @@
                                 <select class="form-control @error('level') is-invalid @enderror" 
                                         id="level" name="level" required>
                                     <option value="">Pilih Tingkat</option>
-                                    <option value="beginner" {{ old('level') == 'beginner' ? 'selected' : '' }}>Pemula (Beginner)</option>
-                                    <option value="intermediate" {{ old('level') == 'intermediate' ? 'selected' : '' }}>Menengah (Intermediate)</option>
-                                    <option value="advanced" {{ old('level') == 'advanced' ? 'selected' : '' }}>Mahir (Advanced)</option>
+                                    <option value="beginner" {{ old('level', $course->level) == 'beginner' ? 'selected' : '' }}>Pemula (Beginner)</option>
+                                    <option value="intermediate" {{ old('level', $course->level) == 'intermediate' ? 'selected' : '' }}>Menengah (Intermediate)</option>
+                                    <option value="advanced" {{ old('level', $course->level) == 'advanced' ? 'selected' : '' }}>Mahir (Advanced)</option>
                                 </select>
                                 @error('level')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -67,7 +67,7 @@
                                 <label>Pilih Kelas</label>
                                 <select name="classroom_id" class="form-control">
                                     @foreach($classrooms as $class)
-                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                        <option value="{{ $class->id }}" {{ old('classroom_id', $course->classroom_id) == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -75,7 +75,7 @@
                             <div class="form-group">
                                 <label for="duration_hours" class="form-label">Durasi (Jam) <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('duration_hours') is-invalid @enderror" 
-                                       id="duration_hours" name="duration_hours" value="{{ old('duration_hours') }}" 
+                                       id="duration_hours" name="duration_hours" value="{{ old('duration_hours',$course->duration_hours) }}" 
                                        placeholder="Contoh: 10" min="0" required>
                                 @error('duration_hours')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -89,7 +89,7 @@
                                     <option value="">Pilih Guru</option>
                                     @foreach($instructors ?? [] as $instructor)
                                     <option value="{{ $instructor->id }}" 
-                                            {{ old('instructor_id', (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) ? auth()->id() : '') == $instructor->id ? 'selected' : '' }}>
+                                            {{ old('instructor_id', $course->instructor_id) == $instructor->id ? 'selected' : '' }}>
                                         {{ $instructor->name }} ({{ $instructor->email }})
                                     </option>
                                     @endforeach
@@ -104,7 +104,7 @@
                             
                             <div class="form-group">
                                 <div class="form-check form-check-primary">
-                                    <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="1" {{ old('is_published') ? 'checked' : '' }}>
+                                    <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="1" {{ old('is_published', $course->is_published) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="is_published">
                                         Terbitkan segera
                                     </label>
@@ -116,6 +116,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                @if($course->thumbnail)
+                                    <div class="mt-2 mb-2">
+                                        <p class="text-muted mb-1">Thumbnail saat ini:</p>
+                                        <img src="{{ asset('storage/' . $course->thumbnail) }}" width="150" class="img-thumbnail">
+                                    </div>
+                                @endif
                                 <label for="thumbnail" class="form-label">Thumbnail Mata Pelajaran</label>
                                 <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" 
                                        id="thumbnail" name="thumbnail" accept="image/*" onchange="previewImage(this)">
