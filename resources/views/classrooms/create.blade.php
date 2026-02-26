@@ -1,9 +1,5 @@
 @extends('layouts.skydash')
 
-@php
-use Illuminate\Support\Facades\Storage;
-@endphp
-
 @section('content')
 <div class="content-wrapper">
     <div class="row">
@@ -30,12 +26,13 @@ use Illuminate\Support\Facades\Storage;
 
                         <div class="form-group">
                             <label>Assign Siswa ke Kelas</label>
-                            <select name="student_ids[]" class="form-control select2" multiple="multiple" style="width:100%; height: 38px;">
-                                 @foreach($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
-                                @foreach($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
-                                @endforeach
+                                <select name="student_ids[]" class="form-control select2" multiple="multiple" style="width:100%; height: 38px;">
+                                    @foreach($students as $student)
+                                        <option value="{{ $student->id }}">
+                                            {{ $student->name }} ({{ $student->email }})
+                                        </option>
+                                    @endforeach
+                                </select>
                             </select>
                             <small class="text-muted">Bisa pilih lebih dari satu siswa</small>
                         </div>

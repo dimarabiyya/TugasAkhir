@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Classroom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-// Import Controller bawaan Laravel
 use App\Http\Controllers\Controller;
 
 class ClassroomController extends Controller

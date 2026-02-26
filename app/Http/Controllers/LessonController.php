@@ -80,23 +80,11 @@ class LessonController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Module $module)
     {
-        $user = auth()->user();
-        
-        // Logika filter seperti yang kita bahas sebelumnya
-        $query = Lesson::with('module.course');
+        $this->checkManagePermission();
 
-        if ($user->hasRole('instructor') && !$user->hasRole('admin')) {
-            $query->whereHas('module.course', function($q) use ($user) {
-                $q->where('instructor_id', $user->id);
-            });
-        }
-
-        $lessons = $query->get(); // Variabel jamak
-
-        // Pastikan di compact namanya 'lessons'
-        return view('quizzes.create', compact('lessons'));
+        return view('lessons.create', compact('module'));
     }
 
     /**

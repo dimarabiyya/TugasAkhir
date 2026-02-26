@@ -33,12 +33,24 @@ class Lesson extends Model
 
     public function course()
     {
-        return $this->belongsTo(Course::class, 'id', 'id')->through('module');
+        return $this->hasOneThrough(
+            Course::class,
+            Module::class,
+            'id',        // FK di modules ke courses
+            'id',        // PK di courses
+            'module_id', // FK di lessons ke modules
+            'course_id'  // FK di modules ke courses
+        );
     }
 
     public function quiz()
     {
         return $this->hasMany(Quiz::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
     }
 
     public function lessonProgress()

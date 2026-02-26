@@ -110,8 +110,9 @@
                         <i class="icon-note text-primary"></i> Pelajaran Modul ({{ $module->lessons->count() }})
                     </h4>
                     @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
-                        <a href="{{ route('lessons.create', $module) }}" class="btn btn-sm btn-primary">
-                            <i class="icon-plus"></i> Tambah Pelajaran
+                       <a href="{{ route('modules.lessons.create', $module) }}"
+                        class="btn btn-sm btn-primary">
+                        + Tambah Materi
                         </a>
                     @endif
                 </div>
@@ -244,8 +245,8 @@
                         <i class="icon-pencil mr-2"></i> Edit Modul
                     </a>
                     
-                    <a href="{{ route('lessons.create', $module) }}" class="btn btn-success btn-block mb-2">
-                        <i class="icon-plus mr-2"></i> Tambah Pelajaran
+                    <a href="{{ route('modules.lessons.create', $module) }}" class="btn btn-success btn-block mb-2">
+                        <i class="icon-plus mr-2"></i> Tambah Materi
                     </a>
                     
                     <form action="{{ route('modules.destroy', $module) }}" method="POST" 

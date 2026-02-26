@@ -239,7 +239,7 @@
                     <div class="row">
                         @foreach($modules as $module)
                         <div class="col-md-6 mb-3">
-                            <div class="card module-card h-100" style="cursor: pointer;" onclick="selectModule({{ $module->id }}, '{{ $module->title }}')">
+                            <div class="card module-card h-100" style="cursor: pointer;" onclick="selectLessonModule({{ $module->id }}, '{{ $module->title }}')">
                                 <div class="card-body">
                                     <h6 class="card-title">{{ $module->title }}</h6>
                                     <p class="card-text text-muted small">{{ Str::limit($module->description, 80) }}</p>
@@ -323,9 +323,9 @@ function confirmDelete(event, message) {
     }
 }
 
-function selectModule(moduleId, moduleTitle) {
-    // Redirect to create lesson page for selected module
-    window.location.href = `/modules/${moduleId}/lessons/create`;
+function selectLessonModule(moduleId) {
+    window.location.href =
+        "{{ route('modules.lessons.create', ':id') }}".replace(':id', moduleId);
 }
 </script>
 @endpush

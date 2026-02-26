@@ -15,6 +15,12 @@ use App\Http\Controllers\EbookController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\TaskController;
+
+use App\Models\Course;
+use App\Models\Module;
+use App\Models\Lesson;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -73,8 +79,11 @@ Route::middleware(['auth', 'permission:view lessons'])->group(function () {
 });
 
 Route::middleware(['auth', 'permission:create lessons'])->group(function () {
-    Route::get('/modules/{module}/lessons/create', [LessonController::class, 'create'])->name('lessons.create');
-    Route::post('/modules/{module}/lessons', [LessonController::class, 'store'])->name('lessons.store');
+    Route::get('/modules/{module}/lessons/create', [LessonController::class, 'create'])
+        ->name('modules.lessons.create');
+
+    Route::post('/modules/{module}/lessons', [LessonController::class, 'store'])
+        ->name('modules.lessons.store');
 });
 
 Route::middleware(['auth', 'permission:edit lessons'])->group(function () {
@@ -87,18 +96,6 @@ Route::middleware(['auth', 'permission:delete lessons'])->group(function () {
 });
 
 // Quiz routes
-// Admin/Instructor can manage quizzes (create, edit, delete)
-// Note: /quizzes listing is public (landing.quizzes), auth users can access via dashboard
-Route::middleware(['auth'])->group(function () {
-    // Quiz taking routes - All authenticated users (students)
-    Route::get('/quizzes/{quiz}/start', [QuizTakingController::class, 'start'])->name('quiz.taking.start');
-    Route::get('/quizzes/{quiz}/attempts/{attempt}', [QuizTakingController::class, 'show'])->name('quiz.taking.show');
-    Route::post('/quizzes/{quiz}/attempts/{attempt}/save', [QuizTakingController::class, 'saveAnswer'])->name('quiz.taking.save');
-    Route::post('/quizzes/{quiz}/attempts/{attempt}/submit', [QuizTakingController::class, 'submit'])->name('quiz.taking.submit');
-    Route::get('/quizzes/{quiz}/attempts/{attempt}/result', [QuizTakingController::class, 'result'])->name('quiz.taking.result');
-    Route::get('/quizzes/{quiz}/attempts/{attempt}/progress', [QuizTakingController::class, 'progress'])->name('quiz.taking.progress');
-});
-
 // Admin/Instructor only - Quiz management
 Route::middleware(['auth'])->group(function () {
     Route::get('/quizzes/manage', [QuizController::class, 'index'])->name('quizzes.index');
@@ -118,8 +115,23 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/quizzes/{quiz}/questions/reorder', [QuizQuestionController::class, 'reorder'])->name('quiz.questions.reorder');
     
     // Show quiz - must be last to avoid conflicts
-    Route::get('/quizzes/{quiz}/{slug?}', [QuizController::class, 'show'])->name('quizzes.show');
+    Route::get('/quizzes/{quiz}/{slug?}', [QuizController::class, 'show'])
+        ->whereNumber('quiz')
+        ->name('quizzes.show');
 });
+
+// Note: /quizzes listing is public (landing.quizzes), auth users can access via dashboard
+Route::middleware(['auth'])->group(function () {
+    // Quiz taking routes - All authenticated users (students)
+    Route::get('/quizzes/{quiz}/start', [QuizTakingController::class, 'start'])->name('quiz.taking.start');
+    Route::get('/quizzes/{quiz}/attempts/{attempt}', [QuizTakingController::class, 'show'])->name('quiz.taking.show');
+    Route::post('/quizzes/{quiz}/attempts/{attempt}/save', [QuizTakingController::class, 'saveAnswer'])->name('quiz.taking.save');
+    Route::post('/quizzes/{quiz}/attempts/{attempt}/submit', [QuizTakingController::class, 'submit'])->name('quiz.taking.submit');
+    Route::get('/quizzes/{quiz}/attempts/{attempt}/result', [QuizTakingController::class, 'result'])->name('quiz.taking.result');
+    Route::get('/quizzes/{quiz}/attempts/{attempt}/progress', [QuizTakingController::class, 'progress'])->name('quiz.taking.progress');
+});
+
+
 
 // Enrollment routes - Students can enroll themselves
 Route::middleware('auth')->group(function () {
@@ -230,6 +242,40 @@ Route::middleware(['auth', 'role:instructor'])->group(function () {
     Route::get('/attendance/{attendance}/edit', [AttendanceController::class, 'edit'])->name('attendance.edit');
     Route::put('/attendance/{attendance}', [AttendanceController::class, 'update'])->name('attendance.update');
     Route::post('/attendance/group/update', [AttendanceController::class, 'updateGroup'])->name('attendance.group.update');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('tasks', TaskController::class);
+    Route::get('/tasks/{id}', [TaskController::class, 'show'])->name('tasks.show');
+    Route::post('/submissions/{submission_id}/grade', [TaskController::class, 'gradeTask'])->name('tasks.grade');
+    Route::post('/tasks/{task}/submit', [TaskController::class, 'submit'])->name('tasks.submit');
+    
+});
+
+// Pastikan route ini berada di dalam middleware auth
+Route::middleware(['auth'])->group(function () {
+    
+    // Ambil Course berdasarkan Kelas
+    Route::get('/get-courses/{classroomId}', function($classroomId) {
+        $user = auth()->user();
+        $query = \App\Models\Course::where('classroom_id', $classroomId);
+        if ($user->role_id != 1) {
+            $query->where('instructor_id', $user->id);
+        }
+        return response()->json($query->get());
+    });
+
+    // Ambil Module berdasarkan Course ID
+    Route::get('/get-modules/{courseId}', function($courseId) {
+        $modules = \App\Models\Module::where('course_id', $courseId)->get();
+        return response()->json($modules);
+    });
+
+    // Ambil Lesson berdasarkan Module ID
+    Route::get('/get-lessons/{moduleId}', function($moduleId) {
+        $lessons = \App\Models\Lesson::where('module_id', $moduleId)->get();
+        return response()->json($lessons);
+    });
 });
 
 require __DIR__.'/auth.php';

@@ -63,7 +63,7 @@ class Course extends Model
             return $module->lessons->count();
         });
     }
-
+    
     public function scopePublished($query) { return $query->where('is_published', true); }
     public function scopeLevel($query, $level) { return $query->where('level', $level); }
     

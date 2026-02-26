@@ -17,8 +17,8 @@
                 <div class="justify-content-end d-flex">
                     @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                         @if(isset($lessons) && $lessons && $lessons->count() > 0)
-                            <a href="{{ url('/lessons/' . $lessons->first()->id . '/quizzes/create') }}" class="btn btn-primary mr-3">
-                                <i class="mdi mdi-plus"></i> Buat Kuis
+                            <a href="{{ route('quizzes.create', $lesson) }}" class="btn btn-primary">
+                                Buat Kuis
                             </a>
                         @else
                             <button type="button" class="btn btn-primary mr-3" disabled title="Tidak ada Materi yang tersedia">
@@ -178,6 +178,9 @@
                                                title="Manage Questions">
                                                 <i class="mdi mdi-plus"></i>
                                             </a>
+                                            <a href="{{ route('quizzes.show', ['quiz' => $quiz->id,'slug' => $quiz->slug]) }}" class="btn btn-info btn-sm">
+                                                    Lihat Quiz
+                                                </a>
                                             
                                             <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" 
                                                 onsubmit="event.preventDefault(); confirmDelete(event);">

@@ -157,43 +157,51 @@
         @endif
         
         <!-- Quiz Section -->
-        @if($lesson->quiz)
-        <div class="card mt-3">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title mb-0">
+        @if($lesson->quiz->count())
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">
                         <i class="mdi mdi-help-circle text-primary"></i> Kuis Terkait
                     </h4>
-                    <a href="{{ route('quizzes.show', $lesson->quiz) }}" class="btn btn-sm btn-primary">
-                        <i class="mdi mdi-eye"></i> Lihat Kuis
-                    </a>
-                </div>
-                
-                <div class="quiz-info">
-                    <h6 class="mb-2">{{ $lesson->quiz->title }}</h6>
-                    <p class="text-muted mb-3">{{ Str::limit($lesson->quiz->description, 100) }}</p>
-                    
-                    <div class="row">
-                        <div class="col-md-4">
-                            <span class="badge badge-info">
-                                <i class="mdi mdi-help mr-1"></i>{{ $lesson->quiz->questions->count() }} Questions
-                            </span>
+
+                    @foreach($lesson->quiz as $quiz)
+                        <div class="border rounded p-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">{{ $quiz->title }}</h6>
+                                <a href="{{ route('quizzes.show', $quiz) }}" class="btn btn-sm btn-primary">
+                                    <i class="mdi mdi-eye"></i> Lihat Kuis
+                                </a>
+                            </div>
+
+                            <p class="text-muted mb-3">
+                                {{ Str::limit($quiz->description, 120) }}
+                            </p>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span class="badge badge-info">
+                                        <i class="mdi mdi-help mr-1"></i>
+                                        {{ $quiz->questions->count() }} Soal
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="badge badge-success">
+                                        <i class="mdi mdi-check mr-1"></i>
+                                        {{ $quiz->passing_score }}% Lulus
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="badge badge-warning">
+                                        <i class="mdi mdi-clock mr-1"></i>
+                                        {{ $quiz->time_limit_minutes ? $quiz->time_limit_minutes.'m' : '∞' }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <span class="badge badge-success">
-                                <i class="mdi mdi-check mr-1"></i>{{ $lesson->quiz->passing_score }}% Pass
-                            </span>
-                        </div>
-                        <div class="col-md-4">
-                            <span class="badge badge-warning">
-                                <i class="mdi mdi-clock mr-1"></i>{{ $lesson->quiz->time_limit_minutes ? $lesson->quiz->time_limit_minutes . 'm' : '∞' }}
-                            </span>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
-        </div>
-        @endif
+            @endif
         
     </div>
     
@@ -263,11 +271,12 @@
                         <i class="mdi mdi-pencil mr-2"></i> Edit Materi
                     </a>
                     
-                    @if(!$lesson->quiz)
-                        <a href="{{ route('quizzes.create', $lesson) }}" class="btn btn-success btn-block mb-2">
-                            <i class="mdi mdi-plus mr-2"></i> Tambah Kuis
+                   
+                        <a href="{{ route('quizzes.create', ['lesson' => $lesson->id]) }}"
+                            class="btn btn-success btn-block mb-2">
+                                <i class="mdi mdi-plus mr-2"></i> Tambah Kuis
                         </a>
-                    @endif
+                  
                     
                     <form action="{{ route('lessons.destroy', $lesson) }}" method="POST" 
                           onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus Materi ini? Tindakan ini tidak dapat dibatalkan.');">

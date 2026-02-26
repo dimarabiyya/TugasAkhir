@@ -135,32 +135,40 @@ class QuizController extends Controller
      */
     public function show(Quiz $quiz, $slug = null)
     {
-        // If slug is provided, verify it matches the quiz slug
-        if ($slug && $slug !== $quiz->slug) {
-            // Redirect to the correct URL with proper slug
-            return redirect()->route('quizzes.show', ['quiz' => $quiz->id, 'slug' => $quiz->slug]);
+        if ($slug !== $quiz->slug) {
+            return redirect()->route('quizzes.show', [
+                'quiz' => $quiz->id,
+                'slug' => $quiz->slug
+            ]);
         }
-        
-        $quiz->load(['lesson.module.course', 'questions', 'attempts.user']);
-        
-        // Load user attempts if student
+
+        $quiz->load([
+            'lesson.module.course',
+            'questions',
+            'attempts.user'
+        ]);
+
         $userAttempts = null;
         $bestAttempt = null;
-        
+
         if (auth()->check() && !auth()->user()->hasAnyRole(['admin', 'instructor'])) {
             $userAttempts = auth()->user()->quizAttempts()
                 ->where('quiz_id', $quiz->id)
-                ->orderBy('created_at', 'desc')
+                ->latest()
                 ->get();
-                
+
             $bestAttempt = auth()->user()->quizAttempts()
                 ->where('quiz_id', $quiz->id)
                 ->where('submitted', true)
-                ->orderBy('score', 'desc')
+                ->orderByDesc('score')
                 ->first();
         }
 
-        return view('quizzes.show', compact('quiz', 'userAttempts', 'bestAttempt'));
+        return view('quizzes.show', compact(
+            'quiz',
+            'userAttempts',
+            'bestAttempt'
+        ));
     }
 
     /**

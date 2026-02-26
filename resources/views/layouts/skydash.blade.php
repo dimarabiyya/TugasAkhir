@@ -630,7 +630,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}" href="{{ route('students.index') }}">
-                            <i class="mdi mdi-account-group menu-icon"></i>
+                            <i class="mdi mdi-account-school menu-icon"></i>
                             <span class="menu-title">Siswa</span>
                         </a>
                     </li>
@@ -651,6 +651,12 @@
                         <a class="nav-link" href="{{ route('instructors.index') }}">
                             <i class="icon-head menu-icon"></i>
                             <span class="menu-title">Management Guru</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
+                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
+                            <span class="menu-title">Tugas</span>
                         </a>
                     </li>
 
@@ -689,7 +695,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}" href="{{ route('students.index') }}">
-                            <i class="mdi mdi-school menu-icon"></i>
+                            <i class="mdi mdi-account-school menu-icon"></i>
                             <span class="menu-title">Siswa</span>
                         </a>
                     </li>
@@ -703,6 +709,12 @@
                         <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
                             <i class="mdi mdi-help-circle menu-icon"></i>
                             <span class="menu-title">Kuis</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
+                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
+                            <span class="menu-title">Tugas</span>
                         </a>
                     </li>
                 @endif
@@ -745,9 +757,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
+                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
+                            <span class="menu-title">Tugas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['testimonials.index', 'testimonials.create', 'testimonials.edit']) ? 'active' : '' }}" href="{{ route('testimonials.create') }}">
                             <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
-                            <span class="menu-title">Testimonials</span>
+                            <span class="menu-title">Aduan</span>
                         </a>
                     </li>
                 @endif
@@ -1194,7 +1212,7 @@
                         ],
                         [
                             'url' => route('students.index'),
-                            'icon' => 'mdi mdi-school',
+                            'icon' => 'mdi mdi-account-school',
                             'label' => 'Siswa',
                             'active' => request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']),
                             'priority' => 8
@@ -1260,7 +1278,7 @@
                         ],
                         [
                             'url' => route('students.index'),
-                            'icon' => 'mdi mdi-school',
+                            'icon' => 'mdi mdi-account-school',
                             'label' => 'Siswa',
                             'active' => request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']),
                             'priority' => 6

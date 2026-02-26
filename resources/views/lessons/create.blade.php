@@ -52,7 +52,7 @@
                     <i class="mdi mdi-plus text-primary"></i> Informasi Materi
                 </h4>
 
-                <form action="{{ route('lessons.store', $module) }}" method="POST">
+                <form action="{{ route('modules.lessons.store', $module) }}" method="POST">
                     @csrf
                     
                     <div class="form-group mb-4">
@@ -92,6 +92,10 @@
                                 name="type" 
                                 required>
                             <option value="">Pilih tipe Materi</option>
+                            @php
+                                $lessonTypes = ['video', 'pdf', 'quiz', 'assignment'];
+                            @endphp
+
                             @foreach($lessonTypes as $type)
                                 <option value="{{ $type }}" {{ old('type') == $type ? 'selected' : '' }}>
                                     {{ ucfirst($type) }}
@@ -156,6 +160,9 @@
                                 <label for="order" class="form-label">
                                     Urutan <span class="text-danger">*</span>
                                 </label>
+                                @php
+                                    $nextOrder = $nextOrder ?? 1;
+                                @endphp
                                 <input type="number" 
                                        class="form-control @error('order') is-invalid @enderror" 
                                        id="order" 
