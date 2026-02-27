@@ -246,10 +246,13 @@ Route::middleware(['auth', 'role:instructor'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('tasks', TaskController::class);
-    Route::get('/tasks/{id}', [TaskController::class, 'show'])->name('tasks.show');
-    Route::post('/submissions/{submission_id}/grade', [TaskController::class, 'gradeTask'])->name('tasks.grade');
-    Route::post('/tasks/{task}/submit', [TaskController::class, 'submit'])->name('tasks.submit');
     
+    // Gunakan POST untuk Submit dan Grade
+    Route::post('/tasks/{task}/submit', [TaskController::class, 'submit'])->name('tasks.submit');
+    Route::post('/submissions/{submission_id}/grade', [TaskController::class, 'gradeTask'])->name('tasks.grade');
+    
+    // Route Hapus Nilai
+    Route::delete('/grades/{id}', [TaskController::class, 'destroyGrade'])->name('tasks.grade.destroy');
 });
 
 // Pastikan route ini berada di dalam middleware auth

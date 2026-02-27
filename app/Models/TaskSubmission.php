@@ -23,6 +23,7 @@ class TaskSubmission extends Model
 
     // Relasi ke tabel penilaian (jika ada)
     public function grade() {
-        return $this->hasOne(TaskGrade::class, 'submission_id');
+        // Tambahkan parameter kedua untuk foreign key
+        return $this->hasOne(TaskGrade::class, 'task_submission_id');
     }
 }

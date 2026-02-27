@@ -197,4 +197,31 @@ class TaskController extends Controller
 
         return redirect()->back()->with('success', 'Tugas Anda berhasil dikirim!');
     }
+
+    public function gradeTask(Request $request, $submission_id)
+    {
+        $request->validate([
+            'score' => 'required|integer',
+            'feedback' => 'nullable|string'
+        ]);
+
+        TaskGrade::updateOrCreate(
+            ['task_submission_id' => $submission_id], // Gunakan nama kolom yang benar di sini
+            [
+                'grader_id' => auth()->id(),
+                'score' => $request->score,
+                'feedback' => $request->feedback
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Nilai berhasil disimpan!');
+    }
+
+    public function destroyGrade($id)
+    {
+        $grade = \App\Models\TaskGrade::findOrFail($id);
+        $grade->delete();
+
+        return redirect()->back()->with('success', 'Nilai berhasil dihapus!');
+    }
 }
