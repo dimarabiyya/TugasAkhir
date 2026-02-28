@@ -24,6 +24,51 @@
         </div>
     </div>
 
+    <!-- Statistics Cards -->
+
+<div class="row mb-4">
+    @php
+       
+    @endphp
+    
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body text-center">
+                <i class="mdi mdi-clipboard-check-outline" style="font-size: 40px; color: #667eea;"></i>
+                <h3 class="mt-3 mb-0">00</h3>
+                <p class="text-muted mb-0">Total Tugas</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body text-center">
+                <i class="mdi mdi-calendar-check" style="font-size: 40px; color: #667eea;"></i>
+                <h3 class="mt-3 mb-0">00</h3>
+                <p class="text-muted mb-0">Total Tugas Dikerjakan</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body text-center">
+                <i class="mdi mdi-check" style="font-size: 40px; color: #667eea;"></i>
+                <h3 class="mt-3 mb-0">00</h3>
+                <p class="text-muted mb-0">Total tasks</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body text-center">
+                <i class="icon-note" style="font-size: 40px; color: #667eea;"></i>
+                <h3 class="mt-3 mb-0">00</h3>
+                <p class="text-muted mb-0">Total tasks</p>
+            </div>
+        </div>
+    </div>s
+</div>
+
     <div class="row">
         {{-- Gunakan forelse untuk menangani jika data kosong --}}
         @forelse($tasks as $task)
