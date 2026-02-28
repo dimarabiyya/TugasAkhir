@@ -1,15 +1,25 @@
 @extends('layouts.skydash')
 
 @section('content')
-<div class="content-wrapper">
     <div class="row">
         <div class="col-md-12 grid-margin">
-            <div class="d-flex justify-content-between align-items-center">
-                <h3 class="font-weight-bold">Daftar Tugas</h3>
-                {{-- Gunakan logika yang kamu inginkan --}}
-                @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
-                    <a href="{{ route('tasks.create') }}" class="btn btn-primary">Tambah Tugas Baru</a>
-                @endif
+            <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                    @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
+                        <h3 class="font-weight-bold">Manajemen Tugas</h3>
+                        <p class="text-muted">Kelola semua Tugas untuk pelajaran Anda!</p>
+                    @else
+                        <h3 class="font-weight-bold">Daftar Tugas yang Tersedia</h3>
+                        <p class="text-muted">Selesaikan tugas tugas yang telah di berikan!</p>
+                    @endif
+                </div>
+                <div class="col-12 col-xl-4">
+                    @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
+                    <div class="justify-content-end d-flex">
+                        <a href="{{ route('tasks.create') }}" class="btn btn-primary btn-sm my-2">+ Tambah Tugas</a>
+                    </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -56,6 +66,5 @@
             </div>
         </div>
         @endforelse
-    </div>
 </div>
 @endsection

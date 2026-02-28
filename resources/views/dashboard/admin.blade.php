@@ -5,8 +5,8 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Admin Dashboard</h3>
-                <h6 class="font-weight-normal mb-0">Welcome {{ auth()->user()->name }}! Monitor your platform's performance and analytics.</h6>
+                <h3 class="font-weight-bold">Dashboard Admin</h3>
+                <h6 class="font-weight-normal mb-0">Halo {{ auth()->user()->name }}! Pantau performa dan analitik platform Anda.</h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
@@ -15,10 +15,10 @@
                             <i class="mdi mdi-calendar"></i> {{ now()->format('M d, Y') }}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
-                            <a class="dropdown-item" href="#" onclick="updateCharts('today')">Today</a>
-                            <a class="dropdown-item" href="#" onclick="updateCharts('week')">Last 7 days</a>
-                            <a class="dropdown-item" href="#" onclick="updateCharts('month')">Last 30 days</a>
-                            <a class="dropdown-item" href="#" onclick="updateCharts('year')">This year</a>
+                            <a class="dropdown-item" href="#" onclick="updateCharts('today')">Hari Ini</a>
+                            <a class="dropdown-item" href="#" onclick="updateCharts('week')">7 Hari Terakhir</a>
+                            <a class="dropdown-item" href="#" onclick="updateCharts('month')">30 Hari Terakhir</a>
+                            <a class="dropdown-item" href="#" onclick="updateCharts('year')">Tahun Ini</a>
                         </div>
                     </div>
                 </div>
@@ -39,8 +39,8 @@
                             <h2 class="mb-0 font-weight-normal"><i class="mdi mdi-school me-2"></i>{{ $totalStudents ?? 0 }}</h2>
                         </div>
                         <div class="ms-2">
-                            <h4 class="location font-weight-normal">Total Students</h4>
-                            <h6 class="font-weight-normal">Active Learners</h6>
+                            <h4 class="location font-weight-normal">Total Siswa</h4>
+                            <h6 class="font-weight-normal">Pembelajar Aktif</h6>
                         </div>
                     </div>
                 </div>
@@ -49,14 +49,14 @@
     </div>
     <div class="col-md-6 grid-margin transparent">
         <div class="row">
-            <div class="col-md-6 mb-4 stretch-card transparent">
+            <a href="{{ route('courses.index') }}" class="col-md-6 mb-4 stretch-card transparent" style="text-decoration: none;">
                 <div class="card card-tale interactive-card">
                     <div class="card-body position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="mb-4">Total Courses</p>
+                                <p class="mb-4">Total Mata Pelajaran</p>
                                 <p class="fs-30 mb-2">{{ $totalCourses ?? 0 }}</p>
-                                <p>{{ $publishedCourses ?? 0 }} published</p>
+                                <p>{{ $publishedCourses ?? 0 }} dipublikasikan</p>
                             </div>
                             <div class="card-icon-circle">
                                 <i class="mdi mdi-school"></i>
@@ -64,15 +64,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
             <div class="col-md-6 mb-4 stretch-card transparent">
                 <div class="card card-dark-blue interactive-card">
                     <div class="card-body position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="mb-4">Total Enrollments</p>
+                                <p class="mb-4">Total Siswa</p>
                                 <p class="fs-30 mb-2">{{ $totalEnrollments ?? 0 }}</p>
-                                <p>{{ $activeEnrollments ?? 0 }} active</p>
+                                <p>{{ $activeEnrollments ?? 0 }} aktif</p>
                             </div>
                             <div class="card-icon-circle">
                                 <i class="mdi mdi-account-group"></i>
@@ -88,9 +88,9 @@
                     <div class="card-body position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="mb-4">Total Modules</p>
+                                <p class="mb-4">Total Modul</p>
                                 <p class="fs-30 mb-2">{{ $totalModules ?? 0 }}</p>
-                                <p>Across courses</p>
+                                <p>Di seluruh Mata Pelajaran</p>
                             </div>
                             <div class="card-icon-circle">
                                 <i class="mdi mdi-file-document"></i>
@@ -104,9 +104,9 @@
                     <div class="card-body position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="mb-4">Total Quizzes</p>
+                                <p class="mb-4">Total Kuis</p>
                                 <p class="fs-30 mb-2">{{ $totalQuizzes ?? 0 }}</p>
-                                <p>Available</p>
+                                <p>Tersedia</p>
                             </div>
                             <div class="card-icon-circle">
                                 <i class="mdi mdi-clipboard-text"></i>
@@ -126,19 +126,19 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title mb-0">Enrollment Trends</h4>
+                    <h4 class="card-title mb-0">Tren Perkembangan Siswa</h4>
                     <div class="dropdown">
                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="enrollmentChartDropdown" data-bs-toggle="dropdown">
-                            <i class="mdi mdi-calendar"></i> Last 12 months
+                            <i class="mdi mdi-calendar"></i> 12 Bulan Terakhir
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('6months')">Last 6 months</a>
-                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('12months')">Last 12 months</a>
-                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('year')">This year</a>
+                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('6months')">6 Bulan Terakhir</a>
+                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('12months')">12 Bulan Terakhir</a>
+                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('year')">Tahun Ini</a>
                         </div>
                     </div>
                 </div>
-                <p class="font-weight-500 mb-3">Student enrollment patterns over time</p>
+                <p class="font-weight-500 mb-3">Pola Perkembangan Siswa siswa dari waktu ke waktu</p>
                 <div class="chart-container">
                     <canvas id="enrollmentTrendsChart"></canvas>
                 </div>
@@ -150,22 +150,22 @@
     <div class="col-md-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Course Distribution</h4>
-                <p class="font-weight-500 mb-3">Courses by difficulty level</p>
+                <h4 class="card-title mb-4">Distribusi Mata Pelajaran</h4>
+                <p class="font-weight-500 mb-3">Mata Pelajaran berdasarkan tingkat kesulitan</p>
                 <div class="chart-container-small">
                     <canvas id="courseLevelChart"></canvas>
                 </div>
                 <div class="mt-3">
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Beginner</span>
+                        <span class="text-muted">Pemula</span>
                         <span class="font-weight-bold">{{ $coursesByLevel['beginner'] ?? 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Intermediate</span>
+                        <span class="text-muted">Menengah</span>
                         <span class="font-weight-bold">{{ $coursesByLevel['intermediate'] ?? 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Advanced</span>
+                        <span class="text-muted">Lanjutan</span>
                         <span class="font-weight-bold">{{ $coursesByLevel['advanced'] ?? 0 }}</span>
                     </div>
                 </div>
@@ -180,8 +180,8 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Student Activity</h4>
-                <p class="font-weight-500 mb-3">Daily login patterns</p>
+                <h4 class="card-title mb-4">Aktivitas Siswa</h4>
+                <p class="font-weight-500 mb-3">Pola login harian</p>
                 <div class="chart-container-small">
                     <canvas id="activityHeatmapChart"></canvas>
                 </div>
@@ -193,8 +193,8 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Course Completion</h4>
-                <p class="font-weight-500 mb-3">Completion rates by course</p>
+                <h4 class="card-title mb-4">Penyelesaian Mata Pelajaran</h4>
+                <p class="font-weight-500 mb-3">Tingkat penyelesaian berdasarkan Mata Pelajaran</p>
                 <div class="chart-container-small">
                     <canvas id="completionRatesChart"></canvas>
                 </div>
@@ -208,17 +208,17 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Recent Platform Activity</h4>
-                <p class="font-weight-500 mb-0">Latest enrollments and course updates</p>
+                <h4 class="card-title">Aktivitas Platform Terbaru</h4>
+                <p class="font-weight-500 mb-0">Perkembangan Siswa terbaru dan pembaruan Mata Pelajaran</p>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Activity</th>
-                                <th>User</th>
-                                <th>Course</th>
-                                <th>Type</th>
-                                <th>Date</th>
+                                <th>Aktivitas</th>
+                                <th>Pengguna</th>
+                                <th>Mata Pelajaran</th>
+                                <th>Jenis</th>
+                                <th>Tanggal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -236,7 +236,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center">No recent activity</td>
+                                <td colspan="5" class="text-center">Tidak ada aktivitas terbaru</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -397,7 +397,7 @@
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [{
-                    label: 'New Enrollments',
+                    label: 'Perkembangan Siswa',
                     data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
                     borderColor: '#667eea',
                     backgroundColor: 'rgba(102, 126, 234, 0.1)',
@@ -409,7 +409,7 @@
                     pointRadius: 6,
                     pointHoverRadius: 8
                 }, {
-                    label: 'Completed Courses',
+                    label: 'Mata Pelajaran Selesai',
                     data: [8, 15, 12, 20, 18, 25, 22, 28, 26, 32, 30, 35],
                     borderColor: '#764ba2',
                     backgroundColor: 'rgba(118, 75, 162, 0.1)',
@@ -529,7 +529,7 @@
             data: {
                 labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 datasets: [{
-                    label: 'Active Users',
+label: 'Pengguna Aktif',
                     data: [120, 150, 180, 200, 160, 80, 60],
                     backgroundColor: [
                         'rgba(102, 126, 234, 0.8)',
@@ -589,7 +589,7 @@
             data: {
                 labels: ['Course A', 'Course B', 'Course C', 'Course D', 'Course E'],
                 datasets: [{
-                    label: 'Completion Rate (%)',
+                    label: 'Tingkat Penyelesaian (%)',
                     data: [85, 92, 78, 88, 95],
                     backgroundColor: 'rgba(102, 126, 234, 0.2)',
                     borderColor: '#667eea',

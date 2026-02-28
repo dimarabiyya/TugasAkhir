@@ -43,7 +43,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <!-- Main Content and Sidebar -->
 <div class="row">
@@ -53,7 +52,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="mdi mdi-information text-primary"></i> Ikhtisar Materi
+                    <i class="mdi mdi-information text-primary"></i> Materi
                 </h4>
                 
                 @if($lesson->description)

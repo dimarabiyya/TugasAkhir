@@ -5,8 +5,8 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Welcome {{ auth()->user()->name }}</h3>
-                <h6 class="font-weight-normal mb-0">Manage your courses and track your students' progress. You have <span class="text-primary">active enrollments!</span></h6>
+                <h3 class="font-weight-bold">Selamat Datang {{ auth()->user()->name }}</h3>
+                <h6 class="font-weight-normal mb-0">Kelola Mata Pelajaran Anda dan lacak kemajuan siswa Anda. Anda memiliki <span class="text-primary">pendaftaran aktif!</span></h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
@@ -15,9 +15,9 @@
                             <i class="mdi mdi-calendar"></i> {{ now()->format('M d, Y') }}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
-                            <a class="dropdown-item" href="#">Today</a>
-                            <a class="dropdown-item" href="#">Last 7 days</a>
-                            <a class="dropdown-item" href="#">Last 30 days</a>
+                            <a class="dropdown-item" href="#">Hari Ini</a>
+                            <a class="dropdown-item" href="#">7 Hari Terakhir</a>
+                            <a class="dropdown-item" href="#">30 Hari Terakhir</a>
                         </div>
                     </div>
                 </div>
@@ -38,8 +38,8 @@
                             <h2 class="mb-0 font-weight-normal"><i class="mdi mdi-school me-2"></i>{{ $totalStudents ?? 0 }}</h2>
                         </div>
                         <div class="ms-2">
-                            <h4 class="location font-weight-normal">Total Students</h4>
-                            <h6 class="font-weight-normal">Active Learners</h6>
+                            <h4 class="location font-weight-normal">Total Siswa</h4>
+                            <h6 class="font-weight-normal">Pembelajar Aktif</h6>
                         </div>
                     </div>
                 </div>
@@ -53,9 +53,9 @@
                     <div class="card-body position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="mb-4">Total Courses</p>
+                                <p class="mb-4">Total Mata Pelajaran</p>
                                 <p class="fs-30 mb-2">{{ $totalCourses ?? 0 }}</p>
-                                <p>{{ $publishedCourses ?? 0 }} published</p>
+                                <p>{{ $publishedCourses ?? 0 }} dipublikasikan</p>
                             </div>
                             <div class="card-icon-circle">
                                 <i class="mdi mdi-school"></i>
@@ -69,9 +69,9 @@
                     <div class="card-body position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="mb-4">Total Enrollments</p>
+                                <p class="mb-4">Total Pendaftaran</p>
                                 <p class="fs-30 mb-2">{{ $totalEnrollments ?? 0 }}</p>
-                                <p>{{ $activeEnrollments ?? 0 }} active</p>
+                                <p>{{ $activeEnrollments ?? 0 }} aktif</p>
                             </div>
                             <div class="card-icon-circle">
                                 <i class="mdi mdi-account-group"></i>
@@ -87,9 +87,9 @@
                     <div class="card-body position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="mb-4">Total Modules</p>
+                                <p class="mb-4">Total Modul</p>
                                 <p class="fs-30 mb-2">{{ $totalModules ?? 0 }}</p>
-                                <p>Across courses</p>
+                                <p>Di seluruh Mata Pelajaran</p>
                             </div>
                             <div class="card-icon-circle">
                                 <i class="mdi mdi-file-document"></i>
@@ -103,9 +103,9 @@
                     <div class="card-body position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <p class="mb-4">Total Quizzes</p>
+                                <p class="mb-4">Total Kuis</p>
                                 <p class="fs-30 mb-2">{{ $totalQuizzes ?? 0 }}</p>
-                                <p>Available</p>
+                                <p>Tersedia</p>
                             </div>
                             <div class="card-icon-circle">
                                 <i class="mdi mdi-clipboard-text"></i>
@@ -125,19 +125,19 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title mb-0">Student Enrollment Trends</h4>
+                    <h4 class="card-title mb-0">Tren Pendaftaran Siswa</h4>
                     <div class="dropdown">
                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="enrollmentChartDropdown" data-bs-toggle="dropdown">
-                            <i class="mdi mdi-calendar"></i> Last 12 months
+                            <i class="mdi mdi-calendar"></i> 12 Bulan Terakhir
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('6months')">Last 6 months</a>
-                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('12months')">Last 12 months</a>
-                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('year')">This year</a>
+                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('6months')">6 Bulan Terakhir</a>
+                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('12months')">12 Bulan Terakhir</a>
+                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('year')">Tahun Ini</a>
                         </div>
                     </div>
                 </div>
-                <p class="font-weight-500 mb-3">Track your course enrollment patterns and student engagement</p>
+                <p class="font-weight-500 mb-3">Lacak pola pendaftaran Mata Pelajaran dan keterlibatan siswa</p>
                 <div class="chart-container">
                     <canvas id="enrollmentTrendsChart"></canvas>
                 </div>
@@ -149,22 +149,22 @@
     <div class="col-md-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Course Performance</h4>
-                <p class="font-weight-500 mb-3">Your courses by completion rate</p>
+                <h4 class="card-title mb-4">Performa Mata Pelajaran</h4>
+                <p class="font-weight-500 mb-3">Mata Pelajaran Anda berdasarkan tingkat penyelesaian</p>
                 <div class="chart-container-small">
                     <canvas id="coursePerformanceChart"></canvas>
                 </div>
                 <div class="mt-3">
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">High Performance</span>
+                        <span class="text-muted">Performa Tinggi</span>
                         <span class="font-weight-bold text-success">{{ $highPerformanceCourses ?? 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Medium Performance</span>
+                        <span class="text-muted">Performa Sedang</span>
                         <span class="font-weight-bold text-warning">{{ $mediumPerformanceCourses ?? 0 }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Needs Attention</span>
+                        <span class="text-muted">Perlu Perhatian</span>
                         <span class="font-weight-bold text-danger">{{ $lowPerformanceCourses ?? 0 }}</span>
                     </div>
                 </div>
@@ -179,8 +179,8 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Student Activity</h4>
-                <p class="font-weight-500 mb-3">Weekly student engagement</p>
+                <h4 class="card-title mb-4">Aktivitas Siswa</h4>
+                <p class="font-weight-500 mb-3">Keterlibatan siswa mingguan</p>
                 <div class="chart-container-small">
                     <canvas id="studentActivityChart"></canvas>
                 </div>
@@ -192,8 +192,8 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Course Completion</h4>
-                <p class="font-weight-500 mb-3">Completion rates by course</p>
+                <h4 class="card-title mb-4">Penyelesaian Mata Pelajaran</h4>
+                <p class="font-weight-500 mb-3">Tingkat penyelesaian berdasarkan Mata Pelajaran</p>
                 <div class="chart-container-small">
                     <canvas id="completionRatesChart"></canvas>
                 </div>
@@ -207,17 +207,17 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <p class="card-title">Recent Courses</p>
-                <p class="font-weight-500 mb-0">Your latest course updates</p>
+                <p class="card-title">Mata Pelajaran Terbaru</p>
+                <p class="font-weight-500 mb-0">Pembaruan Mata Pelajaran terbaru Anda</p>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Course</th>
-                                <th>Level</th>
-                                <th>Modules</th>
+                                <th>Mata Pelajaran</th>
+                                <th>Tingkat</th>
+                                <th>Modul</th>
                                 <th>Status</th>
-                                <th>Date</th>
+                                <th>Tanggal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -228,14 +228,14 @@
                                 <td>{{ $course->modules->count() ?? 0 }}</td>
                                 <td>
                                     <label class="badge {{ $course->is_published ? 'badge-success' : 'badge-warning' }}">
-                                        {{ $course->is_published ? 'Published' : 'Draft' }}
+                                        {{ $course->is_published ? 'Dipublikasikan' : 'Draf' }}
                                     </label>
                                 </td>
                                 <td>{{ $course->created_at ?? now()->format('M d, Y') }}</td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center">No courses yet. <a href="{{ route('courses.create') }}">Create your first course</a></td>
+                                <td colspan="5" class="text-center">Belum ada Mata Pelajaran. <a href="{{ route('courses.create') }}">Buat Mata Pelajaran pertama Anda</a></td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -420,7 +420,7 @@
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [{
-                    label: 'New Enrollments',
+                    label: 'Perkembangan Siswa',
                     data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
                     borderColor: '#667eea',
                     backgroundColor: 'rgba(102, 126, 234, 0.1)',
@@ -432,7 +432,7 @@
                     pointRadius: 6,
                     pointHoverRadius: 8
                 }, {
-                    label: 'Course Completions',
+                    label: 'Penyelesaian Mata Pelajaran',
                     data: [8, 15, 12, 20, 18, 25, 22, 28, 26, 32, 30, 35],
                     borderColor: '#764ba2',
                     backgroundColor: 'rgba(118, 75, 162, 0.1)',
@@ -504,7 +504,7 @@
         coursePerformanceChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['High Performance', 'Medium Performance', 'Needs Attention'],
+                labels: ['Performa Tinggi', 'Performa Sedang', 'Perlu Perhatian'],
                 datasets: [{
                     data: [{{ $highPerformanceCourses ?? 0 }}, {{ $mediumPerformanceCourses ?? 0 }}, {{ $lowPerformanceCourses ?? 0 }}],
                     backgroundColor: [
@@ -552,7 +552,7 @@
             data: {
                 labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 datasets: [{
-                    label: 'Active Students',
+                    label: 'Siswa Aktif',
                     data: [45, 52, 48, 61, 55, 25, 18],
                     backgroundColor: [
                         'rgba(102, 126, 234, 0.8)',
@@ -612,7 +612,7 @@
             data: {
                 labels: ['Course A', 'Course B', 'Course C', 'Course D', 'Course E'],
                 datasets: [{
-                    label: 'Completion Rate (%)',
+                    label: 'Tingkat Penyelesaian (%)',
                     data: [85, 92, 78, 88, 95],
                     backgroundColor: 'rgba(102, 126, 234, 0.2)',
                     borderColor: '#667eea',

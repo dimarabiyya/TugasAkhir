@@ -6,12 +6,12 @@
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <h3 class="font-weight-bold">Kelola Testimoni</h3>
-                <h6 class="font-weight-normal mb-0">Setujui, tolak, dan kelola testimoni siswa</h6>
+                <p class="text-muted">Setujui, tolak, dan kelola testimoni siswa</p>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('testimonials.index') }}" class="btn btn-info" target="_blank">
-                        <i class="icon-eye"></i> Lihat Halaman Publik
+                        <i class="icon-eye"></i> Daftar Aduan
                     </a>
                 </div>
             </div>
@@ -143,10 +143,9 @@
                             <tr>
                                 <th>Siswa</th>
                                 <th>Kursus</th>
-                                <th>Testimoni</th>
+                                <th>Aduan Siswa</th>
                                 <th>Penilaian</th>
                                 <th>Status</th>
-                                <th>Unggulan</th>
                                 <th>Tanggal</th>
                                 <th>Aksi</th>
                             </tr>
@@ -191,9 +190,9 @@
                                         <div style="color: #ffb606;">
                                             @for($i = 1; $i <= 5; $i++)
                                                 @if($i <= $testimonial->rating)
-                                                    <i class="fas fa-star"></i>
+                                                    <i class="mdi mdi-star"></i>
                                                 @else
-                                                    <i class="far fa-star"></i>
+                                                    <i class="mdi mdi-star-outline"></i>
                                                 @endif
                                             @endfor
                                             <small class="text-muted ml-1">({{ $testimonial->rating }}/5)</small>
@@ -207,19 +206,6 @@
                                         <span class="badge badge-success">Disetujui</span>
                                     @else
                                         <span class="badge badge-warning">Menunggu</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($testimonial->is_approved)
-                                        @if($testimonial->is_featured)
-                                            <span class="badge badge-info">
-                                                <i class="mdi mdi-star"></i> Unggulan
-                                            </span>
-                                        @else
-                                            <span class="text-muted">-</span>
-                                        @endif
-                                    @else
-                                        <span class="text-muted">-</span>
                                     @endif
                                 </td>
                                 <td>
@@ -257,7 +243,7 @@
                                         </form>
                                         @endif
 
-                                        <a href="{{ route('testimonials.show', $testimonial) }}" 
+                                        <a href="{{ route('testimonials.index', $testimonial) }}" 
                                            class="btn btn-info btn-sm" 
                                            target="_blank"
                                            title="View">

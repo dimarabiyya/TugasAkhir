@@ -8,8 +8,8 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h2 class="text-white mb-2">Welcome back, {{ auth()->user()->name }}!</h2>
-                        <p class="text-white mb-0" style="opacity: 0.9;">Continue your learning journey with LMS SMKN 40 Jakarta</p>
+<h2 class="text-white mb-2">Selamat datang kembali, {{ auth()->user()->name }}!</h2>
+                        <p class="text-white mb-0" style="opacity: 0.9;">Lanjutkan perjalanan pembelajaran Anda dengan LMS SMKN 40 Jakarta</p>
                     </div>
                     <div>
                         <i class="icon-graduation" style="font-size: 64px; opacity: 0.3;"></i>
@@ -24,22 +24,22 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-chart text-primary"></i> Overall Progress
+                    <i class="icon-chart text-primary"></i> Progress Keseluruhan
                 </h4>
                 <div class="d-flex align-items-center">
                     <div style="flex: 0 0 150px;">
                         <h1 class="mb-0 text-primary" style="font-size: 3.5rem; font-weight: 700;">
                             {{ $overallProgress ?? 0 }}%
                         </h1>
-                        <p class="text-muted mb-0">Course Completion</p>
+                        <p class="text-muted mb-0">Penyelesaian Mata Pelajaran</p>
                     </div>
                     <div style="flex: 1; margin-left: 2rem;">
                         <div style="background: #e5e7eb; height: 20px; border-radius: 9999px; overflow: hidden;">
                             <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: {{ $overallProgress ?? 0 }}%; transition: width 0.3s ease;"></div>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
-                            <small class="text-muted">{{ $completedLessonsCount ?? 0 }} Lessons Completed</small>
-                            <small class="text-muted">{{ $totalLessons ?? 0 }} Total Lessons</small>
+                            <small class="text-muted">{{ $completedLessonsCount ?? 0 }} Materi Selesai</small>
+                            <small class="text-muted">{{ $totalLessons ?? 0 }} Materi Lesson</small>
                         </div>
                     </div>
                 </div>
@@ -55,9 +55,9 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-4">Enrolled Courses</p>
+<p class="mb-4">Mata Pelajarans Terdaftar</p>
                         <p class="fs-30 mb-2">{{ $totalEnrolledCourses ?? 0 }}</p>
-                        <p>{{ $activeCourses ?? 0 }} active</p>
+                        <p>{{ $activeCourses ?? 0 }} aktif</p>
                     </div>
                     <div class="card-icon-circle">
                         <i class="icon-book"></i>
@@ -72,9 +72,9 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-4">Completed Lessons</p>
+<p class="mb-4">Lesson Selesai</p>
                         <p class="fs-30 mb-2">{{ $completedLessonsCount ?? 0 }}</p>
-                        <p>{{ $inProgressLessons ?? 0 }} in progress</p>
+<p>{{ $inProgressLessons ?? 0 }} dalam progress</p>
                     </div>
                     <div class="card-icon-circle">
                         <i class="icon-check"></i>
@@ -89,9 +89,9 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-4">Quiz Attempts</p>
+<p class="mb-4">Percobaan Kuis</p>
                         <p class="fs-30 mb-2">{{ $totalQuizAttempts ?? 0 }}</p>
-                        <p>{{ $passedQuizzes ?? 0 }} passed</p>
+<p>{{ $passedQuizzes ?? 0 }} lulus</p>
                     </div>
                     <div class="card-icon-circle">
                     <i class="mdi mdi-clipboard-text"></i>
@@ -107,9 +107,9 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-4">Average Score</p>
+<p class="mb-4">Rata-rata Skor</p>
                         <p class="fs-30 mb-2">{{ number_format($averageScore ?? 0, 1) }}%</p>
-                        <p>Quiz performance</p>
+<p>Performa kuis</p>
                     </div>
                     <div class="card-icon-circle">
                         <i class="icon-star"></i>
@@ -127,7 +127,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-chart-bar text-primary"></i> Course Progress
+<i class="icon-chart-bar text-primary"></i>Perkembangan Mata Pelajaran
                 </h4>
                 <canvas id="courseProgressChart" height="60"></canvas>
             </div>
@@ -139,7 +139,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-calendar text-success"></i> Weekly Activity
+<i class="icon-calendar text-success"></i> Aktivitas Mingguan
                 </h4>
                 <canvas id="weeklyProgressChart" height="250"></canvas>
             </div>
@@ -154,7 +154,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-                    <i class="icon-trending-up text-warning"></i> Quiz Performance Over Time
+                    <i class="icon-trending-up text-warning"></i> Performa Kuis
                 </h4>
                 <canvas id="quizPerformanceChart" height="50"></canvas>
             </div>
@@ -170,10 +170,10 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">
-                        <i class="icon-book text-primary"></i> My Courses
+                        <i class="icon-book text-primary"></i> Mata Pelajaran Saya
                     </h4>
                     <a href="{{ route('courses.index') }}" class="btn btn-sm btn-outline-primary">
-                        Browse All <i class="icon-arrow-right"></i>
+                        Jelajahi Semua <i class="icon-arrow-right"></i>
                     </a>
                 </div>
                 
@@ -207,7 +207,7 @@
                                 @if($courseProg)
                                 <div class="mb-3">
                                     <div class="d-flex justify-content-between mb-1">
-                                        <small class="text-muted">Progress</small>
+                                        <small class="text-muted">Perkembangan</small>
                                         <small class="text-muted font-weight-bold">{{ $courseProg['progress'] }}%</small>
                                     </div>
                                     <div class="progress" style="height: 8px;">
@@ -221,7 +221,7 @@
                                         <i class="icon-folder mr-1"></i>{{ $course->modules->count() ?? 0 }} Modules
                                     </span>
                                     <a href="{{ $course->url }}" class="btn btn-sm btn-primary">
-                                        Continue <i class="icon-arrow-right"></i>
+                                        Lanjutkan <i class="icon-arrow-right"></i>
                                     </a>
                                 </div>
                             </div>
@@ -231,10 +231,10 @@
                     <div class="col-12">
                         <div class="text-center py-5">
                             <i class="icon-book-open" style="font-size: 64px; color: #e3e6f0;"></i>
-                            <h5 class="mt-3 mb-2">No enrolled courses yet</h5>
-                            <p class="text-muted mb-4">Start your learning journey by enrolling in courses</p>
+                            <h5 class="mt-3 mb-2">Tidak ada Progress</h5>
+                            <p class="text-muted mb-4">Mulai belajar !</p>
                             <a href="{{ route('courses.index') }}" class="btn btn-primary">
-                                <i class="icon-magnifier mr-2"></i>Browse Courses
+                                <i class="icon-magnifier mr-2"></i>
                             </a>
                         </div>
                     </div>

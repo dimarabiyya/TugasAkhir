@@ -6,12 +6,12 @@
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <h3 class="font-weight-bold">Bagikan Pengalaman Anda</h3>
-                <h6 class="font-weight-normal mb-0">Bantu orang lain dengan membagikan perjalanan belajar Anda</h6>
+                <p class="text-muted">Berikan penilaian kamu untuk sekolah lebih baik!</p>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('testimonials.index') }}" class="btn btn-secondary">
-                        <i class="icon-arrow-left"></i> Kembali ke Testimoni
+                        <i class="icon-arrow-left"></i> Kembali ke Aduan
                     </a>
                 </div>
             </div>
@@ -27,10 +27,10 @@
                     @csrf
                     
                     <div class="form-group">
-                        <label for="course_id" class="form-label">Kursus (Opsional)</label>
+                        <label for="course_id" class="form-label">Mata Pelajaran (Opsional)</label>
                         <select class="form-control @error('course_id') is-invalid @enderror" 
                                 id="course_id" name="course_id">
-                            <option value="">Testimoni Umum</option>
+                            <option value="">Aduan Umum</option>
                             @foreach($enrolledCourses ?? [] as $course)
                             <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
                                 {{ $course->title }}
@@ -43,7 +43,7 @@
                         @error('course_id')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <small class="form-text text-muted">Pilih kursus jika testimoni ini tentang kursus tertentu yang Anda ikuti.</small>
+                        <small class="form-text text-muted">Pilih Mata Pelajaran jika testimoni ini tentang kursus tertentu yang Anda ikuti.</small>
                     </div>
 
                     <div class="form-group">
@@ -59,7 +59,7 @@
                             <label for="rating_{{ $i }}" 
                                    class="star-label" 
                                    data-rating="{{ $i }}">
-                                <i class="far fa-star"></i>
+                                <i class="mdi mdi-star"></i>
                             </label>
                             @endfor
                         </div>
@@ -196,9 +196,9 @@
                 starLabels.forEach((l, index) => {
                     const lRating = l.getAttribute('data-rating');
                     if (lRating <= rating) {
-                        l.querySelector('i').className = 'fas fa-star';
+                        l.querySelector('i').className = 'mdi mdi-star';
                     } else {
-                        l.querySelector('i').className = 'far fa-star';
+                        l.querySelector('i').className = 'mdi mdi-star';
                     }
                 });
             });
@@ -222,12 +222,12 @@
                 starLabels.forEach(l => {
                     const lRating = l.getAttribute('data-rating');
                     l.style.color = lRating <= rating ? '#ffb606' : '#ddd';
-                    l.querySelector('i').className = lRating <= rating ? 'fas fa-star' : 'far fa-star';
+                    l.querySelector('i').className = lRating <= rating ? 'mdi mdi-star' : 'mdi mdi-star';
                 });
             } else {
                 starLabels.forEach(l => {
                     l.style.color = '#ddd';
-                    l.querySelector('i').className = 'far fa-star';
+                    l.querySelector('i').className = 'mdi mdi-star';
                 });
             }
         });

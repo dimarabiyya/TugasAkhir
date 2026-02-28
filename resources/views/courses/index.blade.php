@@ -40,14 +40,15 @@ use Illuminate\Support\Facades\Storage;
                 <form action="{{ route('courses.index') }}" method="GET" id="searchForm">
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="form-group">
+                            <div class="form-group mb-0">
                                 <label for="search">Cari</label>
                                 <input type="text" class="form-control" name="search" id="search" 
                                        placeholder="Cari mata pelajaran" value="{{ request('search') }}">
+                                </input>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
+                        <div class="col-md-3 justify-content-center align-items-center">
+                            <div class="form-group mb-0">
                                 <label for="level">Tingkat</label>
                                 <select class="form-control" name="level" id="level">
                                     <option value="">Semua Tingkat</option>
@@ -57,8 +58,8 @@ use Illuminate\Support\Facades\Storage;
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
+                        <div class="col-md-3 justify-content-center align-items-center">
+                            <div class="form-group mb-0">
                                 <label for="published">Status</label>
                                 <select class="form-control" name="published" id="published">
                                     <option value="">Semua Status</option>
@@ -68,21 +69,20 @@ use Illuminate\Support\Facades\Storage;
                             </div>
                         </div>
                         <div class="col-md-1">
-                            <div class="form-group">
-                                <label>&nbsp;</label>
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="icon-magnifier"></i>
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary w-100 h-50 justify-content-center d-flex align-items-center">
+                                        <i class="mdi mdi-magnify"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 justify-content-center d-flex align-items-center" >
+                                <button type="reset" class="btn btn-secondary btn-sm w-100 h-50 " onclick="window.location.href='{{ route('courses.index') }}'">
+                                    <i class="icon-refresh"></i> Reset
                                 </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-12">
-                            <button type="reset" class="btn btn-secondary btn-sm" onclick="window.location.href='{{ route('courses.index') }}'">
-                                <i class="icon-refresh"></i> Reset
-                            </button>
-                        </div>
-                    </div>
+                    <div>
                 </form>
             </div>
         </div>
@@ -443,7 +443,7 @@ use Illuminate\Support\Facades\Storage;
                     search: "_INPUT_",
                     searchPlaceholder: "Cari kursus...",
                     lengthMenu: "Tampilkan _MENU_ entri",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ kursus",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ courses",
                     infoEmpty: "Tidak ada kursus tersedia",
                     infoFiltered: "(difilter dari _MAX_ total kursus)",
                     paginate: {
@@ -452,7 +452,7 @@ use Illuminate\Support\Facades\Storage;
                         next: "Selanjutnya",
                         previous: "Sebelumnya"
                     },
-                    emptyTable: "Tidak ada kursus ditemukan"
+                    emptyTable: "Tidak ada mata pelajaran ditemukan"
                 },
                 columnDefs: [
                     {

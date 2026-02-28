@@ -336,22 +336,6 @@
             }
         }
         
-        /* Enhanced visibility for white backgrounds */
-        .bottom-nav::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, 
-                rgba(0, 0, 0, 0.15) 0%, 
-                rgba(0, 0, 0, 0.1) 50%, 
-                rgba(0, 0, 0, 0.15) 100%);
-            border-radius: 24px;
-            pointer-events: none;
-            z-index: -1;
-        }
         
         .bottom-nav.expanded::before {
             background: linear-gradient(135deg, 
@@ -584,7 +568,7 @@
             <ul class="nav">
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                        <i class="mdi mdi-view-dashboard menu-icon"></i>
+                        <i class="mdi mdi-view-dashboard-outline menu-icon"></i>
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </li>
@@ -592,77 +576,75 @@
                 @if(auth()->user()->hasRole('admin'))
                     <li class="nav-item {{ request()->routeIs('classrooms.index, classrooms.edit, classrooms.create') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('classrooms.index') }}">
-                            <i class="icon-grid menu-icon"></i>
+                            <i class="mdi mdi-book-education-outline menu-icon"></i>
                             <span class="menu-title">Kelas</span>
                         </a>
                     </li>
 
                     <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('courses.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <i class="mdi mdi-library-outline menu-icon"></i>
                             <span class="menu-title">Mata Pelajaran</span>
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}" href="{{ route('modules.index') }}">
-                            <i class="mdi mdi-folder menu-icon"></i>
+                    <li class="nav-item {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('modules.index') }}">
+                            <i class="mdi mdi-folder-outline menu-icon"></i>
                             <span class="menu-title">Modul</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" href="{{ route('lessons.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                    <li class="nav-item {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('lessons.index') }}">
+                            <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
                             <span class="menu-title">Materi</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
-                            <i class="mdi mdi-help-circle menu-icon"></i>
+                    <li class="nav-item {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('tasks.index') }}">
+                            <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
+                            <span class="menu-title">Tugas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('quizzes.index') }}">
+                            <i class="mdi mdi-file-question-outline menu-icon"></i>
                             <span class="menu-title">Kuis</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']) ? 'active' : '' }}" href="{{ route('enrollments.index') }}">
-                            <i class="mdi mdi-school menu-icon"></i>
+                    <li class="nav-item {{ request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('enrollments.index') }}">
+                            <i class="mdi mdi-school-outline menu-icon"></i>
                             <span class="menu-title">Progress Siswa</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}" href="{{ route('students.index') }}">
-                            <i class="mdi mdi-account-school menu-icon"></i>
+                    <li class="nav-item {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('students.index') }}">
+                            <i class="mdi mdi-account-school-outline menu-icon"></i>
                             <span class="menu-title">Siswa</span>
                         </a>
                     </li>
                     <li class="nav-item {{ request()->routeIs('ebooks.index', 'ebooks.creates') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('ebooks.index') }}">
-                            <i class="mdi mdi-book menu-icon"></i>
+                            <i class="mdi mdi-book-outline menu-icon"></i>
                             <span class="menu-title">Perpustakaan</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ? 'active' : '' }}" href="{{ route('testimonials.manage') }}">
+                    <li class="nav-item {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('testimonials.manage') }}">
                             <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
-                            <span class="menu-title">Testimonial</span>
+                            <span class="menu-title">Aduan siswa</span>
                         </a>
                     </li>
-
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs(['instructors.index', 'instructors.create', 'instructors.edit', 'instructors.show']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('instructors.index') }}">
-                            <i class="icon-head menu-icon"></i>
+                            <i class="mdi mdi-human-male-board menu-icon"></i>
                             <span class="menu-title">Management Guru</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
-                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
-                            <span class="menu-title">Tugas</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show', 'attendance.select']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('attendance.index') }}">
-                            <i class="icon-check menu-icon"></i>
+                            <i class="mdi mdi-note-check-outline menu-icon"></i>
                             <span class="menu-title">Absensi</span>
                         </a>
                     </li>
@@ -671,50 +653,50 @@
                 @if(auth()->user()->hasRole('instructor'))
                     <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('ebooks.index') }}">
-                            <i class="mdi mdi-book menu-icon"></i>
+                            <i class="mdi mdi-book-outline menu-icon"></i>
                             <span class="menu-title">Perpustakaan</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('courses.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <i class="mdi mdi-library-outline menu-icon"></i>
                             <span class="menu-title">Mata Pelajaran</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}" href="{{ route('modules.index') }}">
-                            <i class="mdi mdi-folder menu-icon"></i>
+                            <i class="mdi mdi-folder-outline menu-icon"></i>
                             <span class="menu-title">Modul</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" href="{{ route('lessons.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
                             <span class="menu-title">Materi</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}" href="{{ route('students.index') }}">
-                            <i class="mdi mdi-account-school menu-icon"></i>
+                            <i class="mdi mdi-account-school-outline menu-icon"></i>
                             <span class="menu-title">Siswa</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('attendance.index') }}">
-                            <i class="icon-head menu-icon"></i>
+                            <i class="mdi mdi-note-check-outline menu-icon"></i>
                             <span class="menu-title">Absensi</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
-                            <i class="mdi mdi-help-circle menu-icon"></i>
-                            <span class="menu-title">Kuis</span>
+                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
+                            <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
+                            <span class="menu-title">Tugas</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
-                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
-                            <span class="menu-title">Tugas</span>
+                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
+                            <i class="mdi mdi-file-question-outline menu-icon"></i>
+                            <span class="menu-title">Kuis</span>
                         </a>
                     </li>
                 @endif
@@ -722,44 +704,44 @@
                 @if(auth()->user()->hasRole('student'))
                     <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('ebooks.index') }}">
-                            <i class="mdi mdi-book menu-icon"></i>
+                            <i class="mdi mdi-book-outline menu-icon"></i>
                             <span class="menu-title">Perpustakaan</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('courses.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <i class="mdi mdi-library-outline menu-icon"></i>
                             <span class="menu-title">Mata Pelajaran</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}" href="{{ route('modules.index') }}">
-                            <i class="mdi mdi-folder menu-icon"></i>
+                            <i class="mdi mdi-folder-outline menu-icon"></i>
                             <span class="menu-title">Modul</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" href="{{ route('lessons.index') }}">
-                            <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+                            <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
                             <span class="menu-title">Materi</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('enrollments.index') }}">
-                            <i class="mdi mdi-account-group menu-icon"></i>
+                            <i class="mdi mdi-account-group-outline menu-icon"></i>
                             <span class="menu-title">Progress Pelajaran</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
-                            <i class="mdi mdi-help-circle menu-icon"></i>
-                            <span class="menu-title">Kuis</span>
+                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
+                            <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
+                            <span class="menu-title">Tugas</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
-                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
-                            <span class="menu-title">Tugas</span>
+                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
+                            <i class="mdi mdi-file-question-outline menu-icon"></i>
+                            <span class="menu-title">Kuis</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -813,7 +795,7 @@
         // Handle Laravel session messages with SweetAlert
         @if(session('success'))
             Swal.fire({
-                position: "top-end",
+                position: "center",
                 icon: "success",
                 title: "{{ session('success') }}",
                 showConfirmButton: false,
@@ -823,7 +805,7 @@
 
         @if(session('error'))
             Swal.fire({
-                position: "top-end",
+                position: "center",
                 icon: "error",
                 title: "{{ session('error') }}",
                 showConfirmButton: false,
@@ -833,7 +815,7 @@
 
         @if(session('info'))
             Swal.fire({
-                position: "top-end",
+                position: "center",
                 icon: "info",
                 title: "{{ session('info') }}",
                 showConfirmButton: false,
@@ -847,13 +829,13 @@
             const form = event.target.closest('form');
             
             Swal.fire({
-                title: "Are you sure?",
+                title: "Apa kamu yakin?",
                 text: message,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
+                confirmButtonText: "Ya, hapus!"
             }).then((result) => {
                 if (result.isConfirmed) {
                     // If form exists, submit it
@@ -870,16 +852,16 @@
         // Global function for save confirmation
         function confirmSave(form) {
             Swal.fire({
-                title: "Do you want to save the changes?",
+                title: "Apa kamu yakin?",
                 showDenyButton: true,
                 showCancelButton: true,
-                confirmButtonText: "Save",
-                denyButtonText: `Don't save`
+                confirmButtonText: "Simpan",
+                denyButtonText: `Kembali`
             }).then((result) => {
                 if (result.isConfirmed) {
                     form.submit();
                 } else if (result.isDenied) {
-                    Swal.fire("Changes are not saved", "", "info");
+                    Swal.fire("Gagal menyimpan data!", "", "info");
                 }
             });
         }
@@ -976,7 +958,7 @@
             
             scrollHideRaf = requestAnimationFrame(() => {
                 if (Math.abs(delta) > threshold) {
-                    if (delta > 0 && currentY > 100 && !keyboardLikelyOpen) {
+                    if (delta > 0 && currentY > 1000 && !keyboardLikelyOpen) {
                         // Scrolling down - hide nav
                         bottomNav.classList.add('hidden');
                     } else if (delta < -threshold) {
@@ -1159,7 +1141,7 @@
                 // Always include Dashboard
                 $menuItems[] = [
                     'url' => route('dashboard'),
-                    'icon' => 'mdi mdi-view-dashboard',
+                    'icon' => 'mdi mdi-view-dashboard-outline',
                     'label' => 'Dashboard',
                     'active' => request()->routeIs('dashboard'),
                     'priority' => 1
@@ -1170,191 +1152,212 @@
                     $menuItems = array_merge($menuItems, [
                         [
                             'url' => route('classrooms.index'),
-                            'icon' => 'mdi mdi-school',
+                            'icon' => 'mdi mdi-book-education-outline',
                             'label' => 'Kelas',
-                            'active' => request()->routeIs(['classrooms.index, classrooms.edit, classrooms.create']),
+                            'active' => request()->routeIs(['classrooms.index', 'classrooms.edit', 'classrooms.create']),
                             'priority' => 2
                         ],
                         [
                             'url' => route('courses.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant',
+                            'icon' => 'mdi mdi-library-outline',
                             'label' => 'Mata Pelajaran',
                             'active' => request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
                             'priority' => 3
                         ],
                         [
                             'url' => route('modules.index'),
-                            'icon' => 'mdi mdi-folder',
+                            'icon' => 'mdi mdi-folder-outline',
                             'label' => 'Modul',
                             'active' => request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']),
                             'priority' => 4
                         ],
                         [
                             'url' => route('lessons.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant',
+                            'icon' => 'mdi mdi-book-open-page-variant-outline',
                             'label' => 'Materi',
                             'active' => request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']),
                             'priority' => 5
                         ],
-                         [
-                            'url' => route('quizzes.index'),
-                            'icon' => 'mdi mdi-help-circle',
-                            'label' => 'Kuis',
-                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
+                        [
+                            'url' => route('tasks.index'),
+                            'icon' => 'mdi mdi-clipboard-check-outline',
+                            'label' => 'Tugas',
+                            'active' => request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']),
                             'priority' => 6
                         ],
                         [
-                            'url' => route('enrollments.index'),
-                            'icon' => 'mdi mdi-account-group',
-                            'label' => 'Progress Siswa',
-                            'active' => request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']),
+                            'url' => route('quizzes.index'),
+                            'icon' => 'mdi mdi-file-question-outline-outline',
+                            'label' => 'Kuis',
+                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']),
                             'priority' => 7
                         ],
                         [
-                            'url' => route('students.index'),
-                            'icon' => 'mdi mdi-account-school',
-                            'label' => 'Siswa',
-                            'active' => request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']),
+                            'url' => route('enrollments.index'),
+                            'icon' => 'mdi mdi-account-group-outline',
+                            'label' => 'Progress Siswa',
+                            'active' => request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']),
                             'priority' => 8
                         ],
                         [
+                            'url' => route('students.index'),
+                            'icon' => 'mdi mdi-account-school-outline',
+                            'label' => 'Siswa',
+                            'active' => request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']),
+                            'priority' => 9
+                        ],
+                        [
                             'url' => route('ebooks.index'),
-                            'icon' => 'mdi mdi-book',
+                            'icon' => 'mdi mdi-book-outline',
                             'label' => 'Perpustakaan',
                             'active' => request()->routeIs(['ebooks.index', 'ebooks.create']),
-                            'priority' => 9
+                            'priority' => 10
                         ],
                         [
                             'url' => route('testimonials.manage'),
                             'icon' => 'mdi mdi-comment-multiple-outline',
-                            'label' => 'Testimonials',
+                            'label' => 'Aduan siswa',
                             'active' => request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
-                            'priority' => 10
-                        ],
-                        [
-                            'url' => route('instructors.index'),
-                            'icon' => 'icon-head',
-                            'label' => 'Management Guru',
-                            'active' => request()->routeIs(['instructors.index', 'instructors.create', 'instructors.edit', 'instructors.show']),
                             'priority' => 11
                         ],
                         [
+                            'url' => route('instructors.index'),
+                            'icon' => 'mdi mdi-human-male-board',
+                            'label' => 'Management Guru',
+                            'active' => request()->routeIs(['instructors.index', 'instructors.create', 'instructors.edit', 'instructors.show']),
+                            'priority' => 12
+                        ],
+                        [
                             'url' => route('attendance.index'),
-                            'icon' => 'icon-check',
+                            'icon' => 'mdi mdi-note-check-outline',
                             'label' => 'Absensi',
                             'active' => request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show']),
-                            'priority' => 12
+                            'priority' => 13
                         ]
                     ]);
                 } elseif(auth()->user()->hasRole('instructor')) {
                     $menuItems = array_merge($menuItems, [
                         [
                             'url' => route('courses.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant',
+                            'icon' => 'mdi mdi-library-outline',
                             'label' => 'Mata Pelajaran',
                             'active' => request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
                             'priority' => 2
                         ],
                         [
                             'url' => route('modules.index'),
-                            'icon' => 'mdi mdi-folder',
+                            'icon' => 'mdi mdi-folder-outline',
                             'label' => 'Modul',
                             'active' => request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']),
                             'priority' => 3
                         ],
                         [
                             'url' => route('lessons.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant',
+                            'icon' => 'mdi mdi-book-open-page-variant-outline',
                             'label' => 'Materi',
                             'active' => request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']),
                             'priority' => 4
                         ],
-                         [
-                            'url' => route('quizzes.index'),
-                            'icon' => 'mdi mdi-help-circle',
-                            'label' => 'Kuis',
-                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
+                        [
+                            'url' => route('tasks.index'),
+                            'icon' => 'mdi mdi-clipboard-check-outline',
+                            'label' => 'Tugas',
+                            'active' => request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
                             'priority' => 5
                         ],
                         [
-                            'url' => route('students.index'),
-                            'icon' => 'mdi mdi-account-school',
-                            'label' => 'Siswa',
-                            'active' => request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']),
+                            'url' => route('quizzes.index'),
+                            'icon' => 'mdi mdi-file-question-outline-outline',
+                            'label' => 'Kuis',
+                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
                             'priority' => 6
                         ],
                         [
+                            'url' => route('students.index'),
+                            'icon' => 'mdi mdi-account-school-outline',
+                            'label' => 'Siswa',
+                            'active' => request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']),
+                            'priority' => 7
+                        ],
+                        [
                             'url' => route('ebooks.index'),
-                            'icon' => 'mdi mdi-book',
+                            'icon' => 'mdi mdi-book-outline',
                             'label' => 'Perpustakaan',
                             'active' => request()->routeIs(['ebooks.index', 'ebooks.create']),
-                            'priority' => 7
+                            'priority' => 8
                         ],
                         [
                             'url' => route('testimonials.manage'),
                             'icon' => 'mdi mdi-comment-multiple-outline',
-                            'label' => 'Testimonials',
+                            'label' => 'Aduan siswa',
                             'active' => request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
-                            'priority' => 8
+                            'priority' => 9
                         ],
                         [
                             'url' => route('attendance.index'),
-                            'icon' => 'icon-check',
+                            'icon' => 'mdi mdi-note-check-outline',
                             'label' => 'Absensi',
                             'active' => request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show']),
-                            'priority' => 9
+                            'priority' => 10
                         ]
                     ]);
                 } elseif(auth()->user()->hasRole('student')) {
                     $menuItems = array_merge($menuItems, [
                         [
                             'url' => route('courses.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant',
+                            'icon' => 'mdi mdi-library-outline',
                             'label' => 'Mata Pelajaran',
                             'active' => request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
                             'priority' => 2
                         ],
                         [
                             'url' => route('modules.index'),
-                            'icon' => 'mdi mdi-folder',
+                            'icon' => 'mdi mdi-folder-outline',
                             'label' => 'Modul',
                             'active' => request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']),
                             'priority' => 3
                         ],
                         [
                             'url' => route('lessons.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant',
+                            'icon' => 'mdi mdi-book-open-page-variant-outline',
                             'label' => 'Materi',
                             'active' => request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']),
                             'priority' => 4
                         ],
-                         [
-                            'url' => route('quizzes.index'),
-                            'icon' => 'mdi mdi-help-circle',
-                            'label' => 'Kuis',
-                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
+                        [
+                            'url' => route('tasks.index'),
+                            'icon' => 'mdi mdi-clipboard-check-outline',
+                            'label' => 'Tugas',
+                            'active' => request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
                             'priority' => 5
                         ],
                         [
+                            'url' => route('quizzes.index'),
+                            'icon' => 'mdi mdi-file-question-outline',
+                            'label' => 'Kuis',
+                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
+                            'priority' => 6
+                        ],
+                        [
                             'url' => route('ebooks.index'),
-                            'icon' => 'mdi mdi-book',
+                            'icon' => 'mdi mdi-book-outline',
                             'label' => 'Perpustakaan',
                             'active' => request()->routeIs(['ebooks.index', 'ebooks.create']),
-                            'priority' => 6
+                            'priority' => 7
                         ],
                         [
                             'url' => route('testimonials.manage'),
                             'icon' => 'mdi mdi-comment-multiple-outline',
-                            'label' => 'Testimonials',
+                            'label' => 'Aduan',
                             'active' => request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
-                            'priority' => 7
+                            'priority' => 8
                         ],
                         [
                             'url' => route('enrollments.index'),
-                            'icon' => 'mdi mdi-account-group',
+                            'icon' => 'mdi mdi-account-group-outline',
                             'label' => 'Progress Saya',
                             'active' => request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']),
-                            'priority' => 8
+                            'priority' => 9
                         ],
                     ]);
             }
