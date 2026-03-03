@@ -5,13 +5,13 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Edit Testimoni Anda</h3>
-                <h6 class="font-weight-normal mb-0">Perbarui testimoni Anda</h6>
+                <h3 class="font-weight-bold">Edit Aduan Siswa</h3>
+                <h6 class="font-weight-normal mb-0">Perbarui Aduan siswa </h6>
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
                     <a href="{{ route('testimonials.index') }}" class="btn btn-secondary">
-                        <i class="icon-arrow-left"></i> Kembali ke Testimoni
+                        <i class="icon-arrow-left"></i> Kembali ke Aduan Siswa
                     </a>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     @method('PUT')
                     
                     <div class="form-group">
-                        <label for="course_id" class="form-label">Kursus (Opsional)</label>
+                        <label for="course_id" class="form-label">Mata Pelajaran (Opsional)</label>
                         <select class="form-control @error('course_id') is-invalid @enderror" 
                                 id="course_id" name="course_id">
                             <option value="">Testimoni Umum</option>

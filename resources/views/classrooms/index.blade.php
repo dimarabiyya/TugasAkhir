@@ -16,11 +16,9 @@ use Illuminate\Support\Facades\Storage;
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
-                    @if(!auth()->check() || !auth()->user()->hasAnyRole(['admin', 'instructor']))
-                        <a href="{{ route('courses.index') }}" class="btn btn-primary">
-                            <i class="icon-plus"></i> Browse Courses
-                        </a>
-                    @endif
+                    <a href="{{ route('classrooms.create') }}" class="btn btn-primary btn btn-icon-text">
+                        <i class="mdi mdi-plus"></i> Tambah Kelas
+                    </a>
                 </div>
             </div>
         </div>
@@ -31,12 +29,6 @@ use Illuminate\Support\Facades\Storage;
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <p class="card-title">Daftar Kelas</p>
-                        <a href="{{ route('classrooms.create') }}" class="btn btn-primary btn-sm btn-icon-text">
-                            <i class="ti-plus btn-icon-prepend"></i> Tambah Kelas
-                        </a>
-                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-borderless">
                             <thead>

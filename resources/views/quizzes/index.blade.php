@@ -6,30 +6,12 @@
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                    <h3 class="font-weight-bold">Manajemen Kuis</h3>
+                    <h3 class="font-weight-bold">Daftar Kuis</h3>
                     <p class="text-muted">Kelola semua kuis untuk pelajaran Anda</p>
                 @else
                     <h3 class="font-weight-bold">Kuis yang Tersedia</h3>
                     <p class="text-muted">Uji pengetahuan Anda dengan kuis-kuis ini</p>
                 @endif
-            </div>
-            <div class="col-12 col-xl-4">
-                <div class="justify-content-end d-flex">
-                    @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                        @if(isset($lessons) && $lessons && $lessons->count() > 0)
-                            <a href="{{ route('quizzes.create', $lesson) }}" class="btn btn-primary">
-                                Buat Kuis
-                            </a>
-                        @else
-                            <button type="button" class="btn btn-primary mr-3" disabled title="Tidak ada Materi yang tersedia">
-                                <i class="mdi mdi-plus"></i> Buat Kuis
-                            </button>
-                        @endif
-                    @endif
-                    <a href="{{ route('quizzes.index') }}" class="btn btn-secondary ml-3">
-                        <i class="mdi mdi-refresh"></i> Segarkan
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -48,7 +30,7 @@
     <div class="col-md-3">
         <div class="card stats-card">
             <div class="card-body text-center">
-                <i class="icon-note" style="font-size: 40px; color: #667eea;"></i>
+                <i class="mdi mdi-check" style="font-size: 40px; color: #667eea;"></i>
                 <h3 class="mt-3 mb-0">{{ $totalQuizzes }}</h3>
                 <p class="text-muted mb-0">Total Quizzes</p>
             </div>
@@ -58,7 +40,7 @@
     <div class="col-md-3">
         <div class="card stats-card">
             <div class="card-body text-center">
-                <i class="icon-check" style="font-size: 40px; color: #06beb6;"></i>
+                <i class="mdi mdi-check" style="font-size: 40px; color: #06beb6;"></i>
                 <h3 class="mt-3 mb-0">{{ $publishedQuizzes }}</h3>
                 <p class="text-muted mb-0">Published</p>
             </div>
@@ -68,7 +50,7 @@
     <div class="col-md-3">
         <div class="card stats-card">
             <div class="card-body text-center">
-                <i class="icon-question" style="font-size: 40px; color: #f5576c;"></i>
+                <i class="mdi mdi-check" style="font-size: 40px; color: #f5576c;"></i>
                 <h3 class="mt-3 mb-0">{{ $totalQuestions }}</h3>
                 <p class="text-muted mb-0">Total Questions</p>
             </div>
@@ -78,7 +60,7 @@
     <div class="col-md-3">
         <div class="card stats-card">
             <div class="card-body text-center">
-                <i class="icon-people" style="font-size: 40px; color: #4facfe;"></i>
+                <i class="mdi mdi-check " style="font-size: 40px; color: #4facfe;"></i>
                 <h3 class="mt-3 mb-0">{{ $totalAttempts }}</h3>
                 <p class="text-muted mb-0">Total Attempts</p>
             </div>
@@ -178,10 +160,6 @@
                                                title="Manage Questions">
                                                 <i class="mdi mdi-plus"></i>
                                             </a>
-                                            <a href="{{ route('quizzes.show', ['quiz' => $quiz->id,'slug' => $quiz->slug]) }}" class="btn btn-info btn-sm">
-                                                    Lihat Quiz
-                                                </a>
-                                            
                                             <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" 
                                                 onsubmit="event.preventDefault(); confirmDelete(event);">
                                                 @csrf

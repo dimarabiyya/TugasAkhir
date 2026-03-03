@@ -15,9 +15,11 @@
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
-                    <a href="{{ route('courses.index') }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Kembali ke Mata Pelajaran
-                    </a>
+                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
+                        <button type="button" class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#selectModuleModal">
+                            <i class="mdi mdi-plus"></i> Buat Materi
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -88,11 +90,6 @@
                     <h4 class="card-title mb-0">
                         <i class="mdi mdi-book-open text-primary"></i> Semua Materi ({{ $lessons->total() }})
                     </h4>
-                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#selectModuleModal">
-                            <i class="mdi mdi-plus"></i> Buat Materi
-                        </button>
-                    @endif
                 </div>
 
                 @if($lessons->count() > 0)
@@ -179,7 +176,7 @@
                                                     <i class="mdi mdi-pencil"></i>
                                                 </a>
                                                 <form action="{{ route('lessons.destroy', $lesson) }}" method="POST" class="d-inline"
-                                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Are you sure you want to delete this lesson?');">
+                                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Kamu yakin menghapus Materi ini?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger" title="Delete">

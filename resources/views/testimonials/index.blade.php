@@ -1,16 +1,6 @@
-@extends('layouts.landing')
+@extends('layouts.skydash')
 
 @section('content')
-
-<!-- Home -->
-<div class="home">
-    <div class="home_background_container prlx_parent">
-        <div class="home_background prlx" style="background-image:url({{ asset('images/landing/testimonials_background.jpg') }})"></div>
-    </div>
-        <div class="home_content">
-        <h1>Testimoni</h1>
-    </div>
-</div>
 
 <!-- Testimonials -->
 <div class="elements">
@@ -19,7 +9,7 @@
         <div class="row">
             <div class="col">
                 <div class="elements_title text-center">
-                    <h1>Apa Kata Siswa Kami</h1>
+                    <h1>Daftar Aduan siswa</h1>
                     <p class="text-muted mt-3">Baca testimoni dari siswa yang telah mengikuti kursus kami</p>
                 </div>
             </div>
@@ -36,7 +26,7 @@
                                      <input type="text" 
                                          name="search" 
                                          class="form-control" 
-                                         placeholder="Cari testimoni..." 
+                                         placeholder="Cari Aduan..." 
                                          value="{{ request('search') }}">
                                 </div>
                                 <div class="col-md-3 mb-3">
@@ -71,23 +61,6 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="row mb-4">
-            <div class="col text-center">
-                @auth
-                @if(auth()->user()->hasRole('student'))
-                <a href="{{ route('testimonials.create') }}" class="button button_1">
-                    <span>Bagikan Pengalaman Anda</span>
-                </a>
-                @endif
-                @else
-                <a href="{{ route('login') }}" class="button button_1">
-                    <span>Masuk untuk Membagikan Pengalaman</span>
-                </a>
-                @endauth
             </div>
         </div>
 
@@ -211,52 +184,6 @@
             </div>
         </div>
         @endif
-    </div>
-</div>
-
-<!-- Milestones -->
-<div class="milestones">
-    <div class="milestones_background" style="background-image:url({{ asset('images/landing/milestones_background.jpg') }})"></div>
-
-    <div class="container">
-        <div class="row">
-            <!-- Milestone -->
-            <div class="col-lg-3 milestone_col">
-                <div class="milestone text-center">
-                    <div class="milestone_icon"><img src="{{ asset('images/landing/milestone_1.svg') }}" alt=""></div>
-                    <div class="milestone_counter" data-end-value="{{ \App\Models\User::whereHas('roles', function($q) { $q->where('name', 'student'); })->count() }}">0</div>
-                    <div class="milestone_text">Current Students</div>
-                </div>
-            </div>
-
-            <!-- Milestone -->
-            <div class="col-lg-3 milestone_col">
-                <div class="milestone text-center">
-                    <div class="milestone_icon"><img src="{{ asset('images/landing/milestone_2.svg') }}" alt=""></div>
-                    <div class="milestone_counter" data-end-value="{{ \App\Models\User::whereHas('roles', function($q) { $q->where('name', 'instructor'); })->count() }}">0</div>
-                    <div class="milestone_text">Certified Teachers</div>
-                </div>
-            </div>
-
-            <!-- Milestone -->
-            <div class="col-lg-3 milestone_col">
-                <div class="milestone text-center">
-                    <div class="milestone_icon"><img src="{{ asset('images/landing/milestone_3.svg') }}" alt=""></div>
-                    <div class="milestone_counter" data-end-value="{{ \App\Models\Course::where('is_published', true)->count() }}">0</div>
-                    <div class="milestone_text">Approved Courses</div>
-                </div>
-            </div>
-
-            <!-- Milestone -->
-            <div class="col-lg-3 milestone_col">
-                <div class="milestone text-center">
-                    <div class="milestone_icon"><img src="{{ asset('images/landing/milestone_4.svg') }}" alt=""></div>
-                    <div class="milestone_counter" data-end-value="{{ \App\Models\Testimonial::where('is_approved', true)->count() }}" data-sign-before="+">0</div>
-                    <div class="milestone_text">Testimonials</div>
-                </div>
-            </div>
-
-        </div>
     </div>
 </div>
 

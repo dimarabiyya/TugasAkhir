@@ -19,9 +19,6 @@
                             <i class="mdi mdi-plus"></i> Buat Absensi Baru
                         </a>
                     @endif
-                    <a href="{{ route('dashboard') }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Kembali ke Dashboard
-                    </a>
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@
                 <div class="col-12 col-xl-4">
                     @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                     <div class="justify-content-end d-flex">
-                        <a href="{{ route('tasks.create') }}" class="btn btn-primary btn-sm my-2">+ Tambah Tugas</a>
+                        <a href="{{ route('tasks.create') }}" class="btn btn-primary btn">+ Tambah Tugas</a>
                     </div>
                     @endif
                 </div>
@@ -61,12 +61,12 @@
     <div class="col-md-3">
         <div class="card stats-card">
             <div class="card-body text-center">
-                <i class="icon-note" style="font-size: 40px; color: #667eea;"></i>
+                <i class="mdi mdi-check" style="font-size: 40px; color: #667eea;"></i>
                 <h3 class="mt-3 mb-0">00</h3>
                 <p class="text-muted mb-0">Total tasks</p>
             </div>
         </div>
-    </div>s
+    </div>
 </div>
 
     <div class="row">
@@ -94,9 +94,13 @@
                         @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
                         <div class="d-flex mt-2">
                             <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-light btn-sm flex-grow-1 mr-1">Edit</a>
-                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="flex-grow-1">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm w-100" onclick="return confirm('Hapus tugas?')">Hapus</button>
+                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="flex-grow-1" 
+                                onsubmit="event.preventDefault(); confirmDelete(event, 'Kamu yakin menghapus Tugas ini?');">
+                                @csrf 
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
                             </form>
                         </div>
                         @endif
@@ -106,10 +110,21 @@
         </div>
         @empty
         <div class="col-12">
-            <div class="alert alert-info text-center">
+            <div class="alert alert-warning text-center">
                 Belum ada tugas yang tersedia untuk saat ini.
             </div>
         </div>
         @endforelse
 </div>
+
+@push('scripts')
+<script>
+function confirmDelete(event, message) {
+    if (confirm(message)) {
+        event.target.closest('form').submit();
+    }
+}
+</script>
+@endpush
+
 @endsection

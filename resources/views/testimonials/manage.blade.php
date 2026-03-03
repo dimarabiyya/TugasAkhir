@@ -5,15 +5,8 @@
     <div class="col-md-12 grid-margin">
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Kelola Testimoni</h3>
-                <p class="text-muted">Setujui, tolak, dan kelola testimoni siswa</p>
-            </div>
-            <div class="col-12 col-xl-4">
-                <div class="justify-content-end d-flex">
-                    <a href="{{ route('testimonials.index') }}" class="btn btn-info" target="_blank">
-                        <i class="icon-eye"></i> Daftar Aduan
-                    </a>
-                </div>
+                <h3 class="font-weight-bold">Kelola Aduan Siswa</h3>
+                <p class="text-muted">Setujui, tolak, dan kelola aduan siswa</p>
             </div>
         </div>
     </div>
@@ -94,7 +87,7 @@
                             <input type="text" 
                                 name="search" 
                                 class="form-control" 
-                                placeholder="Cari testimoni..." 
+                                placeholder="Cari aduan siswa..." 
                                 value="{{ request('search') }}">
                         </div>
                         <div class="col-md-3 mb-3">
@@ -142,7 +135,7 @@
                         <thead>
                             <tr>
                                 <th>Siswa</th>
-                                <th>Kursus</th>
+                                <th>Mata Pelajaran</th>
                                 <th>Aduan Siswa</th>
                                 <th>Penilaian</th>
                                 <th>Status</th>

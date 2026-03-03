@@ -44,7 +44,7 @@
             <div class="col-12 col-xl-4">
                 <div class="d-flex justify-content-end">
                     @if(Auth::user()->hasRole('admin'))
-                        <a href="{{ route('ebooks.create') }}" class="btn text-white fw-bold d-flex align-items-center gap-2 gradient-primary" style="border: none;">
+                        <a href="{{ route('ebooks.create') }}" class="btn btn-primary text-white d-flex align-items-center gap-2" style="border: none;">
                             <i class="icon-plus"></i> Tambah e-Book
                         </a>
                     @endif

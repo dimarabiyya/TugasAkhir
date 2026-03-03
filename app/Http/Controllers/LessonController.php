@@ -8,6 +8,8 @@ use App\Http\Requests\LessonRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Models\LessonProgress;
+use App\Models\Enrollment;
 
 class LessonController extends Controller
 {
@@ -119,11 +121,44 @@ class LessonController extends Controller
 
     public function show(Lesson $lesson): View
     {
-        // Cek akses lesson
         if (auth()->user()->hasRole('instructor') && !auth()->user()->hasRole('admin')) {
             if ($lesson->module->course->instructor_id !== auth()->id()) {
                 abort(403, 'Unauthorized view.');
             }
+        }
+
+        // Hanya untuk student
+        if (auth()->user()->hasRole('student')) {
+
+            LessonProgress::firstOrCreate([
+                'lesson_id' => $lesson->id,
+                'user_id' => auth()->id(),
+            ], [
+                'is_completed' => true
+            ]);
+
+            // Update progress enrollment
+            $course = $lesson->module->course;
+
+            $totalLessons = Lesson::whereHas('module', function ($query) use ($course) {
+                $query->where('course_id', $course->id);
+            })->count();
+            $completedLessons = LessonProgress::where('user_id', auth()->id())
+                ->whereHas('lesson.module', function ($query) use ($course) {
+                    $query->where('course_id', $course->id);
+                })
+                ->count();
+
+            $percentage = $totalLessons > 0 
+                ? round(($completedLessons / $totalLessons) * 100) 
+                : 0;
+
+            Enrollment::where('user_id', auth()->id())
+                ->where('course_id', $course->id)
+                ->update([
+                    'progress_percentage' => $percentage,
+                    'completed_at' => $percentage == 100 ? now() : null
+                ]);
         }
 
         $lesson->load(['module.course', 'quiz', 'lessonProgress' => function($query) {

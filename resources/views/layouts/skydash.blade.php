@@ -612,6 +612,12 @@
                             <span class="menu-title">Kuis</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show', 'attendance.select']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('attendance.index') }}">
+                            <i class="mdi mdi-note-check-outline menu-icon"></i>
+                            <span class="menu-title">Absensi</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('enrollments.index') }}">
                             <i class="mdi mdi-school-outline menu-icon"></i>
@@ -630,7 +636,7 @@
                             <span class="menu-title">Perpustakaan</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.index', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('testimonials.manage') }}">
                             <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
                             <span class="menu-title">Aduan siswa</span>
@@ -640,12 +646,6 @@
                         <a class="nav-link" href="{{ route('instructors.index') }}">
                             <i class="mdi mdi-human-male-board menu-icon"></i>
                             <span class="menu-title">Management Guru</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show', 'attendance.select']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('attendance.index') }}">
-                            <i class="mdi mdi-note-check-outline menu-icon"></i>
-                            <span class="menu-title">Absensi</span>
                         </a>
                     </li>
                 @endif
@@ -708,44 +708,44 @@
                             <span class="menu-title">Perpustakaan</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('courses.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
+                        <a class="nav-link"  href="{{ route('courses.index') }}">
                             <i class="mdi mdi-library-outline menu-icon"></i>
                             <span class="menu-title">Mata Pelajaran</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}" href="{{ route('modules.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('modules.index') }}">
                             <i class="mdi mdi-folder-outline menu-icon"></i>
                             <span class="menu-title">Modul</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" href="{{ route('lessons.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}">
+                        <a class="nav-link " href="{{ route('lessons.index') }}">
                             <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
                             <span class="menu-title">Materi</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs(['enrollments.index', 'enrollments.show']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('enrollments.index') }}">
                             <i class="mdi mdi-account-group-outline menu-icon"></i>
                             <span class="menu-title">Progress Pelajaran</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" >
+                        <a class="nav-link " href="{{ route('tasks.index') }}">
                             <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
                             <span class="menu-title">Tugas</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('quizzes.index') }}">
                             <i class="mdi mdi-file-question-outline menu-icon"></i>
                             <span class="menu-title">Kuis</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['testimonials.index', 'testimonials.create', 'testimonials.edit']) ? 'active' : '' }}" href="{{ route('testimonials.create') }}">
+                    <li class="nav-item {{ request()->routeIs(['testimonials.index', 'testimonials.create', 'testimonials.edit']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('testimonials.create') }}">
                             <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
                             <span class="menu-title">Aduan</span>
                         </a>
@@ -761,9 +761,15 @@
             </div>
             <!-- Footer -->
             <footer class="footer">
-                <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="" target="_blank">LMS SMKN 40 Jakarta</a> 2026</span>
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="text-muted text-center ">Develop by <a href="https://www.linkedin.com/in/dimar-abiyya/" target="_blank">Dimar Abiyya</a> 2026</span>
+                    </div>
+                    <div class="col-md-6 d-none d-md-block text-end justify-content-end">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="" target="_blank">LMS SMKN 40 Jakarta</a> 2026</span>
+                    </div>
                 </div>
+               
             </footer>
         </div>
         <!-- main-panel ends -->

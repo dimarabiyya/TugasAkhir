@@ -1,7 +1,21 @@
 @extends('layouts.skydash')
 
 @section('content')
-<div class="content-wrapper">
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <div class="row">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
+                    <h3 class="font-weight-bold">Deskripsi Tugas</h3>
+                    <p class="text-muted">Kelola semua deskripsi tugas</p>
+                @else
+                    <h3 class="font-weight-bold">Deskripsi Tugas</h3>
+                    <p class="text-muted">Uji kemampuan Anda dengan tugas ini</p>
+                @endif
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         {{-- SISI KIRI: DETAIL TUGAS --}}
         <div class="col-md-8 grid-margin stretch-card">
@@ -102,11 +116,11 @@
                                     <td>
                                         @if($sub->submission_type == 'file')
                                             <a href="{{ asset('storage/' . $sub->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                <i class="ti-download"></i> Lihat File
+                                                <i class="mdi mdi-eye"></i>  Lihat File
                                             </a>
                                         @else
                                             <a href="{{ $sub->link_url }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                                <i class="ti-link"></i> Buka Link
+                                                <i class="mdi mdi-eye"></i> Buka Link
                                             </a>
                                         @endif
                                     </td>
@@ -157,9 +171,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title font-weight-bold">Penilaian: {{ $sub->student->name }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <form action="{{ route('tasks.grade', $sub->id) }}" method="POST">
                     @csrf
@@ -182,7 +193,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Simpan Nilai</button>
                     </div>
                 </form>

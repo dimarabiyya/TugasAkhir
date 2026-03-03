@@ -17,15 +17,6 @@ use Illuminate\Support\Facades\Storage;
                     <p class="text-muted">Lacak kemajuan pembelajaran Anda</p>
                 @endif
             </div>
-            <div class="col-12 col-xl-4">
-                <div class="justify-content-end d-flex">
-                    @if(!auth()->check() || !auth()->user()->hasAnyRole(['admin', 'instructor']))
-                        <a href="{{ route('courses.index') }}" class="btn btn-primary">
-                            <i class="mdi mdi-eye"></i> Jelajahi Kursus
-                        </a>
-                    @endif
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -41,7 +32,7 @@ use Illuminate\Support\Facades\Storage;
                             <tr>
                                 <th>No</th>
                                 <th>Pengguna</th>
-                                <th>Kursus</th>
+                                <th>Mata Pelajaran</th>
                                 <th>Status</th>
                                 <th>Kemajuan</th>
                                 <th>Aksi</th>
@@ -54,8 +45,16 @@ use Illuminate\Support\Facades\Storage;
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $enroll->user->name }}</td>
                                 <td>{{ $enroll->course->title }}</td>
-                                <td>{{ $enroll->status }}</td>
-                                <td>{{ $enroll->progress }}%</td>
+                                <td>
+                                    @if($enroll->completed_at)
+                                        <span class="badge badge-success">Selesai</span>
+                                    @else
+                                        <span class="badge badge-warning">Belum Selesai</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $enroll->progress_percentage ?? 0 }}%
+                                </td>
                                 <td>
                                     <a href="{{ route('enrollments.show', $enroll) }}" class="btn btn-sm btn-primary">
                                         <i class="icon-info"></i> Detail
@@ -259,8 +258,8 @@ use Illuminate\Support\Facades\Storage;
                 order: [[sortColumn, 'desc']],
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Cari pendaftaran...",
-                    lengthMenu: "Tampilkan _MENU_ entri",
+                    searchPlaceholder: "Cari Pelajaran...",
+                    lengthMenu: "Tampilkan _MENU_ data",
                     info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ pendaftaran",
                     infoEmpty: "Tidak ada pendaftaran tersedia",
                     infoFiltered: "(disaring dari _MAX_ total pendaftaran)",
@@ -274,7 +273,7 @@ use Illuminate\Support\Facades\Storage;
                 },
                 columnDefs: [
                     {
-                        targets: -1, // Last column (Actions)
+                        targets: -1,
                         orderable: false,
                         searchable: false,
                         responsivePriority: 1

@@ -8,7 +8,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-<h2 class="text-white mb-2">Selamat datang kembali, {{ auth()->user()->name }}!</h2>
+                        <h2 class="text-white mb-2">Selamat datang kembali, {{ auth()->user()->name }}!</h2>
                         <p class="text-white mb-0" style="opacity: 0.9;">Lanjutkan perjalanan pembelajaran Anda dengan LMS SMKN 40 Jakarta</p>
                     </div>
                     <div>
@@ -39,7 +39,7 @@
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <small class="text-muted">{{ $completedLessonsCount ?? 0 }} Materi Selesai</small>
-                            <small class="text-muted">{{ $totalLessons ?? 0 }} Materi Lesson</small>
+                            <small class="text-muted">{{ $totalLessons ?? 0 }} Materi</small>
                         </div>
                     </div>
                 </div>

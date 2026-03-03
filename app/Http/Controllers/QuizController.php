@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Lesson;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class QuizController extends Controller
 {
@@ -238,6 +237,6 @@ class QuizController extends Controller
         $quiz->delete();
 
         return redirect()->route('quizzes.index')
-            ->with('success', 'Quiz deleted successfully.');
+            ->with('success', 'Kuis berhasil di hapus!.');
     }
 }

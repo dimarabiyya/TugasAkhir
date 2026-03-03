@@ -93,7 +93,7 @@
                                 required>
                             <option value="">Pilih tipe Materi</option>
                             @php
-                                $lessonTypes = ['video', 'pdf', 'quiz', 'assignment'];
+                                $lessonTypes = ['reading', 'video', 'audio', 'quiz'];
                             @endphp
 
                             @foreach($lessonTypes as $type)

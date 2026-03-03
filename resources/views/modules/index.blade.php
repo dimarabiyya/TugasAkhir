@@ -15,9 +15,11 @@
             </div>
             <div class="col-12 col-xl-4">
                 <div class="justify-content-end d-flex">
-                    <a href="{{ route('courses.index') }}" class="btn btn-light">
-                        <i class="icon-arrow-left"></i> Kembali
-                    </a>
+                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
+                        <button type="button" class="btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#selectCourseModal">
+                            <i class="icon-plus"></i> Buat Modul
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -69,11 +71,6 @@
                     <h4 class="card-title mb-0">
                         <i class="icon-folder text-primary"></i> Semua Modul ({{ $modules->total() }})
                     </h4>
-                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#selectCourseModal">
-                            <i class="icon-plus"></i> Buat Modul
-                        </button>
-                    @endif
                 </div>
 
                 @if($modules->count() > 0)
