@@ -691,7 +691,7 @@
                             <span class="menu-title">Siswa</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show', 'attendance.select']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('attendance.index') }}">
                             <i class="mdi mdi-note-check-outline menu-icon"></i>
                             <span class="menu-title">Absensi</span>
@@ -1243,8 +1243,8 @@
                         ],
                         [
                             'url' => route('counseling.index'),
-                            'icon' => 'mdi mdi-comment-alert-outline',
-                            'label' => 'Aduan siswa',
+                            'icon' => 'mdi mdi-comment-multiple-outline',
+                            'label' => 'Konseling',
                             'active' => request()->routeIs(['counseling.index', 'counseling.show', 'counseling.create']),
                             'priority' => 11
                         ],
@@ -1316,8 +1316,8 @@
                         ],
                         [
                             'url' => route('counseling.index'),
-                            'icon' => 'mdi mdi-comment-alert-outline',
-                            'label' => 'Aduan siswa',
+                            'icon' => 'mdi mdi-comment-multiple-outline',
+                            'label' => 'Konseling',
                             'active' => request()->routeIs(['counseling.index', 'counseling.show', 'counseling.create']),
                             'priority' => 8
                         ],
@@ -1375,7 +1375,7 @@
                         ],
                         [
                             'url' => route('counseling.index'),
-                            'icon' => 'mdi mdi-comment-alert-outline',
+                            'icon' => 'mdi mdi-comment-multiple-outline',
                             'label' => 'Konseling',
                             'active' => request()->routeIs(['counseling.index', 'counseling.show', 'counseling.create']),
                             'priority' => 7

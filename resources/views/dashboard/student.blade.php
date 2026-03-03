@@ -55,7 +55,7 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-<p class="mb-4">Mata Pelajarans Terdaftar</p>
+                        <p class="mb-4">Mata Pelajarans Terdaftar</p>
                         <p class="fs-30 mb-2">{{ $totalEnrolledCourses ?? 0 }}</p>
                         <p>{{ $activeCourses ?? 0 }} aktif</p>
                     </div>
@@ -72,9 +72,9 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-<p class="mb-4">Lesson Selesai</p>
+                        <p class="mb-4">Lesson Selesai</p>
                         <p class="fs-30 mb-2">{{ $completedLessonsCount ?? 0 }}</p>
-<p>{{ $inProgressLessons ?? 0 }} dalam progress</p>
+                        <p>{{ $inProgressLessons ?? 0 }} dalam progress</p>
                     </div>
                     <div class="card-icon-circle">
                         <i class="icon-check"></i>

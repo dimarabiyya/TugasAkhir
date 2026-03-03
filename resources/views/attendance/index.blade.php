@@ -37,7 +37,7 @@
                                         <th>Tanggal</th>
                                         <th>Mata Pelajaran</th>
                                         <th>Kelas</th>
-                                        <th>Instruktur</th>
+                                        <th>Guru</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>

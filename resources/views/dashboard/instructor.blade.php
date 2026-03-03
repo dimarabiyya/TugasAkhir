@@ -6,111 +6,80 @@
         <div class="row">
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <h3 class="font-weight-bold">Selamat Datang {{ auth()->user()->name }}</h3>
-                <h6 class="font-weight-normal mb-0">Kelola Mata Pelajaran Anda dan lacak kemajuan siswa Anda. Anda memiliki <span class="text-primary">pendaftaran aktif!</span></h6>
-            </div>
-            <div class="col-12 col-xl-4">
-                <div class="justify-content-end d-flex">
-                    <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
-                        <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" id="dropdownMenuDate2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <i class="mdi mdi-calendar"></i> {{ now()->format('M d, Y') }}
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
-                            <a class="dropdown-item" href="#">Hari Ini</a>
-                            <a class="dropdown-item" href="#">7 Hari Terakhir</a>
-                            <a class="dropdown-item" href="#">30 Hari Terakhir</a>
-                        </div>
-                    </div>
-                </div>
+                <h6 class="font-weight-normal mb-0">Kelola Mata Pelajaran Anda dan lacak kemajuan siswa Anda!</h6>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Stats Cards -->
+<!-- Stats Cards - Row 1 -->
 <div class="row">
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card tale-bg">
-            <div class="card-people mt-auto">
-                <img src="{{ asset('skydash/images/dashboard/people.svg') }}" alt="people">
-                <div class="weather-info">
-                    <div class="d-flex">
-                        <div>
-                            <h2 class="mb-0 font-weight-normal"><i class="mdi mdi-school me-2"></i>{{ $totalStudents ?? 0 }}</h2>
-                        </div>
-                        <div class="ms-2">
-                            <h4 class="location font-weight-normal">Total Siswa</h4>
-                            <h6 class="font-weight-normal">Pembelajar Aktif</h6>
-                        </div>
+    <!-- Total Students Card -->
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card card-tale interactive-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-2">Total Siswa</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalStudents ?? 0) }}</p>
+                        <p class="text-muted mb-0">Di kelas Anda</p>
+                    </div>
+                    <div class="card-icon-circle">
+                        <i class="mdi mdi-account-group"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 grid-margin transparent">
-        <div class="row">
-            <div class="col-md-6 mb-4 stretch-card transparent">
-                <div class="card card-tale interactive-card">
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-4">Total Mata Pelajaran</p>
-                                <p class="fs-30 mb-2">{{ $totalCourses ?? 0 }}</p>
-                                <p>{{ $publishedCourses ?? 0 }} dipublikasikan</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-school"></i>
-                            </div>
-                        </div>
+    
+    <!-- Total Courses Card -->
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card card-dark-blue interactive-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-2">Total Mata Pelajaran</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalCourses ?? 0) }}</p>
+                        <p class="text-muted mb-0">{{ number_format($publishedCourses ?? 0) }} dipublikasikan</p>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4 stretch-card transparent">
-                <div class="card card-dark-blue interactive-card">
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-4">Total Pendaftaran</p>
-                                <p class="fs-30 mb-2">{{ $totalEnrollments ?? 0 }}</p>
-                                <p>{{ $activeEnrollments ?? 0 }} aktif</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-account-group"></i>
-                            </div>
-                        </div>
+                    <div class="card-icon-circle">
+                        <i class="mdi mdi-school"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-4 stretch-card transparent">
-                <div class="card card-light-blue interactive-card">
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-4">Total Modul</p>
-                                <p class="fs-30 mb-2">{{ $totalModules ?? 0 }}</p>
-                                <p>Di seluruh Mata Pelajaran</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-file-document"></i>
-                            </div>
-                        </div>
+    </div>
+    
+    <!-- Total Enrollments Card -->
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card card-light-blue interactive-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-2">Total Pendaftaran</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalEnrollments ?? 0) }}</p>
+                        <p class="text-muted mb-0">{{ number_format($activeEnrollments ?? 0) }} aktif</p>
+                    </div>
+                    <div class="card-icon-circle">
+                        <i class="mdi mdi-account-plus"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4 stretch-card transparent">
-                <div class="card card-light-danger interactive-card">
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-4">Total Kuis</p>
-                                <p class="fs-30 mb-2">{{ $totalQuizzes ?? 0 }}</p>
-                                <p>Tersedia</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-clipboard-text"></i>
-                            </div>
-                        </div>
+        </div>
+    </div>
+    
+    <!-- Quiz Attempts Card -->
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card card-light-danger interactive-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-2">Total Kuis</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalQuizzes ?? 0) }}</p>
+                        <p class="text-muted mb-0">{{ number_format($totalQuizAttempts ?? 0) }} attempts</p>
+                    </div>
+                    <div class="card-icon-circle">
+                        <i class="mdi mdi-clipboard-text"></i>
                     </div>
                 </div>
             </div>
@@ -118,7 +87,82 @@
     </div>
 </div>
 
-<!-- Advanced Charts Section -->
+<!-- Stats Cards - Row 2 -->
+<div class="row">
+    <!-- Total Modules Card -->
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card card-tale interactive-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-2">Total Modul</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalModules ?? 0) }}</p>
+                        <p class="text-muted mb-0">Di seluruh Mata Pelajaran</p>
+                    </div>
+                    <div class="card-icon-circle">
+                        <i class="mdi mdi-file-document"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tasks Card -->
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card card-dark-blue interactive-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-2">Total Tugas</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalTasks ?? 0) }}</p>
+                        <p class="text-muted mb-0">{{ number_format($pendingTaskSubmissions ?? 0) }} menunggu</p>
+                    </div>
+                    <div class="card-icon-circle">
+                        <i class="mdi mdi-file-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Attendance Card -->
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card card-light-blue interactive-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-2">Kehadiran Hari Ini</p>
+                        <p class="fs-30 mb-2">{{ number_format($presentToday ?? 0) }}</p>
+                        <p class="text-muted mb-0">dari {{ number_format($totalAttendances ?? 0) }} total</p>
+                    </div>
+                    <div class="card-icon-circle">
+                        <i class="mdi mdi-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Passed Quizzes Card -->
+    <div class="col-md-3 grid-margin stretch-card">
+        <div class="card card-light-danger interactive-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-2">Kuis Lulus</p>
+                        <p class="fs-30 mb-2">{{ number_format($passedQuizAttempts ?? 0) }}</p>
+                        <p class="text-muted mb-0">dari {{ number_format($totalQuizAttempts ?? 0) }} total</p>
+                    </div>
+                    <div class="card-icon-circle">
+                        <i class="mdi mdi-check-decagram"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section - Row 1 -->
 <div class="row">
     <!-- Enrollment Trends Chart -->
     <div class="col-md-8 grid-margin stretch-card">
@@ -173,14 +217,14 @@
     </div>
 </div>
 
-<!-- Student Engagement Metrics -->
+<!-- Charts Section - Row 2 -->
 <div class="row">
     <!-- Student Activity -->
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Aktivitas Siswa</h4>
-                <p class="font-weight-500 mb-3">Keterlibatan siswa mingguan</p>
+                <h4 class="card-title mb-4">Aktivitas Siswa Mingguan</h4>
+                <p class="font-weight-500 mb-3">Pola aktivitas berdasarkan hari</p>
                 <div class="chart-container-small">
                     <canvas id="studentActivityChart"></canvas>
                 </div>
@@ -202,20 +246,21 @@
     </div>
 </div>
 
-<!-- Recent Courses -->
+<!-- Recent Courses Table -->
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <p class="card-title">Mata Pelajaran Terbaru</p>
+                <h4 class="card-title">Mata Pelajaran Terbaru</h4>
                 <p class="font-weight-500 mb-0">Pembaruan Mata Pelajaran terbaru Anda</p>
-                <div class="table-responsive">
+                <div class="table-responsive mt-3">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Mata Pelajaran</th>
                                 <th>Tingkat</th>
                                 <th>Modul</th>
+                                <th>Siswa</th>
                                 <th>Status</th>
                                 <th>Tanggal</th>
                             </tr>
@@ -226,16 +271,17 @@
                                 <td>{{ $course->title ?? 'Course Title' }}</td>
                                 <td>{{ $course->level ?? 'N/A' }}</td>
                                 <td>{{ $course->modules->count() ?? 0 }}</td>
+                                <td>{{ $course->enrollments->count() ?? 0 }}</td>
                                 <td>
                                     <label class="badge {{ $course->is_published ? 'badge-success' : 'badge-warning' }}">
                                         {{ $course->is_published ? 'Dipublikasikan' : 'Draf' }}
                                     </label>
                                 </td>
-                                <td>{{ $course->created_at ?? now()->format('M d, Y') }}</td>
+                                <td>{{ $course->created_at->format('M d, Y') }}</td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center">Belum ada Mata Pelajaran. <a href="{{ route('courses.create') }}">Buat Mata Pelajaran pertama Anda</a></td>
+                                <td colspan="6" class="text-center">Belum ada Mata Pelajaran. <a href="{{ route('courses.create') }}">Buat Mata Pelajaran pertama Anda</a></td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -412,33 +458,25 @@
         initCompletionRatesChart();
     });
     
-    // Enrollment Trends Chart
+    // Enrollment Trends Chart - with real data from controller
     function initEnrollmentTrendsChart() {
         const ctx = document.getElementById('enrollmentTrendsChart').getContext('2d');
+        
+        // Monthly enrollments data from controller
+        const monthlyData = @json($monthlyEnrollmentsData ?? array_fill(0, 12, 0));
+        
         enrollmentTrendsChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [{
-                    label: 'Perkembangan Siswa',
-                    data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
+                    label: 'Pendaftaran Siswa',
+                    data: monthlyData,
                     borderColor: '#667eea',
                     backgroundColor: 'rgba(102, 126, 234, 0.1)',
                     fill: true,
                     tension: 0.4,
                     pointBackgroundColor: '#667eea',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6,
-                    pointHoverRadius: 8
-                }, {
-                    label: 'Penyelesaian Mata Pelajaran',
-                    data: [8, 15, 12, 20, 18, 25, 22, 28, 26, 32, 30, 35],
-                    borderColor: '#764ba2',
-                    backgroundColor: 'rgba(118, 75, 162, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#764ba2',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 6,
@@ -498,15 +536,21 @@
         });
     }
     
-    // Course Performance Chart
+    // Course Performance Chart - with real data from controller
     function initCoursePerformanceChart() {
         const ctx = document.getElementById('coursePerformanceChart').getContext('2d');
+        
+        // Course performance data from controller
+        const highPerf = {{ $highPerformanceCourses ?? 0 }};
+        const mediumPerf = {{ $mediumPerformanceCourses ?? 0 }};
+        const lowPerf = {{ $lowPerformanceCourses ?? 0 }};
+        
         coursePerformanceChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['Performa Tinggi', 'Performa Sedang', 'Perlu Perhatian'],
                 datasets: [{
-                    data: [{{ $highPerformanceCourses ?? 0 }}, {{ $mediumPerformanceCourses ?? 0 }}, {{ $lowPerformanceCourses ?? 0 }}],
+                    data: [highPerf, mediumPerf, lowPerf],
                     backgroundColor: [
                         'rgba(40, 167, 69, 0.8)',
                         'rgba(255, 193, 7, 0.8)',
@@ -544,16 +588,22 @@
         });
     }
     
-    // Student Activity Chart
+    // Student Activity Chart - with real data from controller
     function initStudentActivityChart() {
         const ctx = document.getElementById('studentActivityChart').getContext('2d');
+        
+        // Weekly activity data from controller
+        const weeklyData = @json($weeklyActivity ?? []);
+        const days = weeklyData.map(w => w.day);
+        const enrollments = weeklyData.map(w => w.enrollments);
+        
         studentActivityChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                labels: days.length > 0 ? days : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 datasets: [{
-                    label: 'Siswa Aktif',
-                    data: [45, 52, 48, 61, 55, 25, 18],
+                    label: 'Pendaftaran',
+                    data: enrollments.length > 0 ? enrollments : [0, 0, 0, 0, 0, 0, 0],
                     backgroundColor: [
                         'rgba(102, 126, 234, 0.8)',
                         'rgba(102, 126, 234, 0.8)',
@@ -604,23 +654,31 @@
         });
     }
     
-    // Course Completion Rates Chart
+    // Course Completion Rates Chart - with real data from controller
     function initCompletionRatesChart() {
         const ctx = document.getElementById('completionRatesChart').getContext('2d');
+        
+        // Course completion data from controller
+        const completionData = @json($courseCompletionRates ?? []);
+        const courseLabels = completionData.length > 0 ? completionData.map(c => c.title) : ['Course A', 'Course B', 'Course C', 'Course D', 'Course E'];
+        const completionRates = completionData.length > 0 ? completionData.map(c => c.rate) : [85, 92, 78, 88, 95];
+        
         completionRatesChart = new Chart(ctx, {
-            type: 'radar',
+            type: 'bar',
             data: {
-                labels: ['Course A', 'Course B', 'Course C', 'Course D', 'Course E'],
+                labels: courseLabels,
                 datasets: [{
                     label: 'Tingkat Penyelesaian (%)',
-                    data: [85, 92, 78, 88, 95],
-                    backgroundColor: 'rgba(102, 126, 234, 0.2)',
-                    borderColor: '#667eea',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#667eea',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6
+                    data: completionRates,
+                    backgroundColor: [
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(118, 75, 162, 0.8)',
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(40, 167, 69, 0.8)',
+                        'rgba(255, 193, 7, 0.8)'
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false
                 }]
             },
             options: {
@@ -634,24 +692,33 @@
                         backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         titleColor: '#fff',
                         bodyColor: '#fff',
-                        cornerRadius: 8
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '%';
+                            }
+                        }
                     }
                 },
                 scales: {
-                    r: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#6c757d'
+                        }
+                    },
+                    y: {
                         beginAtZero: true,
                         max: 100,
-                        ticks: {
-                            stepSize: 20,
-                            color: '#6c757d'
-                        },
                         grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
+                            color: 'rgba(0, 0, 0, 0.05)'
                         },
-                        pointLabels: {
+                        ticks: {
                             color: '#6c757d',
-                            font: {
-                                size: 12
+                            callback: function(value) {
+                                return value + '%';
                             }
                         }
                     }
@@ -675,4 +742,3 @@
 </script>
 @endpush
 @endsection
-
