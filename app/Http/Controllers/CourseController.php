@@ -13,29 +13,31 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+
         $query = Course::with(['modules.lessons', 'instructor', 'classroom']);
-        
-        // --- LOGIKA FILTER BERDASARKAN ROLE ---
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER BERDASARKAN ROLE
+        |--------------------------------------------------------------------------
+        */
 
         if ($user->hasRole('admin')) {
-            // Admin bisa melihat semua, tidak perlu filter classroom
-        } 
-        elseif ($user->hasRole('instructor')) {
-            // Instruktur melihat course miliknya SENDIRI 
-            // ATAU course yang berada di kelas tempat dia mengajar modul
-            $query->where(function($q) use ($user) {
-                $q->where('instructor_id', $user->id)
-                  ->orWhereHas('classroom.courses', function($sq) use ($user) {
-                      $sq->where('instructor_id', $user->id);
-                  });
-            });
-        } 
-        elseif ($user->hasRole('student')) {
-            // Student HANYA boleh melihat course yang ada di dalam kelas tempat dia terdaftar
-            $classroomIds = $user->classrooms()->pluck('classrooms.id')->toArray();
+            // Admin bisa lihat semua
+        }
 
-            // Jika student belum terdaftar di kelas manapun, kembalikan koleksi kosong
-            if (empty($classroomIds)) {
+        elseif ($user->hasRole('instructor')) {
+            // Instructor hanya lihat course miliknya
+            $query->where('instructor_id', $user->id);
+        }
+
+        elseif ($user->hasRole('student')) {
+
+            // Ambil classroom tempat student terdaftar
+            $classroomIds = $user->classrooms()->pluck('classrooms.id');
+
+            // Kalau student belum punya classroom → tampilkan kosong tapi tetap pagination aman
+            if ($classroomIds->isEmpty()) {
                 $courses = collect();
                 return view('courses.index', compact('courses'));
             }
@@ -43,25 +45,51 @@ class CourseController extends Controller
             $query->whereIn('classroom_id', $classroomIds);
         }
 
-        // --- FILTER PENCARIAN & LEVEL (Sudah ada di kode Anda) ---
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER SEARCH
+        |--------------------------------------------------------------------------
+        */
 
-        if ($request->has('search') && $request->search !== '') {
-            $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('title', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('description', 'like', '%' . $searchTerm . '%');
+        if ($request->filled('search')) {
+
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
-        if ($request->has('level') && $request->level !== '') {
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER LEVEL
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('level')) {
             $query->where('level', $request->level);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER STATUS PUBLISH
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('published')) {
-            $query->where('is_published', $request->published == '1' ? 1 : 0);
+            $query->where('is_published', $request->published);
         }
 
-        $courses = $query->latest()->paginate(12)->appends($request->query());
+        /*
+        |--------------------------------------------------------------------------
+        | PAGINATION
+        |--------------------------------------------------------------------------
+        */
+
+        $courses = $query->latest()
+                        ->paginate(12)
+                        ->withQueryString(); // supaya filter tidak hilang saat pindah page
 
         return view('courses.index', compact('courses'));
     }

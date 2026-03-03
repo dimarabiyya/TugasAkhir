@@ -29,32 +29,36 @@
 <!-- Search and Filter Section -->
 <div class="row">
     <div class="col-md-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <form method="GET" action="{{ route('modules.index') }}" class="row g-3">
-                    <div class="col-md-4">
-                        <label for="search" class="form-label">Cari Modul</label>
-                        <input type="text" class="form-control" id="search" name="search" 
-                               value="{{ request('search') }}" placeholder="Cari berdasarkan judul, deskripsi, atau Mata Pelajaran...">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="course_id" class="form-label">Filter berdasarkan Mata Pelajaran</label>
-                        <select class="form-control" id="course_id" name="course_id">
-                            <option value="">Semua Mata Pelajaran</option>
-                            @foreach($courses as $course)
-                                <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
-                                    {{ $course->title }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary mr-2">
-                            <i class="icon-magnifier"></i> Cari
-                        </button>
-                        <a href="{{ route('modules.index') }}" class="btn btn-outline-secondary">
-                            <i class="icon-refresh"></i> Hapus
-                        </a>
+        <div class="body-card">
+            <div class="filter-card">
+                <form method="GET" action="{{ route('modules.index') }}" id="searchForm">
+                    <div class="row align-items-end g-3">
+                        <div class="col-md-6">
+                            <label for="search" class="filter-label">Cari Modul</label>
+                            <input type="text" class="form-control" id="search" name="search" 
+                                value="{{ request('search') }}" placeholder="Cari berdasarkan judul, deskripsi, atau Mata Pelajaran...">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="course_id" class="filter-label">Filter berdasarkan Mata Pelajaran</label>
+                            <select class="form-control" id="course_id" name="course_id">
+                                <option value="">Semua Mata Pelajaran</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
+                                        {{ $course->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="d-flex align-items-end gap-2">
+                                <button type="submit" class="btn btn-primary btn-sm flex-grow-1">
+                                    <i class="mdi mdi-magnify"></i> Cari
+                                </button>
+                                <a href="{{ route('modules.index') }}" class="btn btn-reset" title="Reset">
+                                    <i class="mdi mdi-refresh"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -224,6 +228,38 @@
 
 @push('styles')
 <style>
+    .filter-card {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    border: 1px solid #f0f0f0;
+  }
+  .filter-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.6px;
+    text-transform: uppercase; color: #9ca3af; margin-bottom: 6px; display: block;
+  }
+  .filter-card .form-control {
+    font-size: 14px; font-weight: 500; color: #111827;
+    background: #f9fafb; border: 1.5px solid #e5e7eb;
+    border-radius: 10px; padding: 9px 14px; height: auto;
+    transition: all 0.2s; box-shadow: none;
+  }
+  .filter-card .form-control:focus {
+    background: #fff; border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+  }
+  .search-input-wrapper { position: relative; }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 17px; pointer-events: none; }
+  .search-input-wrapper .form-control { padding-left: 38px; }
+    select.form-control { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+  .btn-search { font-size: 13px; font-weight: 600; background: linear-gradient(135deg,#6366f1,#4f46e5); color: #fff; border: none; border-radius: 10px; padding: 9px 20px; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(99,102,241,0.3); transition: all 0.2s; cursor: pointer; }
+  .btn-search:hover { background: linear-gradient(135deg,#4f46e5,#4338ca); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(99,102,241,0.4); color:#fff; }
+  .btn-reset { font-size: 13px; font-weight: 600; background: #f3f4f6; color: #6b7280; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 9px 14px; display: flex; align-items: center; gap: 6px; transition: all 0.2s; cursor: pointer; text-decoration: none; }
+  .btn-reset:hover { background: #e5e7eb; color: #374151; }
+
+
     .table th {
         border-top: none;
         font-weight: 600;

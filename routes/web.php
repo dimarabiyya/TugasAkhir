@@ -16,6 +16,7 @@ use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CounselingController;
 
 use App\Models\Course;
 use App\Models\Module;
@@ -253,6 +254,15 @@ Route::middleware(['auth'])->group(function () {
     
     // Route Hapus Nilai
     Route::delete('/grades/{id}', [TaskController::class, 'destroyGrade'])->name('tasks.grade.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/counseling', [CounselingController::class, 'index'])->name('counseling.index');
+    Route::get('/counseling/choose', [CounselingController::class, 'chooseInstructor'])->name('counseling.choose');
+    Route::post('/counseling/start/{instructor}', [CounselingController::class, 'startSession'])->name('counseling.start');
+    Route::get('/counseling/chat/{session}', [CounselingController::class, 'show'])->name('counseling.show');
+    Route::post('/counseling/{session}/message', [CounselingController::class, 'storeMessage'])->name('counseling.message.store');
+    Route::delete('/counseling/{session}', [CounselingController::class, 'destroy'])->name('counseling.destroy');
 });
 
 // Pastikan route ini berada di dalam middleware auth

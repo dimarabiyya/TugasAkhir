@@ -35,7 +35,7 @@
         <div class="card stats-card">
             <div class="card-body text-center">
                 <i class="mdi mdi-clipboard-check-outline" style="font-size: 40px; color: #667eea;"></i>
-                <h3 class="mt-3 mb-0">00</h3>
+                <h3 class="mt-3 mb-0">{{ $totalTasks }}</h3>
                 <p class="text-muted mb-0">Total Tugas</p>
             </div>
         </div>
@@ -44,8 +44,8 @@
         <div class="card stats-card">
             <div class="card-body text-center">
                 <i class="mdi mdi-calendar-check" style="font-size: 40px; color: #667eea;"></i>
-                <h3 class="mt-3 mb-0">00</h3>
-                <p class="text-muted mb-0">Total Tugas Dikerjakan</p>
+                <h3 class="mt-3 mb-0">{{ $totalSubmitted }}</h3>
+                <p class="text-muted mb-0">Tugas terkumpul</p>
             </div>
         </div>
     </div>
@@ -53,8 +53,8 @@
         <div class="card stats-card">
             <div class="card-body text-center">
                 <i class="mdi mdi-check" style="font-size: 40px; color: #667eea;"></i>
-                <h3 class="mt-3 mb-0">00</h3>
-                <p class="text-muted mb-0">Total tasks</p>
+                <h3 class="mt-3 mb-0">{{ $totalGraded }}</h3>
+                <p class="text-muted mb-0">Tugas selesai</p>
             </div>
         </div>
     </div>
@@ -62,8 +62,8 @@
         <div class="card stats-card">
             <div class="card-body text-center">
                 <i class="mdi mdi-check" style="font-size: 40px; color: #667eea;"></i>
-                <h3 class="mt-3 mb-0">00</h3>
-                <p class="text-muted mb-0">Total tasks</p>
+                <h3 class="mt-3 mb-0">{{ $totalPending }}</h3>
+                <p class="text-muted mb-0">Tugas menunggu</p>
             </div>
         </div>
     </div>

@@ -202,4 +202,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Classroom::class, 'classroom_user', 'user_id', 'classroom_id');
     }
+
+    public function counselingSessions() {
+    // Jika user adalah student
+        return $this->hasMany(CounselingSession::class, 'student_id');
+    }
 }

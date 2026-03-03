@@ -21,25 +21,56 @@ class TaskController extends Controller
         $query = Task::with(['lesson.module.course.classroom']);
 
         if ($user->hasRole('admin')) {
-            // Admin: Lihat semua
             $tasks = $query->latest()->get();
-        } 
-        elseif ($user->hasRole('instructor')) {
-            // Instructor: Filter berdasarkan instructor_id di tabel courses
+
+            $totalTasks     = Task::count();
+            $totalSubmitted = TaskSubmission::distinct('task_id')->count('task_id');
+            $totalGraded    = TaskGrade::count();
+            $totalPending   = $totalTasks - $totalSubmitted;
+
+        } elseif ($user->hasRole('instructor')) {
             $tasks = $query->whereHas('lesson.module.course', function($q) use ($user) {
                 $q->where('instructor_id', $user->id);
             })->latest()->get();
-        } 
-        else {
-            // STUDENT: Filter berdasarkan classroom_id yang ada di tabel pivot 'classroom_user'
-            $studentClassroomIds = $user->classrooms()->pluck('classrooms.id'); // Ambil semua ID kelas student
+
+            $taskIds = Task::whereHas('lesson.module.course', function($q) use ($user) {
+                $q->where('instructor_id', $user->id);
+            })->pluck('id');
+
+            $totalTasks     = $taskIds->count();
+            $totalSubmitted = TaskSubmission::whereIn('task_id', $taskIds)->distinct('task_id')->count('task_id');
+            $totalGraded    = TaskGrade::whereHas('submission', fn($q) => $q->whereIn('task_id', $taskIds))->count();
+            $totalPending   = $totalTasks - $totalSubmitted;
+
+        } else {
+            // Student
+            $studentClassroomIds = $user->classrooms()->pluck('classrooms.id');
 
             $tasks = $query->whereHas('lesson.module.course', function($q) use ($studentClassroomIds) {
                 $q->whereIn('classroom_id', $studentClassroomIds);
             })->latest()->get();
+
+            $taskIds = Task::whereHas('lesson.module.course', function($q) use ($studentClassroomIds) {
+                $q->whereIn('classroom_id', $studentClassroomIds);
+            })->pluck('id');
+
+            $totalTasks     = $taskIds->count();
+            $totalSubmitted = TaskSubmission::where('user_id', $user->id)
+                                ->whereIn('task_id', $taskIds)
+                                ->distinct('task_id')->count('task_id');
+            $totalGraded    = TaskGrade::whereHas('submission', fn($q) => 
+                                $q->where('user_id', $user->id)->whereIn('task_id', $taskIds)
+                            )->count();
+            $totalPending   = $totalTasks - $totalSubmitted;
         }
 
-        return view('tasks.index', compact('tasks'));
+        return view('tasks.index', compact(
+            'tasks',
+            'totalTasks',
+            'totalSubmitted',
+            'totalGraded',
+            'totalPending'
+        ));
     }
 
     /**

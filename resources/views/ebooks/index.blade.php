@@ -36,7 +36,7 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h2 class="mb-2 text-dark" style="font-size: 28px;">Perpustakaan Digital</h2>
+                        <h3 class="font-weight-bold">Perpustakaan Digital</h3>
                         <p class="text-muted mb-0">Jelajahi koleksi lengkap e-Book pembelajaran berkualitas tinggi</p>
                     </div>
                 </div>
