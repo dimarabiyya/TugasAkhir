@@ -172,24 +172,25 @@ use Illuminate\Support\Facades\Storage;
                                 <td data-priority="1">
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a href="{{ $course->url }}" 
-                                           class="btn btn-info" 
+                                           class="btn btn-sm btn-info" 
                                            title="Lihat">
                                             <i class="mdi mdi-eye"></i>
                                         </a>
                                         @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                                             <a href="{{ route('courses.edit', $course) }}" 
-                                               class="btn btn-primary" 
+                                               class="btn btn-sm btn-primary" 
                                                title="Edit">
                                                 <i class="mdi mdi-pencil"></i>
                                             </a>
                                             <form action="{{ route('courses.destroy', $course) }}" 
                                                   method="POST" 
                                                   class="d-inline" 
-                                                  onsubmit="event.preventDefault(); confirmDelete(event);">
+                                                  onsubmit="event.preventDefault(); confirmDelete(event);" class="btn btn-sm btn-danger" >
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 
-                                                        class="btn btn-danger" 
+                                                        class="btn btn-sm btn-danger"
+                                                        style="border-radius:0px 12px 12px 0px" 
                                                        title="Hapus">
                                                     <i class="mdi mdi-delete"></i>
                                                 </button>

@@ -106,14 +106,27 @@ class AttendanceController extends Controller
         return view('attendance.show', compact('attendances', 'course', 'date'));
     }
 
-    public function edit(Attendance $attendance)
+    public function edit(Request $request)
     {
-        // Admin can edit any; instructor can edit only their own
-        if (Auth::user()->hasRole('instructor') && $attendance->instructor_id !== Auth::id()) {
+        $courseId = $request->course;
+        $date = $request->date;
+
+        $attendances = Attendance::with('student')
+            ->where('course_id', $courseId)
+            ->where('attendance_date', $date)
+            ->get();
+
+        if ($attendances->isEmpty()) abort(404);
+
+        $firstAttendance = $attendances->first();
+
+        if (Auth::user()->hasRole('instructor') && $firstAttendance->instructor_id !== Auth::id()) {
             abort(403);
         }
 
-        return view('attendance.edit', compact('attendance'));
+        $course = Course::findOrFail($courseId);
+
+        return view('attendance.edit', compact('attendances', 'course', 'date'));
     }
 
     public function update(Request $request, Attendance $attendance)
@@ -165,5 +178,33 @@ class AttendanceController extends Controller
         }
 
         return redirect()->route('attendance.show', ['course' => $request->course_id, 'date' => $request->attendance_date])->with('success', 'Absensi diperbarui.');
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'classroom_id' => 'required|exists:classrooms,id',
+            'attendance_date' => 'required|date',
+        ]);
+
+        // Cari semua record yang sesuai dengan grup tersebut
+        $query = Attendance::where('course_id', $request->course_id)
+            ->where('classroom_id', $request->classroom_id)
+            ->where('attendance_date', $request->attendance_date);
+
+        // KEAMANAN: Jika bukan admin, pastikan instruktur hanya bisa menghapus miliknya sendiri
+        if (!auth()->user()->hasRole('admin')) {
+            $query->where('instructor_id', auth()->id());
+        }
+
+        $deleted = $query->delete();
+
+        if ($deleted) {
+            return redirect()->route('attendance.index')
+                ->with('success', 'Seluruh data absensi pada grup tersebut berhasil dihapus.');
+        }
+
+        return redirect()->back()->with('error', 'Gagal menghapus data atau Anda tidak memiliki akses.');
     }
 }

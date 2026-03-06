@@ -30,9 +30,9 @@
     <div class="col-md-3">
         <div class="card stats-card">
             <div class="card-body text-center">
-                <i class="mdi mdi-check" style="font-size: 40px; color: #667eea;"></i>
+                <i class="mdi mdi-file-question-outline" style="font-size: 40px; color: #667eea;"></i>
                 <h3 class="mt-3 mb-0">{{ $totalQuizzes }}</h3>
-                <p class="text-muted mb-0">Total Quizzes</p>
+                <p class="text-muted mb-0">Total Kuis</p>
             </div>
         </div>
     </div>
@@ -40,9 +40,9 @@
     <div class="col-md-3">
         <div class="card stats-card">
             <div class="card-body text-center">
-                <i class="mdi mdi-check" style="font-size: 40px; color: #06beb6;"></i>
+                <i class="mdi mdi-checkbox-marked-circle-outline" style="font-size: 40px; color: #06beb6;"></i>
                 <h3 class="mt-3 mb-0">{{ $publishedQuizzes }}</h3>
-                <p class="text-muted mb-0">Published</p>
+                <p class="text-muted mb-0">Kuis terpublis</p>
             </div>
         </div>
     </div>
@@ -50,9 +50,9 @@
     <div class="col-md-3">
         <div class="card stats-card">
             <div class="card-body text-center">
-                <i class="mdi mdi-check" style="font-size: 40px; color: #f5576c;"></i>
+                <i class="mdi mdi-help" style="font-size: 40px; color: #f5576c;"></i>
                 <h3 class="mt-3 mb-0">{{ $totalQuestions }}</h3>
-                <p class="text-muted mb-0">Total Questions</p>
+                <p class="text-muted mb-0">Total Pertanyaan</p>
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@
             <div class="card-body text-center">
                 <i class="mdi mdi-check " style="font-size: 40px; color: #4facfe;"></i>
                 <h3 class="mt-3 mb-0">{{ $totalAttempts }}</h3>
-                <p class="text-muted mb-0">Total Attempts</p>
+                <p class="text-muted mb-0">Total Dikumpulkan</p>
             </div>
         </div>
     </div>
@@ -74,8 +74,9 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+                @forelse($quizzes as $quiz)
                 <div class="table-responsive">
-                    <table id="quizzesTable" class="table table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Judul Kuis</th>
@@ -89,7 +90,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($quizzes as $quiz)
                             <tr>
                                 <td data-priority="1">
                                     <div>
@@ -145,18 +145,18 @@
                                 <td data-priority="1">
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a href="{{ $quiz->url }}" 
-                                           class="btn btn-info" 
+                                           class="btn btn-info pt-2" 
                                            title="View Details">
                                             <i class="mdi mdi-eye"></i>
                                         </a>
                                         @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                                             <a href="{{ route('quizzes.edit', $quiz) }}" 
-                                               class="btn btn-primary" 
+                                               class="btn btn-primary pt-2" 
                                                title="Edit">
                                                 <i class="mdi mdi-pencil"></i>
                                             </a>
-                                            <a href="{{ route('quiz.questions.index', $quiz) }}" 
-                                               class="btn btn-warning" 
+                                            <a href="{{ route('quiz.questions.index', $quiz) }}"
+                                               class="btn btn-warning pt-2" 
                                                title="Manage Questions">
                                                 <i class="mdi mdi-plus"></i>
                                             </a>
@@ -164,8 +164,8 @@
                                                 onsubmit="event.preventDefault(); confirmDelete(event);">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger w-100">
-                                                    <i class="icon-trash"></i>
+                                                <button type="submit" class="btn btn-sm btn-danger" style=" border-radius:0px 12px 12px 0px;">
+                                                    <i class="mdi mdi-delete"></i>
                                                 </button>
                                             </form>
                                             
@@ -181,33 +181,27 @@
                                     </div>
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td class="text-center py-4">
-                                    <div class="text-center py-2">
-                                        <i class="icon-note" style="font-size: 48px; color: #ccc;"></i>
-                                        <h5 class="mt-2">No quizzes found</h5>
-                                        <p class="text-muted mb-0">
-                                            @if(request('search') || request('status') || request('lesson_id'))
-                                                Try adjusting your search criteria.
-                                            @else
-                                                No quizzes have been created yet.
-                                            @endif
-                                        </p>
-                                    </div>
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            @endforelse
                         </tbody>
                     </table>
                 </div>
+                @empty
+                    <div class="text-center py-2">
+                        <i class="icon-note" style="font-size: 48px; color: #ccc;"></i>
+                            <h5 class="mt-2">Kuis tidak ditemukan!</h5>
+                            <p class="text-muted mb-0">
+                                @if(request('search') || request('status') || request('lesson_id'))
+                                    Coba cek kata kunci!
+                                @else
+                                    Belum ada kuis dibuat! <br>
+                                    <div class="mt-4">
+                                        <a href="{{ route('lessons.index') }}" class="btn btn-primary">
+                                            <i class="mdi mdi-plus"></i>Tambah Kuis
+                                        </a>   
+                                    </div>
+                                @endif
+                            <p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </div>

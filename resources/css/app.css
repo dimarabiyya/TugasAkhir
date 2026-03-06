@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @keyframes floatBlob {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-28px); }
+  }
+}

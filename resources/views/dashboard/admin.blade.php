@@ -15,71 +15,139 @@
 <!-- Stats Cards - Row 1 -->
 <div class="row">
     <!-- Total Students Card -->
-    <div class="col-md-3 grid-margin stretch-card">
-        <div class="card card-tale interactive-card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-2">Total Siswa</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalStudents ?? 0) }}</p>
-                        <p class="text-muted mb-0">Pembelajar Aktif</p>
-                    </div>
-                    <div class="card-icon-circle">
-                        <i class="mdi mdi-account-group"></i>
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card tale-bg" >
+            <div class="card-people mt-auto" >
+                <img src="{{ asset('skydash/images/dashboard/people.svg') }}" alt="people">
+                <div class="weather-info">
+                    <div class="d-flex">
+                        <div>
+                            <h2 class="mb-0 font-weight-normal"><i class="mdi mdi-school me-2"></i>{{ $totalStudents ?? 0 }}</h2>
+                        </div>
+                        <div class="ms-2">
+                            <h4 class="location font-weight-normal">Total Siswa</h4>
+                            <h6 class="font-weight-normal">Aktif pembelajaran</h6>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-md-6 grid-margin transparent">
+        <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card card-dark-blue interactive-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="mb-2">Total Mata Pelajaran</p>
+                                <p class="fs-30 mb-2">{{ number_format($totalCourses ?? 0) }}</p>
+                                <p class="text-muted mb-0">{{ number_format($publishedCourses ?? 0) }} dipublikasikan</p>
+                            </div>
+                            <div class="card-icon-circle">
+                                <i class="mdi mdi-school"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card card-light-blue interactive-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="mb-2">Total Modul</p>
+                                <p class="fs-30 mb-2">{{ number_format($totalModules ?? 0) }}</p>
+                                <p class="text-muted mb-0">Di seluruh Mata Pelajaran</p>
+                            </div>
+                            <div class="card-icon-circle">
+                                <i class="mdi mdi-file-document"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card card-light-danger interactive-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="mb-2">Total Kuis</p>
+                                <p class="fs-30 mb-2">{{ number_format($totalQuizzes ?? 0) }}</p>
+                                <p class="text-muted mb-0">Tersedia</p>
+                            </div>
+                            <div class="card-icon-circle">
+                                <i class="mdi mdi-clipboard-text"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card card-tale interactive-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="mb-2">Total Tugas</p>
+                                <p class="fs-30 mb-2">{{ number_format($totalTasks ?? 0) }}</p>
+                                <p class="text-muted mb-0">{{ number_format($pendingTaskSubmissions ?? 0) }} menunggu</p>
+                            </div>
+                            <div class="card-icon-circle">
+                                <i class="mdi mdi-file-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     
-    <!-- Total Courses Card -->
-    <div class="col-md-3 grid-margin stretch-card">
+{{-- Stats tambahan: Guru, Kelas, Pengumpulan Tugas --}}
+<div class="row">
+    <div class="col-md-4 grid-margin stretch-card">
         <div class="card card-dark-blue interactive-card">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-2">Total Mata Pelajaran</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalCourses ?? 0) }}</p>
-                        <p class="text-muted mb-0">{{ number_format($publishedCourses ?? 0) }} dipublikasikan</p>
+                        <p class="mb-2">Total Guru</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalInstructors ?? 0) }}</p>
+                        <p class="text-muted mb-0">Aktif mengajar</p>
                     </div>
                     <div class="card-icon-circle">
-                        <i class="mdi mdi-school"></i>
+                        <i class="mdi mdi-account-tie"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Total Enrollments Card -->
-    <div class="col-md-3 grid-margin stretch-card">
+    <div class="col-md-4 grid-margin stretch-card">
         <div class="card card-light-blue interactive-card">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-2">Total Pendaftaran</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalEnrollments ?? 0) }}</p>
-                        <p class="text-muted mb-0">{{ number_format($activeEnrollments ?? 0) }} aktif</p>
+                        <p class="mb-2">Total Kelas</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalClassrooms ?? 0) }}</p>
+                        <p class="text-muted mb-0">Terdaftar di platform</p>
                     </div>
                     <div class="card-icon-circle">
-                        <i class="mdi mdi-account-plus"></i>
+                        <i class="mdi mdi-domain"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Total Revenue Card -->
-    <div class="col-md-3 grid-margin stretch-card">
-        <div class="card card-light-danger interactive-card">
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card card-tale interactive-card">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-2">Total Pendapatan</p>
-                        <p class="fs-30 mb-2">Rp {{ number_format($totalRevenue ?? 0, 0, ',', '.') }}</p>
-                        <p class="text-muted mb-0">{{ number_format($totalTransactions ?? 0) }} transaksi</p>
+                        <p class="mb-2">Total Pengumpulan Tugas</p>
+                        <p class="fs-30 mb-2">{{ number_format($totalTaskSubmissions ?? 0) }}</p>
+                        <p class="text-muted mb-0">Di seluruh mata pelajaran</p>
                     </div>
                     <div class="card-icon-circle">
-                        <i class="mdi mdi-currency-usd"></i>
+                        <i class="mdi mdi-send-check"></i>
                     </div>
                 </div>
             </div>
@@ -87,75 +155,33 @@
     </div>
 </div>
 
-<!-- Stats Cards - Row 2 -->
+{{-- Absensi hari ini --}}
 <div class="row">
-    <!-- Total Modules Card -->
-    <div class="col-md-3 grid-margin stretch-card">
-        <div class="card card-tale interactive-card">
+    <div class="col-md-12 grid-margin">
+        <div class="card">
             <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-2">Total Modul</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalModules ?? 0) }}</p>
-                        <p class="text-muted mb-0">Di seluruh Mata Pelajaran</p>
-                    </div>
-                    <div class="card-icon-circle">
-                        <i class="mdi mdi-file-document"></i>
-                    </div>
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h4 class="card-title mb-0">
+                        <i class="mdi mdi-clipboard-account text-primary mr-2"></i>
+                        Absensi Platform Hari Ini
+                    </h4>
+                    <span class="text-muted" style="font-size:13px">
+                        {{ now()->translatedFormat('l, d F Y') }}
+                    </span>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Total Quizzes Card -->
-    <div class="col-md-3 grid-margin stretch-card">
-        <div class="card card-dark-blue interactive-card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-2">Total Kuis</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalQuizzes ?? 0) }}</p>
-                        <p class="text-muted mb-0">Tersedia</p>
-                    </div>
-                    <div class="card-icon-circle">
-                        <i class="mdi mdi-clipboard-text"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Tasks Card -->
-    <div class="col-md-3 grid-margin stretch-card">
-        <div class="card card-light-blue interactive-card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-2">Total Tugas</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalTasks ?? 0) }}</p>
-                        <p class="text-muted mb-0">{{ number_format($pendingTaskSubmissions ?? 0) }} menunggu</p>
-                    </div>
-                    <div class="card-icon-circle">
-                        <i class="mdi mdi-file-check"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Attendance Card -->
-    <div class="col-md-3 grid-margin stretch-card">
-        <div class="card card-light-danger interactive-card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-2">Kehadiran Hari Ini</p>
-                        <p class="fs-30 mb-2">{{ number_format($presentToday ?? 0) }}</p>
-                        <p class="text-muted mb-0">dari {{ number_format($totalAttendances ?? 0) }} total</p>
-                    </div>
-                    <div class="card-icon-circle">
-                        <i class="mdi mdi-check-circle"></i>
-                    </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge badge-pill badge-success px-3 py-2">
+                        <i class="mdi mdi-check-circle mr-1"></i> Hadir: {{ $todayPresent ?? 0 }}
+                    </span>
+                    <span class="badge badge-pill badge-danger px-3 py-2">
+                        <i class="mdi mdi-close-circle mr-1"></i> Absen: {{ $todayAbsent ?? 0 }}
+                    </span>
+                    <span class="badge badge-pill badge-warning px-3 py-2">
+                        <i class="mdi mdi-emoticon-sick mr-1"></i> Sakit: {{ $todaySick ?? 0 }}
+                    </span>
+                    <span class="badge badge-pill badge-secondary px-3 py-2 ml-auto">
+                        Total: {{ $todayTotal ?? 0 }} catatan
+                    </span>
                 </div>
             </div>
         </div>
@@ -223,8 +249,8 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Aktivitas Siswa Mingguan</h4>
-                <p class="font-weight-500 mb-3">Pola aktivitas berdasarkan hari</p>
+                <h4 class="card-title mb-4">Kehadiran siswa</h4>
+                <p class="font-weight-500 mb-3">Kehadiran siswa mingguan</p>
                 <div class="chart-container-small">
                     <canvas id="activityHeatmapChart"></canvas>
                 </div>
@@ -240,6 +266,32 @@
                 <p class="font-weight-500 mb-3">Tingkat penyelesaian berdasarkan Mata Pelajaran</p>
                 <div class="chart-container-small">
                     <canvas id="completionRatesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Charts Row 3: Task + Quiz submission --}}
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-1">Aktivitas Tugas & Kuis per Bulan</h4>
+                <p class="font-weight-500 mb-3">Pengumpulan tugas vs percobaan kuis</p>
+                <div class="chart-container-small">
+                    <canvas id="adminTaskQuizChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-1">Mata Pelajaran Terpopuler</h4>
+                <p class="font-weight-500 mb-3">Berdasarkan jumlah siswa terbanyak</p>
+                <div class="chart-container-small">
+                    <canvas id="adminTopCoursesChart"></canvas>
                 </div>
             </div>
         </div>
@@ -427,82 +479,57 @@
         initCourseLevelChart();
         initActivityHeatmapChart();
         initCompletionRatesChart();
+        initTaskQuizChart();     
+        initTopCoursesChart();    
     });
     
     // Enrollment Trends Chart - with real data from controller
     function initEnrollmentTrendsChart() {
         const ctx = document.getElementById('enrollmentTrendsChart').getContext('2d');
         
-        // Monthly enrollments data from controller
-        const monthlyData = @json($monthlyEnrollmentsData ?? array_fill(0, 12, 0));
+        const monthlyData = @json($monthlyEnrollments ?? []);
         
         enrollmentTrendsChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Pendaftaran Siswa',
-                    data: monthlyData,
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#667eea',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6,
-                    pointHoverRadius: 8
-                }]
+                labels: monthlyData.map(d => d.month),
+                datasets: [
+                    {
+                        label: 'Pembelajaran Selesai',
+                        data: monthlyData.map(d => d.completed),
+                        borderColor: '#00d25b',
+                        backgroundColor: 'rgba(0, 210, 91, 0.1)',
+                        fill: true, tension: 0.4,
+                        pointBackgroundColor: '#00d25b', pointBorderColor: '#fff',
+                        pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Sedang Belajar',
+                        data: monthlyData.map(d => d.active),
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        fill: true, tension: 0.4,
+                        pointBackgroundColor: '#667eea', pointBorderColor: '#fff',
+                        pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8
+                    }
+                ]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
+                responsive: true, maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
                 plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20
-                        }
-                    },
+                    legend: { position: 'top', labels: { usePointStyle: true, padding: 20 } },
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: '#667eea',
-                        borderWidth: 1,
-                        cornerRadius: 8,
-                        displayColors: true
+                        backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#fff',
+                        bodyColor: '#fff', borderColor: '#667eea',
+                        borderWidth: 1, cornerRadius: 8
                     }
                 },
                 scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: '#6c757d'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        },
-                        ticks: {
-                            color: '#6c757d'
-                        }
-                    }
+                    x: { grid: { display: false }, ticks: { color: '#6c757d' } },
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#6c757d', stepSize: 1 } }
                 },
-                elements: {
-                    line: {
-                        borderWidth: 3
-                    }
-                }
+                elements: { line: { borderWidth: 3 } }
             }
         });
     }
@@ -559,140 +586,175 @@
         });
     }
     
-    // Activity Heatmap Chart - with real data from controller
     function initActivityHeatmapChart() {
         const ctx = document.getElementById('activityHeatmapChart').getContext('2d');
         
-        // Weekly activity data from controller
-        const weeklyData = @json($weeklyActivity ?? []);
-        const days = weeklyData.map(w => w.day);
-        const enrollments = weeklyData.map(w => w.enrollments);
+        const weeklyAttendance = @json($weeklyAttendanceChart ?? []);
         
         activityHeatmapChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: days.length > 0 ? days : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{
-                    label: 'Pendaftaran',
-                    data: enrollments.length > 0 ? enrollments : [0, 0, 0, 0, 0, 0, 0],
-                    backgroundColor: [
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(118, 75, 162, 0.6)',
-                        'rgba(118, 75, 162, 0.6)'
-                    ],
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
+                labels: weeklyAttendance.map(d => d.day),
+                datasets: [
+                    {
+                        label: 'Hadir',
+                        data: weeklyAttendance.map(d => d.present),
+                        borderColor: '#00d25b', backgroundColor: 'rgba(0,210,91,0.08)',
+                        fill: true, tension: 0.4,
+                        pointBackgroundColor: '#00d25b', pointBorderColor: '#fff',
+                        pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 7
+                    },
+                    {
+                        label: 'Absen',
+                        data: weeklyAttendance.map(d => d.absent),
+                        borderColor: '#fc424a', backgroundColor: 'rgba(252,66,74,0.08)',
+                        fill: true, tension: 0.4,
+                        pointBackgroundColor: '#fc424a', pointBorderColor: '#fff',
+                        pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 7
+                    },
+                    {
+                        label: 'Sakit',
+                        data: weeklyAttendance.map(d => d.sick),
+                        borderColor: '#ffab00', backgroundColor: 'rgba(255,171,0,0.08)',
+                        fill: true, tension: 0.4,
+                        pointBackgroundColor: '#ffab00', pointBorderColor: '#fff',
+                        pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 7
+                    }
+                ]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } },
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8
+                        backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8,
+                        callbacks: {
+                            footer: items => 'Total: ' + items.reduce((s, i) => s + i.parsed.y, 0) + ' siswa'
+                        }
                     }
                 },
                 scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: '#6c757d'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        },
-                        ticks: {
-                            color: '#6c757d'
-                        }
-                    }
+                    x: { grid: { display: false }, ticks: { color: '#6c757d' } },
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#6c757d', stepSize: 1 } }
                 }
             }
         });
     }
-    
+        
     // Course Completion Rates Chart - with real data from controller
     function initCompletionRatesChart() {
         const ctx = document.getElementById('completionRatesChart').getContext('2d');
         
-        // Course completion data from controller
-        const completionData = @json($courseCompletionRates ?? []);
-        const courseLabels = completionData.length > 0 ? completionData.map(c => c.title) : ['Course A', 'Course B', 'Course C', 'Course D', 'Course E'];
-        const completionRates = completionData.length > 0 ? completionData.map(c => c.rate) : [85, 92, 78, 88, 95];
+        const lessonProgress = @json($lessonProgressChart ?? []);
         
         completionRatesChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: courseLabels,
-                datasets: [{
-                    label: 'Tingkat Penyelesaian (%)',
-                    data: completionRates,
-                    backgroundColor: [
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(118, 75, 162, 0.8)',
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(40, 167, 69, 0.8)',
-                        'rgba(255, 193, 7, 0.8)'
-                    ],
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
+                labels: lessonProgress.map(d => d.label),
+                datasets: [
+                    {
+                        label: 'Materi Selesai',
+                        data: lessonProgress.map(d => d.completed),
+                        backgroundColor: 'rgba(0, 210, 91, 0.85)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Belum Selesai',
+                        data: lessonProgress.map(d => d.incomplete),
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        borderRadius: 4
+                    }
+                ]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 16 } },
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8,
+                        backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8,
                         callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + '%';
+                            afterBody: function(items) {
+                                const i = items[0].dataIndex;
+                                const total = lessonProgress[i].completed + lessonProgress[i].incomplete;
+                                const pct = total > 0 ? Math.round((lessonProgress[i].completed / total) * 100) : 0;
+                                return 'Progress: ' + pct + '%';
                             }
                         }
                     }
                 },
                 scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: '#6c757d'
-                        }
+                    x: { stacked: true, grid: { display: false }, ticks: { color: '#6c757d', font: { size: 11 } } },
+                    y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#6c757d', stepSize: 1 } }
+                }
+            }
+        });
+    }
+
+    function initTaskQuizChart() {
+        const ctx = document.getElementById('adminTaskQuizChart').getContext('2d');
+        const monthlyTasks = @json($monthlyTaskSubmissions ?? []);
+        const monthlyQuiz  = @json($monthlyQuizAttempts ?? []);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: monthlyTasks.map(d => d.month),
+                datasets: [
+                    {
+                        label: 'Pengumpulan Tugas',
+                        data: monthlyTasks.map(d => d.count),
+                        backgroundColor: 'rgba(102,126,234,0.8)', borderRadius: 4
                     },
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        },
-                        ticks: {
-                            color: '#6c757d',
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        }
+                    {
+                        label: 'Percobaan Kuis',
+                        data: monthlyQuiz.map(d => d.count),
+                        backgroundColor: 'rgba(0,144,231,0.8)', borderRadius: 4
                     }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
+                plugins: {
+                    legend: { position: 'top', labels: { usePointStyle: true, padding: 12 } },
+                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8 }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#6c757d', maxRotation: 45, font: { size: 11 } } },
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    }
+
+    function initTopCoursesChart() {
+        const ctx = document.getElementById('adminTopCoursesChart').getContext('2d');
+        const topCourses = @json($topCoursesByEnrollment ?? []);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: topCourses.map(d => d.label),
+                datasets: [{
+                    label: 'Siswa',
+                    data: topCourses.map(d => d.count),
+                    backgroundColor: [
+                        'rgba(102,126,234,0.8)','rgba(0,210,91,0.8)','rgba(255,171,0,0.8)',
+                        'rgba(252,66,74,0.8)','rgba(0,144,231,0.8)','rgba(228,169,81,0.8)',
+                        'rgba(88,216,163,0.8)','rgba(241,126,93,0.8)'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'x',
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8 } },
+                scales: {
+                    x: { beginAtZero: true, ticks: { stepSize: 1 } },
+                    y: { ticks: { font: { size: 11 } } }
                 }
             }
         });

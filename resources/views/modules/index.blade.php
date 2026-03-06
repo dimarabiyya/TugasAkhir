@@ -124,7 +124,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
+                                        <div class="btn-group btm-sm gap-1" role="group">
                                             <a href="{{ route('modules.show', $module) }}" class="btn btn-sm btn-info" title="Lihat">
                                                 <i class="mdi mdi-eye"></i>
                                             </a>
@@ -132,11 +132,11 @@
                                                 <a href="{{ route('modules.edit', $module) }}" class="btn btn-sm btn-primary" title="Edit">
                                                     <i class="mdi mdi-pencil"></i>
                                                 </a>
-                                                <form action="{{ route('modules.destroy', $module) }}" method="POST" class="d-inline"
+                                                <form action="{{ route('modules.destroy', $module) }}" method="POST" class="btn btn-sm btn-danger"
                                                       onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus modul ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                    <button type="submit" class="btn-sm bg-danger" title="Hapus" style="border:none;">
                                                         <i class="mdi mdi-delete"></i>
                                                     </button>
                                                 </form>

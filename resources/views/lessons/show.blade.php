@@ -276,9 +276,8 @@
                                 <i class="mdi mdi-plus mr-2"></i> Tambah Kuis
                         </a>
                   
-                    
-                    <form action="{{ route('lessons.destroy', $lesson) }}" method="POST" 
-                          onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus Materi ini? Tindakan ini tidak dapat dibatalkan.');">
+                    <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST" 
+                        onsubmit="confirmDelete(event, 'Apakah Anda yakin ingin menghapus Materi ini? Tindakan ini tidak dapat dibatalkan.'); return false;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-block" {{ $lesson->quiz ? 'disabled' : '' }}>
@@ -404,12 +403,27 @@
 @endpush
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-function confirmDelete(event, message) {
-    if (confirm(message)) {
-        event.target.closest('form').submit();
+    function confirmDelete(event, message) {
+        const form = event.currentTarget; // Mengambil elemen form
+
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: message,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hapus event listener agar tidak looping, lalu submit
+                form.submit();
+            }
+        });
     }
-}
 </script>
 @endpush
 @endsection

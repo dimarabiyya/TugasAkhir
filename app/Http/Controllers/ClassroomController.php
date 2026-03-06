@@ -13,10 +13,19 @@ class ClassroomController extends Controller
     /**
      * Menampilkan daftar kelas (Index)
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil kelas beserta nama instruktur dan hitung jumlah siswa
-        $classrooms = Classroom::with('instructor')->withCount('students')->get();
+        $search = $request->input('search');
+
+        $classrooms = Classroom::with('instructor') // Load relasi instruktur
+            ->withCount('students')                  // Hitung jumlah siswa
+            ->latest()
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%");
+            })
+            ->get(); 
+
         return view('classrooms.index', compact('classrooms'));
     }
 

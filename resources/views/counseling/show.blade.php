@@ -2,6 +2,18 @@
 
 @section('content')
 <div class="row">
+    <div class="col-md-10 mb-4">
+        <h3 class="font-weight-bold">Chat Konseling</h3>
+        <p class="text-muted">Lihat percakapan dan keluhan terkait sesi konseling ini.</p>
+    </div>
+    <div class="col-md-2 mb-4 text-end">
+        <a href="{{ route('counseling.index') }}" class="btn btn-light">
+            <i class="ti-arrow-left"></i> Kembali
+        </a>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
@@ -34,7 +46,6 @@
 
             </div>
         </div>
-        <a href="{{ route('counseling.index') }}" class="btn btn-light mt-3">Kembali ke Riwayat</a>
     </div>
 </div>
 @endsection

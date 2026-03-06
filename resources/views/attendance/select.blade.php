@@ -1,7 +1,27 @@
 @extends('layouts.skydash')
 
 @section('content')
-<div class="content-wrapper">
+<div class="col-md-12 grid-margin">
+        <div class="row mb-5">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h3 class="font-weight-bold mb-2">Pilih Absensi</h3>
+                        <p class="text-muted mb-0">Pilih kelas dan mata pelajaran untuk absensi siswa!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-xl-4">
+                <div class="justify-content-end d-flex">
+                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
+                        <a href="{{ route('attendance.create') }}" class="btn btn-primary mr-2">
+                            <i class="mdi mdi-plus"></i> Buat Absensi Baru
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+        
     <div class="card">
         <div class="card-body">
             <h4>Pilih Mata Pelajaran untuk Membuat Absensi</h4>
@@ -24,12 +44,10 @@
                     </div>
 
                     <div class="form-group col-md-2 align-self-end">
-                        <button class="btn btn-success">Pilih</button>
+                        <button class="btn btn-primary">Pilih</button>
                     </div>
                 </div>
             </form>
-
-            <a href="{{ route('attendance.index') }}" class="btn btn-secondary mt-3">Kembali</a>
         </div>
     </div>
 </div>

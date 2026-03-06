@@ -9,13 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class EbookController extends Controller
 {
-    // Menampilkan daftar e-book (Untuk Admin, Guru, Siswa)
-    public function index()
+
+    public function index(Request $request)
     {
-        $ebooks = Ebook::latest()->paginate(12);
+        $search = $request->input('search');
+
+        $ebooks = Ebook::latest()
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%")
+                            ->orWhere('author', 'like', "%{$search}%");
+            })
+            ->paginate(12)
+            ->withQueryString();
+
         return view('ebooks.index', compact('ebooks'));
     }
-
     // Form Upload (Hanya Admin)
     public function create()
     {

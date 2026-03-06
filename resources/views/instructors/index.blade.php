@@ -4,10 +4,17 @@
 <div class="row">
     <div class="col-md-12 grid-margin">
         <div class="row">
-            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+            <div class="col-md-6  mb-4 mb-xl-0">
                 @if(auth()->check() && auth()->user()->hasAnyRole(['admin']))
                     <h3 class="font-weight-bold">Manajemen Guru</h3>
                     <p class="text-muted mb-0">Daftar dan Kelola users role guru</p>    
+                @endif
+            </div>
+            <div class="col-md-6 text-end mb-4 mb-xl-0">
+                @if(auth()->check() && auth()->user()->hasAnyRole(['admin']))
+                    <a href="{{ route('instructors.create') }}" class="btn btn-primary btn-icon-text">
+                        <i class="ti-plus btn-icon-prepend"></i> Tambah Guru
+                    </a>
                 @endif
             </div>
         </div>
@@ -20,9 +27,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <p class="card-title">Daftar Guru</p>
-                        <a href="{{ route('instructors.create') }}" class="btn btn-primary btn-icon-text">
-                            <i class="ti-plus btn-icon-prepend"></i> Tambah Guru
-                        </a>
+                        
                     </div>
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
@@ -44,17 +49,19 @@
                                         <td class="font-weight-bold">{{ $instructor->email }}</td>
                                         <td>{{ $instructor->created_at->format('d M Y') }}</td>
                                         <td>
-                                            <a href="{{ route('instructors.edit', $instructor->id) }}" class="btn btn-warning btn-sm">
-                                                <i class="mdi mdi-pencil"></i> Edit
-                                            </a>
-                                            <form action="{{ route('instructors.destroy', $instructor->id) }}" method="POST" class="d-inline"
-                                                onsubmit="event.preventDefault(); confirmDelete(event, 'Yakin ingin menghapus guru ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="mdi mdi-delete"></i> Hapus
-                                                </button>
-                                            </form>
+                                            <div class="btn-group">
+                                                <a href="{{ route('instructors.edit', $instructor->id) }}" class="btn btn-primary btn-sm">
+                                                    <i class="mdi mdi-pencil"></i> Edit
+                                                </a>
+                                                <form action="{{ route('instructors.destroy', $instructor->id) }}" method="POST" class="d-inline"
+                                                    onsubmit="event.preventDefault(); confirmDelete(event, 'Yakin ingin menghapus guru ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm" style="border-radius:0px 12px 12px 0px">
+                                                        <i class="mdi mdi-delete"></i> Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

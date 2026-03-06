@@ -169,7 +169,7 @@
                                         <small class="text-muted">{{ $student->created_at->format('M d, Y') }}</small>
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
+                                        <div class="btn-group btn-sm-group gap-1" role="group">
                                             <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-info" title="Lihat">
                                                 <i class="mdi mdi-eye"></i>
                                             </a>
@@ -177,11 +177,11 @@
                                                 <a href="{{ route('students.edit', $student) }}" class="btn btn-sm btn-primary" title="Edit">
                                                     <i class="mdi mdi-pencil"></i>
                                                 </a>
-                                                <form action="{{ route('students.destroy', $student) }}" method="POST" class="d-inline"
+                                                <form action="{{ route('students.destroy', $student) }}" method="POST" class="d-inline btn-sm btn-danger"
                                                       onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus siswa ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                    <button type="submit" class="btn btn-sm bg-danger" style="border-radius: 0px 12px 12px 0px" title="Hapus">
                                                         <i class="mdi mdi-delete"></i>
                                                     </button>
                                                 </form>

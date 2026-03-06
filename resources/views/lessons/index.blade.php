@@ -167,7 +167,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
+                                        <div class="btn-group gap-1" role="group">
                                             <a href="{{ route('lessons.show', $lesson) }}" class="btn btn-sm btn-info" title="View">
                                                 <i class="mdi mdi-eye"></i>
                                             </a>
@@ -175,11 +175,11 @@
                                                 <a href="{{ route('lessons.edit', $lesson) }}" class="btn btn-sm btn-primary" title="Edit">
                                                     <i class="mdi mdi-pencil"></i>
                                                 </a>
-                                                <form action="{{ route('lessons.destroy', $lesson) }}" method="POST" class="d-inline"
+                                                <form action="{{ route('lessons.destroy', $lesson) }}" method="POST" class="d-inline" class="btn-sm btn-danger"
                                                       onsubmit="event.preventDefault(); confirmDelete(event, 'Kamu yakin menghapus Materi ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                                    <button type="submit"  class="btn btn-sm btn-danger" style="border-radius:0px 12px 12px 0px;" title="Delete">
                                                         <i class="mdi mdi-delete"></i>
                                                     </button>
                                                 </form>

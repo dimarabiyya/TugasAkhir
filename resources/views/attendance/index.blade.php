@@ -49,9 +49,33 @@
                                         <td>{{ $g->classroom->name ?? '-' }}</td>
                                         <td>{{ $g->instructor->name ?? '-' }}</td>
                                         <td>
-                                            <a href="{{ route('attendance.show', ['course' => $g->course_id, 'date' => $g->attendance_date]) }}" class="btn btn-info btn-sm">Lihat</a>
                                             @if(auth()->user()->hasRole('admin') || (auth()->user()->hasRole('instructor') && auth()->id() === $g->instructor_id))
-                                                <a href="{{ route('attendance.show', ['course' => $g->course_id, 'date' => $g->attendance_date]) }}" class="btn btn-primary btn-sm">Edit</a>
+                                                <div class="btn-group gap-1">
+
+                                                    <a href="{{ route('attendance.show', ['course' => $g->course_id, 'date' => $g->attendance_date]) }}" class="btn btn-info btn-sm">
+                                                        <i class="mdi mdi-eye"></i>
+                                                    </a>
+
+                                                    @if(auth()->user()->hasRole('admin') || (auth()->user()->hasRole('instructor') && auth()->id() === $g->instructor_id))
+                                                        <a href="{{ route('attendance.edit', ['course' => $g->course_id, 'date' => $g->attendance_date]) }}" class="btn btn-primary btn-sm">
+                                                            <i class="mdi mdi-pencil"></i>
+                                                        </a>
+                                                    @endif
+                                                
+                                                    <form action="{{ route('attendance.destroyGroup') }}" method="POST" class="d-inline btn-danger btn-sm"
+                                                        onsubmit="confirmDelete(event, 'Apakah Anda yakin? Seluruh data kehadiran siswa di kelas ini pada tanggal tersebut akan terhapus permanen.');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        
+                                                        <input type="hidden" name="course_id" value="{{ $g->course_id }}">
+                                                        <input type="hidden" name="classroom_id" value="{{ $g->classroom_id }}">
+                                                        <input type="hidden" name="attendance_date" value="{{ $g->attendance_date }}">
+                                                        
+                                                        <button type="submit" class="btn btn-danger btn-sm" style="border-radius: 0px 12px 12px 0px">
+                                                            <i class="mdi mdi-delete"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             @endif
                                         </td>
                                     </tr>

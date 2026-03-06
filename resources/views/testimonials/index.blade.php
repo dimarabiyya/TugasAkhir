@@ -128,26 +128,26 @@
                     <!-- Date -->
                     <div class="mt-2 w-100">
                         <small class="text-muted">
-                            <i class="far fa-calendar mr-1"></i>{{ $testimonial->created_at->format('M d, Y') }}
+                            <i class="mdi mdi-calendar mr-1"></i>{{ $testimonial->created_at->format('M d, Y') }}
                         </small>
                     </div>
 
                     <!-- Action Buttons (for own testimonial) -->
                     @auth
-                    @if(auth()->id() == $testimonial->user_id)
-                    <div class="mt-3 w-100" style="border-top: 1px solid #e9ecef; padding-top: 10px;">
-                        <a href="{{ route('testimonials.edit', $testimonial) }}" class="btn btn-sm btn-outline-primary mr-2">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <form action="{{ route('testimonials.destroy', $testimonial) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this testimonial?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </form>
-                    </div>
-                    @endif
+                        @if(auth()->id() == $testimonial->user_id)
+                        <div class="mt-3 w-100" style="border-top: 1px solid #e9ecef; padding-top: 10px;">
+                            <a href="{{ route('testimonials.edit', $testimonial) }}" class="btn btn-sm btn-outline-primary mr-2">
+                                <i class="mdi mdi-pencil"></i> Edit
+                            </a>
+                            <form action="{{ route('testimonials.destroy', $testimonial) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this testimonial?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                        @endif
                     @endauth
                 </div>
             </div>

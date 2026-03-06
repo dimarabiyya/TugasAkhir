@@ -55,7 +55,7 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-4">Mata Pelajarans Terdaftar</p>
+                        <p class="mb-4">Mata Pelajaran</p>
                         <p class="fs-30 mb-2">{{ $totalEnrolledCourses ?? 0 }}</p>
                         <p>{{ $activeCourses ?? 0 }} aktif</p>
                     </div>
@@ -72,7 +72,7 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <p class="mb-4">Lesson Selesai</p>
+                        <p class="mb-4">Materi Selesai</p>
                         <p class="fs-30 mb-2">{{ $completedLessonsCount ?? 0 }}</p>
                         <p>{{ $inProgressLessons ?? 0 }} dalam progress</p>
                     </div>
@@ -89,9 +89,9 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-<p class="mb-4">Percobaan Kuis</p>
+                        <p class="mb-4">Kuis diselesaikan</p>
                         <p class="fs-30 mb-2">{{ $totalQuizAttempts ?? 0 }}</p>
-<p>{{ $passedQuizzes ?? 0 }} lulus</p>
+                        <p>{{ $passedQuizzes ?? 0 }} lulus</p>
                     </div>
                     <div class="card-icon-circle">
                     <i class="mdi mdi-clipboard-text"></i>
@@ -107,9 +107,9 @@
             <div class="card-body position-relative">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-<p class="mb-4">Rata-rata Skor</p>
-                        <p class="fs-30 mb-2">{{ number_format($averageScore ?? 0, 1) }}%</p>
-<p>Performa kuis</p>
+                        <p class="mb-4">Tugas</p>
+                        <p class="fs-30 mb-2">{{ $totalTasks }}</p>
+                        <p>Tugas selesai</p>
                     </div>
                     <div class="card-icon-circle">
                         <i class="icon-star"></i>
@@ -127,7 +127,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-<i class="icon-chart-bar text-primary"></i>Perkembangan Mata Pelajaran
+                <i class="icon-chart-bar text-primary"></i>Perkembangan Mata Pelajaran
                 </h4>
                 <canvas id="courseProgressChart" height="60"></canvas>
             </div>
@@ -139,7 +139,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">
-<i class="icon-calendar text-success"></i> Aktivitas Mingguan
+                <i class="icon-calendar text-success"></i> Aktivitas Mingguan
                 </h4>
                 <canvas id="weeklyProgressChart" height="250"></canvas>
             </div>
@@ -253,7 +253,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">
-                        <i class="icon-clock text-success mr-2"></i> Recent Progress
+                        <i class="icon-clock text-success mr-2"></i> Materi selesai
                     </h4>
                     <span class="badge badge-light">{{ $recentProgress->count() ?? 0 }} items</span>
                 </div>
@@ -288,11 +288,11 @@
                             <div class="modern-list-status">
                                 @if($progress->is_completed)
                                     <span class="status-badge status-badge-success">
-                                        <i class="icon-check-circle mr-1"></i> Done
+                                        <i class="icon-check-circle mr-1"></i> Selesai
                                     </span>
                                 @else
                                     <span class="status-badge status-badge-progress">
-                                        <i class="icon-refresh mr-1"></i> Learning
+                                        <i class="icon-refresh mr-1"></i> Berjalan
                                     </span>
                                 @endif
                             </div>
@@ -303,8 +303,8 @@
                         <div class="empty-state-icon">
                             <i class="icon-clock"></i>
                         </div>
-                        <h5 class="empty-state-title">No progress yet</h5>
-                        <p class="empty-state-text">Start learning to see your progress here</p>
+                        <h5 class="empty-state-title">Tidak ada materi</h5>
+                        <p class="empty-state-text">Mulai pelajaran</p>
                     </div>
                     @endforelse
                 </div>
@@ -318,7 +318,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">
-                        <i class="icon-question text-warning mr-2"></i> Recent Quiz Results
+                        <i class="icon-question text-warning mr-2"></i> Hasil Kuis terbaru
                     </h4>
                     <span class="badge badge-light">{{ $recentQuizAttempts->count() ?? 0 }} attempts</span>
                 </div>
@@ -359,11 +359,11 @@
                             <div class="modern-list-status">
                                 @if($attempt->is_passed ?? false)
                                     <span class="status-badge status-badge-success">
-                                        <i class="icon-check-circle mr-1"></i> Passed
+                                        <i class="icon-check-circle mr-1"></i> Berhasil
                                     </span>
                                 @else
                                     <span class="status-badge status-badge-danger">
-                                        <i class="icon-close-circle mr-1"></i> Failed
+                                        <i class="icon-close-circle mr-1"></i> Gagal
                                     </span>
                                 @endif
                             </div>
@@ -374,8 +374,68 @@
                         <div class="empty-state-icon">
                             <i class="icon-question"></i>
                         </div>
-                        <h5 class="empty-state-title">No quiz attempts yet</h5>
-                        <p class="empty-state-text">Take quizzes to see your results here</p>
+                        <h5 class="empty-state-title">Tidak ada hasil kuis</h5>
+                        <p class="empty-state-text">Ambil kuis sekarang!</p>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 grid-margin">
+        <div class="card modern-activity-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="card-title mb-0">
+                        <i class="icon-note text-warning mr-2"></i> Tugas Belum Dikerjakan
+                    </h4>
+                    <span class="badge badge-light">{{ $pendingTasks ?? 0 }} items</span>
+                </div>
+                <div class="modern-list">
+                    @forelse($pendingTaskList ?? [] as $task)
+                    <div class="modern-list-item in-progress">
+                        <div class="modern-list-content">
+                            <div class="modern-list-icon">
+                                <div class="icon-wrapper icon-wrapper-warning">
+                                    <i class="icon-note"></i>
+                                </div>
+                            </div>
+                            <div class="modern-list-details">
+                                <h6 class="modern-list-title">{{ Str::limit($task->title, 40) }}</h6>
+                                <p class="modern-list-subtitle">
+                                    <i class="icon-graduation mr-1"></i>
+                                    {{ Str::limit($task->lesson->module->course->title ?? 'Course', 35) }}
+                                </p>
+                                <div class="modern-list-meta">
+                                    @if($task->due_date)
+                                    <span class="meta-time {{ now()->gt($task->due_date) ? 'text-danger' : '' }}">
+                                        <i class="icon-calendar mr-1"></i>
+                                        {{ now()->gt($task->due_date) ? 'Terlambat · ' : 'Deadline · ' }}
+                                        {{ \Carbon\Carbon::parse($task->due_date)->format('d M Y') }}
+                                    </span>
+                                    @else
+                                    <span class="meta-time">
+                                        <i class="icon-calendar mr-1"></i> Tidak ada deadline
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="modern-list-status">
+                                <a href="{{ route('tasks.show', $task->slug) }}" 
+                                class="status-badge status-badge-progress text-decoration-none">
+                                    <i class="icon-arrow-right mr-1"></i> Kerjakan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="icon-check"></i>
+                        </div>
+                        <h5 class="empty-state-title">Semua tugas selesai!</h5>
+                        <p class="empty-state-text">Tidak ada tugas yang pending</p>
                     </div>
                     @endforelse
                 </div>

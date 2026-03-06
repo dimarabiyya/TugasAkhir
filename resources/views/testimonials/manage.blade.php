@@ -204,12 +204,12 @@
                                     </small>
                                 </td>
                                 <td>
-                                    <div class="btn-group btn-group-sm" role="group">
+                                    <div class="btn-group btn-group-sm gap-1" role="group">
                                         @if(!$testimonial->is_approved)
                                         <form action="{{ route('testimonials.approve', $testimonial) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="btn btn-success btn-sm" title="Approve">
+                                            <button type="submit" class="btn btn-success btn-sm" title="Approve" style="border-radius: 12px 0px 0px 12px">
                                                 <i class="mdi mdi-check"></i>
                                             </button>
                                         </form>
@@ -217,7 +217,7 @@
                                         <form action="{{ route('testimonials.reject', $testimonial) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="btn btn-warning btn-sm" title="Reject">
+                                            <button type="submit" class="btn btn-warning btn-sm" title="Reject" style="border-radius:12px 0px 0px 12px">
                                                 <i class="mdi mdi-close"></i>
                                             </button>
                                         </form>
@@ -227,7 +227,7 @@
                                         <form action="{{ route('testimonials.toggle-featured', $testimonial) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="btn btn-{{ $testimonial->is_featured ? 'info' : 'secondary' }} btn-sm" title="{{ $testimonial->is_featured ? 'Hapus dari Unggulan' : 'Tandai sebagai Unggulan' }}">
+                                            <button type="submit" class="btn btn-{{ $testimonial->is_featured ? 'info' : 'secondary' }} btn-sm" title="{{ $testimonial->is_featured ? 'Hapus dari Unggulan' : 'Tandai sebagai Unggulan' }}" style="border-radius: 0px 0px 0px 0px">
                                                 <i class="mdi mdi-star{{ $testimonial->is_featured ? '' : '-outline' }}"></i>
                                             </button>
                                         </form>
@@ -243,10 +243,10 @@
                                         <form action="{{ route('testimonials.destroy', $testimonial) }}" 
                                               method="POST" 
                                               class="d-inline" 
-                                              onsubmit="return confirm('Are you sure you want to delete this testimonial?');">
+                                              onsubmit="return confirm('Kamu yakin menghapus aduan siswa?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete" style="border-radius: 0px 12px 12px 0px; ">
                                                 <i class="mdi mdi-delete"></i>
                                             </button>
                                         </form>

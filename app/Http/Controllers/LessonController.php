@@ -233,7 +233,7 @@ class LessonController extends Controller
         $module = $lesson->module;
         
         // Check if lesson has quiz
-        if ($lesson->quiz) {
+        if ($lesson->quiz()->exists()) {
             return redirect()
                 ->route('lessons.show', $lesson)
                 ->with('error', 'Cannot delete lesson with existing quiz. Please delete the quiz first.');

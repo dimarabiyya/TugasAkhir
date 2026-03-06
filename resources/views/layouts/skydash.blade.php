@@ -509,7 +509,7 @@
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <a class="navbar-brand brand-logo me-5 d-flex align-items-center" href="{{ route('dashboard') }}">
                     <img src="{{ asset('images/landing/Logo40.png') }}" class="me-2" alt="logo" style="max-height: 40px;" />
-                    <span class="brand-logo-text">LMS SMKN 40</span>
+                    <span class="brand-logo-text" style="padding-left: 3px">LMS SMKN 40</span>
                 </a>
                 <a class="navbar-brand brand-logo-mini" href="{{ route('dashboard') }}">
                     <img src="{{ asset('images/landing/Logo40.png') }}" alt="logo" style="max-height: 30px;" />
@@ -519,18 +519,7 @@
                 <button class="navbar-toggler navbar-toggler align-self-center d-none d-lg-block" type="button" data-toggle="minimize">
                     <span class="icon-menu"></span>
                 </button>
-                <ul class="navbar-nav mr-lg-2">
-                    <li class="nav-item nav-search d-none d-lg-block">
-                        <div class="input-group">
-                            <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                                <span class="input-group-text" id="search">
-                                    <i class="icon-search"></i>
-                                </span>
-                            </div>
-                            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search" aria-label="search" aria-describedby="search">
-                        </div>
-                    </li>
-                </ul>
+                
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item dropdown">
                         <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
@@ -661,34 +650,28 @@
                 @endif
                 
                 @if(auth()->user()->hasRole('instructor'))
-                    <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->routeIs('ebooks.index', 'ebooks.create') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('ebooks.index') }}">
                             <i class="mdi mdi-book-outline menu-icon"></i>
                             <span class="menu-title">Perpustakaan</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}" href="{{ route('courses.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
+                        <a class="nav-link"  href="{{ route('courses.index') }}">
                             <i class="mdi mdi-library-outline menu-icon"></i>
                             <span class="menu-title">Mata Pelajaran</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}" href="{{ route('modules.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('modules.index') }}">
                             <i class="mdi mdi-folder-outline menu-icon"></i>
                             <span class="menu-title">Modul</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" href="{{ route('lessons.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" >
+                        <a class="nav-link" href="{{ route('lessons.index') }}">
                             <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
                             <span class="menu-title">Materi</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}" href="{{ route('students.index') }}">
-                            <i class="mdi mdi-account-school-outline menu-icon"></i>
-                            <span class="menu-title">Siswa</span>
                         </a>
                     </li>
                     <li class="nav-item {{ request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show', 'attendance.select']) ? 'active' : '' }}">
@@ -697,14 +680,14 @@
                             <span class="menu-title">Absensi</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" href="{{ route('tasks.index') }}">
+                    <li class="nav-item {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" >
+                        <a class="nav-link" href="{{ route('tasks.index') }}">
                             <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
                             <span class="menu-title">Tugas</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" href="{{ route('quizzes.index') }}">
+                    <li class="nav-item  {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" >
+                        <a class="nav-link" href="{{ route('quizzes.index') }}">
                             <i class="mdi mdi-file-question-outline menu-icon"></i>
                             <span class="menu-title">Kuis</span>
                         </a>

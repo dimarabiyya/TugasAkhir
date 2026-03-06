@@ -1,7 +1,18 @@
 @extends('layouts.skydash')
 
 @section('content')
-<div class="content-wrapper">
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <div class="row">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                @if(auth()->check() && auth()->user()->hasAnyRole(['admin']))
+                    <h3 class="font-weight-bold">Edit Data Guru</h3>
+                    <p class="text-muted mb-0">Edit dan kelola data Guru</p>    
+                @endif
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
