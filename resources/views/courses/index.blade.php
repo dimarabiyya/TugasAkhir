@@ -204,17 +204,17 @@ use Illuminate\Support\Facades\Storage;
                                 <td colspan="8" class="text-center py-4">
                                     <div class="text-center py-5">
                                         <i class="icon-book" style="font-size: 64px; color: #ccc;"></i>
-                                        <h4 class="mt-3">Tidak ada kursus ditemukan</h4>
+                                        <h4 class="mt-3">Tidak ada Mata Pelajaran ditemukan</h4>
                                         <p class="text-muted">
                                             @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                                                Mulai dengan membuat kursus pertama Anda!
+                                                Mulai dengan membuat Mata Pelajaran pertama Anda!
                                             @else
-                                                Tidak ada kursus yang tersedia saat ini.
+                                                Tidak ada Mata Pelajaran yang tersedia saat ini.
                                             @endif
                                         </p>
                                         @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
                                             <a href="{{ route('courses.create') }}" class="btn btn-primary mt-3">
-                                                <i class="icon-plus"></i> Buat Kursus
+                                                <i class="icon-plus"></i> Buat Mata Pelajaran
                                             </a>
                                         @endif
                                     </div>

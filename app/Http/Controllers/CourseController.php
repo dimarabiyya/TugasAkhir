@@ -7,6 +7,7 @@ use App\Models\Classroom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
@@ -110,8 +111,7 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $this->checkManagePermission();
-        
-        // 1. Hapus 'price' dari validasi
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -122,9 +122,20 @@ class CourseController extends Controller
             'instructor_id' => 'nullable|exists:users,id',
         ]);
 
-        $data = $request->all();
+        $data = $request->all(); // HARUS DI SINI
 
-        // 2. Set default price jadi 0 secara manual
+        // Generate slug unik
+        $slug = Str::slug($data['title']);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (Course::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+
+        $data['slug'] = $slug;
+
+        // default price
         $data['price'] = 0;
 
         if ($request->hasFile('thumbnail')) {
@@ -214,6 +225,19 @@ class CourseController extends Controller
         ]);
 
         $data = $request->all();
+
+        if ($course->title !== $data['title']) {
+
+            $slug = Str::slug($data['title']);
+            $originalSlug = $slug;
+            $count = 1;
+
+            while (Course::where('slug', $slug)->where('id', '!=', $course->id)->exists()) {
+                $slug = $originalSlug . '-' . $count++;
+            }
+
+            $data['slug'] = $slug;
+        }
 
         // 2. Pastikan price tetap 0 atau ambil nilai lama jika tidak diubah (untuk keamanan)
         $data['price'] = 0;

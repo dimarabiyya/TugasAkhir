@@ -45,12 +45,9 @@ class QuizController extends Controller
         // INSTRUCTOR
         // =====================
         elseif ($user->hasRole('instructor')) {
-            $query->whereHas(
-                'lesson.module.course.classroom',
-                function ($q) use ($user) {
-                    $q->where('instructor_id', $user->id);
-                }
-            );
+            $query->whereHas('lesson.module.course', function ($q) use ($user) {
+                $q->where('instructor_id', $user->id);
+            });
         }
 
         // ADMIN → tanpa filter

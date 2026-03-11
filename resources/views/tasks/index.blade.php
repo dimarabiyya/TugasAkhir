@@ -87,20 +87,22 @@
                         Deadline: {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d M Y') : 'Tidak ada' }}
                     </p>
                     
-                    @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
+                    
                         <div class="d-flex mt-2 gap-2 btn-group btn-group-sm">
                             <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-primary btn-sm flex-grow-1" title="Lihat"> <i class="pt-2 mdi mdi-eye"></i> Buka Tugas</a>
-                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-light btn-sm flex-grow-1" title="Edit"><i class="pt-2 mdi mdi-pencil"></i> Edit</a>
-                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="btn-sm btn-danger" 
-                                onsubmit="event.preventDefault(); confirmDelete(event, 'Kamu yakin menghapus Tugas ini?');">
-                                @csrf 
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" style="border-radius:0px 12px 12px 0px;" title="Hapus">
-                                    <i class="mdi mdi-delete"></i>
-                                </button>
-                            </form>
+                            @if(auth()->user()->hasAnyRole(['admin', 'instructor']))
+                                <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-light btn-sm flex-grow-1" title="Edit"><i class="pt-2 mdi mdi-pencil"></i> Edit</a>
+                                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="btn-sm btn-danger" 
+                                    onsubmit="event.preventDefault(); confirmDelete(event, 'Kamu yakin menghapus Tugas ini?');">
+                                    @csrf 
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" style="border-radius:0px 12px 12px 0px;" title="Hapus">
+                                        <i class="mdi mdi-delete"></i>
+                                    </button>
+                                </form>
+                            @endif
                         </div>
-                    @endif
+                    
                 </div>
             </div>
         </div>

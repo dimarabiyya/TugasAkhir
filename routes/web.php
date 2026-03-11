@@ -97,33 +97,8 @@ Route::middleware(['auth', 'permission:delete lessons'])->group(function () {
 });
 
 // Quiz routes
-// Admin/Instructor only - Quiz management
+// --- TARUH INI DULUAN (Rute Mencoba/Mulai Kuis) ---
 Route::middleware(['auth'])->group(function () {
-    Route::get('/quizzes/manage', [QuizController::class, 'index'])->name('quizzes.index');
-    Route::get('/lessons/{lesson}/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
-    Route::post('/lessons/{lesson}/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
-    Route::get('/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
-    Route::put('/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
-    Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
-    
-    // Quiz question management routes - Admin/Instructor only
-    Route::get('/quizzes/{quiz}/questions', [QuizQuestionController::class, 'index'])->name('quiz.questions.index');
-    Route::get('/quizzes/{quiz}/questions/create', [QuizQuestionController::class, 'create'])->name('quiz.questions.create');
-    Route::post('/quizzes/{quiz}/questions', [QuizQuestionController::class, 'store'])->name('quiz.questions.store');
-    Route::get('/quizzes/{quiz}/questions/{question}/edit', [QuizQuestionController::class, 'edit'])->name('quiz.questions.edit');
-    Route::put('/quizzes/{quiz}/questions/{question}', [QuizQuestionController::class, 'update'])->name('quiz.questions.update');
-    Route::delete('/quizzes/{quiz}/questions/{question}', [QuizQuestionController::class, 'destroy'])->name('quiz.questions.destroy');
-    Route::post('/quizzes/{quiz}/questions/reorder', [QuizQuestionController::class, 'reorder'])->name('quiz.questions.reorder');
-    
-    // Show quiz - must be last to avoid conflicts
-    Route::get('/quizzes/{quiz}/{slug?}', [QuizController::class, 'show'])
-        ->whereNumber('quiz')
-        ->name('quizzes.show');
-});
-
-// Note: /quizzes listing is public (landing.quizzes), auth users can access via dashboard
-Route::middleware(['auth'])->group(function () {
-    // Quiz taking routes - All authenticated users (students)
     Route::get('/quizzes/{quiz}/start', [QuizTakingController::class, 'start'])->name('quiz.taking.start');
     Route::get('/quizzes/{quiz}/attempts/{attempt}', [QuizTakingController::class, 'show'])->name('quiz.taking.show');
     Route::post('/quizzes/{quiz}/attempts/{attempt}/save', [QuizTakingController::class, 'saveAnswer'])->name('quiz.taking.save');
@@ -132,7 +107,29 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/quizzes/{quiz}/attempts/{attempt}/progress', [QuizTakingController::class, 'progress'])->name('quiz.taking.progress');
 });
 
-
+// --- BARU TARUH INI DI BAWAHNYA (Rute Manajemen & Detail) ---
+Route::middleware(['auth'])->group(function () {
+    Route::get('/quizzes/manage', [QuizController::class, 'index'])->name('quizzes.index');
+    Route::get('/lessons/{lesson}/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+    Route::post('/lessons/{lesson}/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+    Route::get('/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
+    Route::put('/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
+    Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
+    
+    // Quiz question management
+    Route::get('/quizzes/{quiz}/questions', [QuizQuestionController::class, 'index'])->name('quiz.questions.index');
+    Route::get('/quizzes/{quiz}/questions/create', [QuizQuestionController::class, 'create'])->name('quiz.questions.create');
+    Route::post('/quizzes/{quiz}/questions', [QuizQuestionController::class, 'store'])->name('quiz.questions.store');
+    Route::get('/quizzes/{quiz}/questions/{question}/edit', [QuizQuestionController::class, 'edit'])->name('quiz.questions.edit');
+    Route::put('/quizzes/{quiz}/questions/{question}', [QuizQuestionController::class, 'update'])->name('quiz.questions.update');
+    Route::delete('/quizzes/{quiz}/questions/{question}', [QuizQuestionController::class, 'destroy'])->name('quiz.questions.destroy');
+    Route::post('/quizzes/{quiz}/questions/reorder', [QuizQuestionController::class, 'reorder'])->name('quiz.questions.reorder');
+    
+    // DETAIL KUIS (Wajib ditaruh paling bawah agar tidak bentrok)
+    Route::get('/quizzes/{quiz}/{slug?}', [QuizController::class, 'show'])
+        ->whereNumber('quiz')
+        ->name('quizzes.show');
+});
 
 // Enrollment routes - Students can enroll themselves
 Route::middleware('auth')->group(function () {

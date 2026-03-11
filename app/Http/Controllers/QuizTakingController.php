@@ -18,19 +18,25 @@ class QuizTakingController extends Controller
      */
     public function start(Quiz $quiz)
     {
-        // Check if quiz is available
-        if (!$quiz->isAvailable()) {
-            return back()->withErrors(['error' => 'This quiz is not available at this time.']);
-        }
-
         $user = Auth::user();
 
-        // Check if user can attempt
-        if (!$quiz->canUserAttempt($user->id)) {
-            return back()->withErrors(['error' => 'You have reached the maximum number of attempts for this quiz.']);
+        // 1. Cek Ketersediaan (Status & Waktu)
+        if (!$quiz->isAvailable()) {
+            return back()->with('error', 'Kuis ini tidak tersedia saat ini (Cek status atau jadwal).');
         }
 
-        // Check if there's an in-progress attempt
+        // 2. Cek Limit Attempt
+        if (!$quiz->canUserAttempt($user->id)) {
+            return back()->with('error', 'Anda telah mencapai batas maksimal percobaan untuk kuis ini.');
+        }
+
+        // 3. Cek apakah ada soalnya?
+        $questions = $quiz->getQuestionsForAttempt();
+        if ($questions->isEmpty()) {
+            return back()->with('error', 'Kuis ini belum memiliki pertanyaan.');
+        }
+
+        // 4. Cek apakah ada kuis yang sedang berjalan (In Progress)?
         $inProgressAttempt = QuizAttempt::where('quiz_id', $quiz->id)
             ->where('user_id', $user->id)
             ->whereNull('completed_at')
@@ -40,14 +46,7 @@ class QuizTakingController extends Controller
             return redirect()->route('quiz.taking.show', ['quiz' => $quiz, 'attempt' => $inProgressAttempt]);
         }
 
-        // Get questions for this attempt
-        $questions = $quiz->getQuestionsForAttempt();
-
-        if ($questions->isEmpty()) {
-            return back()->withErrors(['error' => 'This quiz has no questions.']);
-        }
-
-        // Create new attempt
+        // 5. Buat Attempt Baru
         $attemptNumber = $quiz->getUserAttemptNumber($user->id);
         
         DB::beginTransaction();
@@ -59,17 +58,15 @@ class QuizTakingController extends Controller
                 'total_questions' => $questions->count(),
                 'total_points' => $questions->sum('points'),
                 'started_at' => now(),
-                'completed_at' => null,
                 'submitted' => false,
             ]);
 
             DB::commit();
+            return redirect()->route('quiz.taking.show', ['quiz' => $quiz, 'attempt' => $attempt]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withErrors(['error' => 'Failed to start quiz.']);
+            return back()->with('error', 'Gagal memulai kuis: ' . $e->getMessage());
         }
-
-        return redirect()->route('quiz.taking.show', ['quiz' => $quiz, 'attempt' => $attempt]);
     }
 
     /**

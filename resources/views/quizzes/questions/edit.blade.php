@@ -103,6 +103,7 @@
                         @foreach($question->answers as $index => $answer)
                         <div class="answer-item card mb-3" data-index="{{ $index }}">
                             <div class="card-body">
+                                <input type="hidden" name="answers[{{ $index }}][id]" value="{{ $answer->id }}">
                                 <div class="form-row align-items-center">
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" 

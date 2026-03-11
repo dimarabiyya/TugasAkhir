@@ -767,10 +767,7 @@
             <!-- Footer -->
             <footer class="footer">
                 <div class="row">
-                    <div class="col-md-6">
-                        <span class="text-muted text-center ">Develop by <a href="https://www.linkedin.com/in/dimar-abiyya/" target="_blank">Dimar Abiyya</a> 2026</span>
-                    </div>
-                    <div class="col-md-6 d-none d-md-block text-end justify-content-end">
+                    <div class="col-md-12 d-none d-md-block text-end justify-content-end">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="" target="_blank">LMS SMKN 40 Jakarta</a> 2026</span>
                     </div>
                 </div>

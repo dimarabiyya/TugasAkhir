@@ -74,7 +74,6 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                @forelse($quizzes as $quiz)
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
@@ -90,6 +89,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($quizzes as $quiz)
                             <tr>
                                 <td data-priority="1">
                                     <div>
@@ -181,27 +181,30 @@
                                     </div>
                                 </td>
                             </tr>
+                            @empty
+                            <tr>
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="icon-note" style="font-size: 48px; color: #ccc;"></i>
+                                    <h5 class="mt-2">Kuis tidak ditemukan!</h5>
+                                    <p class="text-muted mb-0">
+                                        @if(request('search') || request('status') || request('lesson_id'))
+                                            Coba cek kata kunci!
+                                        @else
+                                            Belum ada kuis dibuat! <br>
+                                            <div class="mt-4">
+                                                <a href="{{ route('lessons.index') }}" class="btn btn-primary">
+                                                    <i class="mdi mdi-plus"></i>Tambah Kuis
+                                                </a>   
+                                            </div>
+                                        @endif
+                                    <p>
+                                    </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
-                @empty
-                    <div class="text-center py-2">
-                        <i class="icon-note" style="font-size: 48px; color: #ccc;"></i>
-                            <h5 class="mt-2">Kuis tidak ditemukan!</h5>
-                            <p class="text-muted mb-0">
-                                @if(request('search') || request('status') || request('lesson_id'))
-                                    Coba cek kata kunci!
-                                @else
-                                    Belum ada kuis dibuat! <br>
-                                    <div class="mt-4">
-                                        <a href="{{ route('lessons.index') }}" class="btn btn-primary">
-                                            <i class="mdi mdi-plus"></i>Tambah Kuis
-                                        </a>   
-                                    </div>
-                                @endif
-                            <p>
-                    </div>
-                @endforelse
+               
             </div>
         </div>
     </div>

@@ -116,47 +116,58 @@ class QuizQuestionController extends Controller
     public function update(Request $request, Quiz $quiz, QuizQuestion $question)
     {
         $this->checkManagePermission();
+
+        // 1. Validasi: Sesuaikan dengan 'name' di Blade (question_text)
+        // Jangan gunakan 'required|boolean' untuk answers.*.is_correct
         $validated = $request->validate([
-            'question' => 'required|string',
-            'type' => 'required|in:multiple_choice,true_false,fill_blank',
-            'points' => 'required|integer|min:1',
-            'explanation' => 'nullable|string',
-            'difficulty' => 'nullable|in:easy,medium,hard',
-            'order' => 'nullable|integer',
-            'answers' => 'required|array|min:1',
+            'question_text' => 'required|string',
+            'type'          => 'required|in:multiple_choice,true_false,fill_blank',
+            'points'        => 'required|integer|min:1',
+            'explanation'   => 'nullable|string',
+            'difficulty'    => 'nullable|in:easy,medium,hard',
+            'order'         => 'nullable|integer',
+            'answers'       => 'required|array|min:1',
             'answers.*.text' => 'required|string',
-            'answers.*.is_correct' => 'required|boolean',
         ]);
 
         DB::beginTransaction();
         try {
-            // Update the question
+            // 2. Update data pertanyaan
+            // 'question' adalah nama kolom di database kamu
             $question->update([
-                'question' => $validated['question'],
-                'type' => $validated['type'],
-                'points' => $validated['points'],
-                'explanation' => $validated['explanation'] ?? null,
-                'difficulty' => $validated['difficulty'] ?? $question->difficulty,
-                'order' => $validated['order'] ?? $question->order,
+                'question'    => $request->question_text, 
+                'type'        => $request->type,
+                'points'      => $request->points,
+                'explanation' => $request->explanation,
+                'difficulty'  => $request->difficulty,
+                'order'       => $request->order,
             ]);
 
-            // Delete old answers and create new ones
+            // 3. Reset Jawaban (Hapus lama, buat baru)
             $question->answers()->delete();
             
-            foreach ($validated['answers'] as $answerData) {
+            foreach ($request->answers as $answerData) {
+                // Lewati jika teks jawaban kosong
+                if (empty($answerData['text'])) continue;
+
                 $question->answers()->create([
                     'answer_text' => $answerData['text'],
-                    'is_correct' => $answerData['is_correct'],
+                    // LOGIKA PENTING: Jika checkbox dicentang, isset() akan true.
+                    'is_correct'  => isset($answerData['is_correct']),
                 ]);
             }
 
             DB::commit();
 
             return redirect()->route('quiz.questions.index', $quiz)
-                ->with('success', 'Question updated successfully.');
+                ->with('success', 'Pertanyaan berhasil diperbarui.');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withErrors(['error' => 'Failed to update question.'])->withInput();
+            // Kembalikan pesan error asli agar kamu tahu jika ada masalah database
+            return back()
+                ->withErrors(['error' => 'Gagal memperbarui: ' . $e->getMessage()])
+                ->withInput();
         }
     }
 

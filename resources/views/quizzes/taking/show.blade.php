@@ -560,33 +560,24 @@ window.addEventListener('beforeunload', function(e) {
 });
 
 // Initialize
+showQuestion(1); // Pastikan mulai dari pertanyaan 1
 updateNavButtons();
 updateProgress();
 
-// Mark answered questions in nav
-document.querySelectorAll('.answer-input:checked').forEach(input => {
-    const questionId = input.dataset.questionId;
-    const navBtn = document.querySelector(`.question-nav-btn[data-question-id="${questionId}"]`);
-    if (navBtn) {
-        navBtn.classList.add('answered');
-    }
-});
-
-// Keep session alive - refresh every 1 minute
-setInterval(function() {
-    fetch('{{ route('quiz.taking.progress', ['quiz' => $quiz, 'attempt' => $attempt]) }}')
-        .then(response => response.json())
-            .catch(error => console.log('Permintaan tetap hidup sesi'));
-    // allow unload to avoid beforeunload prompt during intentional submit
-    allowBeforeUnload = true;
+// Fungsi untuk Mengirim Kuis via AJAX (Perbaikan Utama)
+function submitQuizViaAjax() {
     const form = document.getElementById('quiz-form');
     const answers = {};
+    
+    // Kumpulkan jawaban
     document.querySelectorAll('.answer-input').forEach(input => {
         const qid = input.dataset.questionId;
         if (!qid) return;
         if (!answers[qid]) answers[qid] = [];
         if (input.checked) answers[qid].push(input.value);
     });
+
+    allowBeforeUnload = true;
 
     fetch(form.action, {
         method: 'POST',
@@ -596,29 +587,49 @@ setInterval(function() {
             'X-Requested-With': 'XMLHttpRequest',
             'Accept': 'application/json'
         },
-        body: JSON.stringify({ answers: answers, submitted: 1 })
+        body: JSON.stringify({ 
+            answers: answers, 
+            submitted: 1 
+        })
     })
     .then(async response => {
-        if (response.status === 419) {
-            alert('Sesi telah berakhir. Silakan muat ulang halaman dan kirim lagi.');
-            return;
-        }
         const data = await response.json().catch(() => null);
         if (data && data.success && data.redirect) {
             window.location.href = data.redirect;
-        } else if (response.redirected) {
-            window.location.href = response.url;
         } else {
-            // fallback to normal submit
+            // Jika AJAX gagal, coba submit manual sebagai cadangan
+            form.method = 'POST';
             form.submit();
         }
     })
     .catch(error => {
-        console.error('Pengiriman otomatis gagal:', error);
-        // fallback to normal submit
-        form.submit();
+        console.error('Pengiriman gagal:', error);
+        form.submit(); // Terakhir, paksa submit form biasa
     });
 }
+
+// Perbaikan Event Listener Next Button
+document.getElementById('next-btn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (currentQuestion < totalQuestions) {
+        showQuestion(currentQuestion + 1);
+    }
+});
+
+// Perbaikan Event Listener Prev Button
+document.getElementById('prev-btn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (currentQuestion > 1) {
+        showQuestion(currentQuestion - 1);
+    }
+});
+
+// Keep session alive - refresh every 2 minutes (Cukup progress saja)
+setInterval(function() {
+    fetch('{{ route('quiz.taking.progress', ['quiz' => $quiz, 'attempt' => $attempt]) }}')
+        .then(response => response.json())
+        .catch(error => console.log('Session keep-alive failed'));
+}, 120000);
 </script>
 @endpush
 @endsection
