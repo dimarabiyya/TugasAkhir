@@ -20,6 +20,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'nisn',
         'name',
         'email',
         'password',
@@ -205,7 +206,11 @@ class User extends Authenticatable
     }
 
     public function counselingSessions() {
-    // Jika user adalah student
         return $this->hasMany(CounselingSession::class, 'student_id');
+    }
+
+    public function examAttempts()
+    {
+        return $this->hasMany(ExamAttempt::class);
     }
 }

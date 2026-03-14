@@ -1,153 +1,101 @@
 @extends('layouts.skydash')
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 grid-margin">
-        <div class="row">
-            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Dashboard Admin</h3>
-                <h6 class="font-weight-normal mb-0">Halo {{ auth()->user()->name }}! Pantau performa dan analitik platform Anda.</h6>
+
+{{-- ===== PAGE HEADER ===== --}}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); border-radius: 12px;">
+            <div class="card-body py-4 px-4">
+                <div class="row align-items-center">
+                    <div class="col-12 col-xl-8 mb-2 mb-xl-0">
+                        <div class="d-flex align-items-center" style="gap: 14px;">
+                            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="mdi mdi-view-dashboard-outline text-white" style="font-size: 26px;"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-weight-bold text-white mb-0">Dashboard Admin</h4>
+                                <p class="text-white-50 mb-0" style="font-size: 13px;">
+                                    Halo, <strong class="text-white">{{ auth()->user()->name }}</strong>! Pantau performa platform Anda.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-4 d-flex justify-content-xl-end">
+                        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 16px; text-align: right;">
+                            <p class="text-white-50 mb-0" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Hari ini</p>
+                            <p class="text-white mb-0 font-weight-bold" style="font-size: 13px;">{{ now()->translatedFormat('l, d F Y') }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Stats Cards - Row 1 -->
-<div class="row">
-    <!-- Total Students Card -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card tale-bg" >
-            <div class="card-people mt-auto" >
-                <img src="{{ asset('skydash/images/dashboard/people.svg') }}" alt="people">
-                <div class="weather-info">
-                    <div class="d-flex">
+{{-- ===== STAT CARDS ROW 1 ===== --}}
+<div class="row mb-4">
+    @php
+        $stats1 = [
+            ['label'=>'Total Siswa',       'value'=> number_format($totalStudents ?? 0),     'sub'=>'Aktif pembelajaran',                       'icon'=>'mdi-account-school-outline',       'bg'=>'#e8f0fe','ic'=>'#4e73df'],
+            ['label'=>'Mata Pelajaran',     'value'=> number_format($totalCourses ?? 0),      'sub'=> number_format($publishedCourses ?? 0).' dipublikasikan', 'icon'=>'mdi-library-outline',  'bg'=>'#e3f9e5','ic'=>'#1cc88a'],
+            ['label'=>'Total Modul',        'value'=> number_format($totalModules ?? 0),      'sub'=>'Di seluruh mata pelajaran',                 'icon'=>'mdi-folder-outline',               'bg'=>'#e0f7fa','ic'=>'#17a2b8'],
+            ['label'=>'Total Kuis',         'value'=> number_format($totalQuizzes ?? 0),      'sub'=>'Tersedia',                                  'icon'=>'mdi-file-question-outline',        'bg'=>'#fde8e8','ic'=>'#e74a3b'],
+            ['label'=>'Total Tugas',        'value'=> number_format($totalTasks ?? 0),        'sub'=> number_format($pendingTaskSubmissions ?? 0).' menunggu', 'icon'=>'mdi-clipboard-check-outline', 'bg'=>'#fff3e8','ic'=>'#f6c23e'],
+            ['label'=>'Total Guru',         'value'=> number_format($totalInstructors ?? 0),  'sub'=>'Aktif mengajar',                            'icon'=>'mdi-human-male-board',             'bg'=>'#e8f0fe','ic'=>'#4e73df'],
+            ['label'=>'Total Kelas',        'value'=> number_format($totalClassrooms ?? 0),   'sub'=>'Terdaftar di platform',                     'icon'=>'mdi-google-classroom',             'bg'=>'#e3f9e5','ic'=>'#1cc88a'],
+            ['label'=>'Pengumpulan Tugas',  'value'=> number_format($totalTaskSubmissions ?? 0), 'sub'=>'Di seluruh mata pelajaran',              'icon'=>'mdi-send-check-outline',           'bg'=>'#e0f7fa','ic'=>'#17a2b8'],
+        ];
+    @endphp
+
+    @foreach($stats1 as $s)
+    <div class="col-6 col-md-3 mb-4">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div style="flex: 1;">
+                        <p class="text-muted mb-1" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">{{ $s['label'] }}</p>
+                        <h3 class="font-weight-bold text-dark mb-0" style="font-size: 24px;">{{ $s['value'] }}</h3>
+                        <p class="text-muted mb-0" style="font-size: 11px; margin-top: 2px;">{{ $s['sub'] }}</p>
+                    </div>
+                    <div style="background: {{ $s['bg'] }}; border-radius: 10px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="mdi {{ $s['icon'] }}" style="font-size: 22px; color: {{ $s['ic'] }};"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+</div>
+
+{{-- ===== ABSENSI HARI INI ===== --}}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-body px-4 py-3">
+                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 10px;">
+                    <div class="d-flex align-items-center" style="gap: 10px;">
+                        <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="mdi mdi-clipboard-account-outline" style="font-size: 18px; color: #4e73df;"></i>
+                        </div>
                         <div>
-                            <h2 class="mb-0 font-weight-normal"><i class="mdi mdi-school me-2"></i>{{ $totalStudents ?? 0 }}</h2>
-                        </div>
-                        <div class="ms-2">
-                            <h4 class="location font-weight-normal">Total Siswa</h4>
-                            <h6 class="font-weight-normal">Aktif pembelajaran</h6>
+                            <h5 class="mb-0 font-weight-bold text-dark">Absensi Platform Hari Ini</h5>
+                            <small class="text-muted">{{ now()->translatedFormat('l, d F Y') }}</small>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 grid-margin transparent">
-        <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
-                <div class="card card-dark-blue interactive-card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-2">Total Mata Pelajaran</p>
-                                <p class="fs-30 mb-2">{{ number_format($totalCourses ?? 0) }}</p>
-                                <p class="text-muted mb-0">{{ number_format($publishedCourses ?? 0) }} dipublikasikan</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-school"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 grid-margin stretch-card">
-                <div class="card card-light-blue interactive-card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-2">Total Modul</p>
-                                <p class="fs-30 mb-2">{{ number_format($totalModules ?? 0) }}</p>
-                                <p class="text-muted mb-0">Di seluruh Mata Pelajaran</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-file-document"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 grid-margin stretch-card">
-                <div class="card card-light-danger interactive-card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-2">Total Kuis</p>
-                                <p class="fs-30 mb-2">{{ number_format($totalQuizzes ?? 0) }}</p>
-                                <p class="text-muted mb-0">Tersedia</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-clipboard-text"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 grid-margin stretch-card">
-                <div class="card card-tale interactive-card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-2">Total Tugas</p>
-                                <p class="fs-30 mb-2">{{ number_format($totalTasks ?? 0) }}</p>
-                                <p class="text-muted mb-0">{{ number_format($pendingTaskSubmissions ?? 0) }} menunggu</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-file-check"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-    
-{{-- Stats tambahan: Guru, Kelas, Pengumpulan Tugas --}}
-<div class="row">
-    <div class="col-md-4 grid-margin stretch-card">
-        <div class="card card-dark-blue interactive-card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-2">Total Guru</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalInstructors ?? 0) }}</p>
-                        <p class="text-muted mb-0">Aktif mengajar</p>
-                    </div>
-                    <div class="card-icon-circle">
-                        <i class="mdi mdi-account-tie"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 grid-margin stretch-card">
-        <div class="card card-light-blue interactive-card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-2">Total Kelas</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalClassrooms ?? 0) }}</p>
-                        <p class="text-muted mb-0">Terdaftar di platform</p>
-                    </div>
-                    <div class="card-icon-circle">
-                        <i class="mdi mdi-domain"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 grid-margin stretch-card">
-        <div class="card card-tale interactive-card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="mb-2">Total Pengumpulan Tugas</p>
-                        <p class="fs-30 mb-2">{{ number_format($totalTaskSubmissions ?? 0) }}</p>
-                        <p class="text-muted mb-0">Di seluruh mata pelajaran</p>
-                    </div>
-                    <div class="card-icon-circle">
-                        <i class="mdi mdi-send-check"></i>
+                    <div class="d-flex flex-wrap" style="gap: 8px;">
+                        <span style="background: #e3f9e5; color: #1cc88a; border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 700;">
+                            <i class="mdi mdi-check-circle mr-1"></i> Hadir: {{ $todayPresent ?? 0 }}
+                        </span>
+                        <span style="background: #fde8e8; color: #e74a3b; border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 700;">
+                            <i class="mdi mdi-close-circle mr-1"></i> Absen: {{ $todayAbsent ?? 0 }}
+                        </span>
+                        <span style="background: #fff3e8; color: #f6c23e; border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 700;">
+                            <i class="mdi mdi-emoticon-sick-outline mr-1"></i> Sakit: {{ $todaySick ?? 0 }}
+                        </span>
+                        <span style="background: #f4f6fb; color: #858796; border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 700;">
+                            Total: {{ $todayTotal ?? 0 }} catatan
+                        </span>
                     </div>
                 </div>
             </div>
@@ -155,116 +103,102 @@
     </div>
 </div>
 
-{{-- Absensi hari ini --}}
-<div class="row">
-    <div class="col-md-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h4 class="card-title mb-0">
-                        <i class="mdi mdi-clipboard-account text-primary mr-2"></i>
-                        Absensi Platform Hari Ini
-                    </h4>
-                    <span class="text-muted" style="font-size:13px">
-                        {{ now()->translatedFormat('l, d F Y') }}
-                    </span>
-                </div>
-                <div class="d-flex flex-wrap gap-2">
-                    <span class="badge badge-pill badge-success px-3 py-2">
-                        <i class="mdi mdi-check-circle mr-1"></i> Hadir: {{ $todayPresent ?? 0 }}
-                    </span>
-                    <span class="badge badge-pill badge-danger px-3 py-2">
-                        <i class="mdi mdi-close-circle mr-1"></i> Absen: {{ $todayAbsent ?? 0 }}
-                    </span>
-                    <span class="badge badge-pill badge-warning px-3 py-2">
-                        <i class="mdi mdi-emoticon-sick mr-1"></i> Sakit: {{ $todaySick ?? 0 }}
-                    </span>
-                    <span class="badge badge-pill badge-secondary px-3 py-2 ml-auto">
-                        Total: {{ $todayTotal ?? 0 }} catatan
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Charts Section - Row 1 -->
-<div class="row">
-    <!-- Enrollment Trends Chart -->
-    <div class="col-md-8 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title mb-0">Tren Perkembangan Siswa</h4>
+{{-- ===== CHARTS ROW 1 ===== --}}
+<div class="row mb-4">
+    {{-- Enrollment Trends --}}
+    <div class="col-md-8 mb-4 mb-md-0">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center">
+                        <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                            <i class="mdi mdi-trending-up" style="font-size: 18px; color: #4e73df;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 font-weight-bold text-dark">Tren Perkembangan Siswa</h5>
+                            <small class="text-muted">Pola pembelajaran dari waktu ke waktu</small>
+                        </div>
+                    </div>
                     <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="enrollmentChartDropdown" data-bs-toggle="dropdown">
-                            <i class="mdi mdi-calendar"></i> 12 Bulan Terakhir
+                        <button class="btn btn-sm" data-bs-toggle="dropdown"
+                                style="background: #f4f6fb; color: #6b7280; border-radius: 6px; font-size: 12px; border: 1px solid #e3e6f0;">
+                            <i class="mdi mdi-calendar-outline mr-1"></i> 12 Bulan
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu dropdown-menu-right" style="border-radius: 10px; border: none; box-shadow: 0 8px 24px rgba(0,0,0,0.1); font-size: 13px;">
                             <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('6months')">6 Bulan Terakhir</a>
                             <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('12months')">12 Bulan Terakhir</a>
-                            <a class="dropdown-item" href="#" onclick="updateEnrollmentChart('year')">Tahun Ini</a>
                         </div>
                     </div>
                 </div>
-                <p class="font-weight-500 mb-3">Pola Perkembangan Siswa dari waktu ke waktu</p>
-                <div class="chart-container">
+                <div style="position: relative; height: 280px;">
                     <canvas id="enrollmentTrendsChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Course Level Distribution -->
-    <div class="col-md-4 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Distribusi Mata Pelajaran</h4>
-                <p class="font-weight-500 mb-3">Mata Pelajaran berdasarkan tingkat kesulitan</p>
-                <div class="chart-container-small">
+
+    {{-- Course Level Distribution --}}
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e3f9e5; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-chart-pie-outline" style="font-size: 18px; color: #1cc88a;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Distribusi Mata Pelajaran</h5>
+                        <small class="text-muted">Berdasarkan tingkat kesulitan</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 180px;">
                     <canvas id="courseLevelChart"></canvas>
                 </div>
                 <div class="mt-3">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Pemula</span>
-                        <span class="font-weight-bold">{{ $coursesByLevel['beginner'] ?? $coursesByLevel['Beginner'] ?? 0 }}</span>
+                    @foreach(['Pemula' => $coursesByLevel['beginner'] ?? $coursesByLevel['Beginner'] ?? 0, 'Menengah' => $coursesByLevel['intermediate'] ?? $coursesByLevel['Intermediate'] ?? 0, 'Lanjutan' => $coursesByLevel['advanced'] ?? $coursesByLevel['Advanced'] ?? 0] as $lbl => $val)
+                    <div class="d-flex justify-content-between align-items-center py-1" style="border-bottom: 1px solid #f0f0f3;">
+                        <span class="text-muted" style="font-size: 12.5px;">{{ $lbl }}</span>
+                        <span class="font-weight-bold text-dark" style="font-size: 13px;">{{ $val }}</span>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Menengah</span>
-                        <span class="font-weight-bold">{{ $coursesByLevel['intermediate'] ?? $coursesByLevel['Intermediate'] ?? 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Lanjutan</span>
-                        <span class="font-weight-bold">{{ $coursesByLevel['advanced'] ?? $coursesByLevel['Advanced'] ?? 0 }}</span>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Charts Section - Row 2 -->
-<div class="row">
-    <!-- Student Activity Heatmap -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Kehadiran siswa</h4>
-                <p class="font-weight-500 mb-3">Kehadiran siswa mingguan</p>
-                <div class="chart-container-small">
+{{-- ===== CHARTS ROW 2 ===== --}}
+<div class="row mb-4">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e0f7fa; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-account-check-outline" style="font-size: 18px; color: #17a2b8;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Kehadiran Siswa Mingguan</h5>
+                        <small class="text-muted">Pola kehadiran 7 hari terakhir</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 220px;">
                     <canvas id="activityHeatmapChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Course Completion Rates -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Penyelesaian Mata Pelajaran</h4>
-                <p class="font-weight-500 mb-3">Tingkat penyelesaian berdasarkan Mata Pelajaran</p>
-                <div class="chart-container-small">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e3f9e5; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-check-all" style="font-size: 18px; color: #1cc88a;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Penyelesaian Mata Pelajaran</h5>
+                        <small class="text-muted">Materi selesai vs belum selesai</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 220px;">
                     <canvas id="completionRatesChart"></canvas>
                 </div>
             </div>
@@ -272,25 +206,39 @@
     </div>
 </div>
 
-{{-- Charts Row 3: Task + Quiz submission --}}
-<div class="row">
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-1">Aktivitas Tugas & Kuis per Bulan</h4>
-                <p class="font-weight-500 mb-3">Pengumpulan tugas vs percobaan kuis</p>
-                <div class="chart-container-small">
+{{-- ===== CHARTS ROW 3 ===== --}}
+<div class="row mb-4">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-chart-bar" style="font-size: 18px; color: #4e73df;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Aktivitas Tugas & Kuis</h5>
+                        <small class="text-muted">Pengumpulan tugas vs percobaan kuis per bulan</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 220px;">
                     <canvas id="adminTaskQuizChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-1">Mata Pelajaran Terpopuler</h4>
-                <p class="font-weight-500 mb-3">Berdasarkan jumlah siswa terbanyak</p>
-                <div class="chart-container-small">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #fff3e8; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-fire" style="font-size: 18px; color: #f6c23e;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Mata Pelajaran Terpopuler</h5>
+                        <small class="text-muted">Berdasarkan jumlah siswa terdaftar</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 220px;">
                     <canvas id="adminTopCoursesChart"></canvas>
                 </div>
             </div>
@@ -298,40 +246,51 @@
     </div>
 </div>
 
-<!-- Recent Activity Table -->
+{{-- ===== RECENT ACTIVITY TABLE ===== --}}
 <div class="row">
-    <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Aktivitas Platform Terbaru</h4>
-                <p class="font-weight-500 mb-0">Perkembangan siswa terbaru dan pembaruan Mata Pelajaran</p>
-                <div class="table-responsive mt-3">
-                    <table class="table table-striped">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-body p-0">
+                <div class="d-flex align-items-center px-4 py-3" style="border-bottom: 1px solid #f0f0f3;">
+                    <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-history" style="font-size: 18px; color: #4e73df;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Aktivitas Platform Terbaru</h5>
+                        <small class="text-muted">Perkembangan siswa dan pembaruan mata pelajaran</small>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table mb-0">
                         <thead>
-                            <tr>
-                                <th>Aktivitas</th>
-                                <th>Pengguna</th>
-                                <th>Mata Pelajaran</th>
-                                <th>Jenis</th>
-                                <th>Tanggal</th>
+                            <tr style="background: #f8f9fc;">
+                                <th style="padding: 12px 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Aktivitas</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Pengguna</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Mata Pelajaran</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Jenis</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Tanggal</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($recentActivity ?? [] as $activity)
-                            <tr>
-                                <td>{{ $activity['description'] ?? 'Course enrollment' }}</td>
-                                <td>{{ $activity['user_name'] ?? 'Student' }}</td>
-                                <td>{{ $activity['course_title'] ?? 'Course Title' }}</td>
-                                <td>
-                                    <label class="badge {{ $activity['type'] === 'enrollment' ? 'badge-success' : 'badge-info' }}">
-                                        {{ ucfirst($activity['type'] ?? 'enrollment') }}
-                                    </label>
+                            <tr style="transition: background 0.15s;" onmouseover="this.style.background='#f8f9fc';" onmouseout="this.style.background='white';">
+                                <td style="padding: 13px 20px; border-bottom: 1px solid #f0f0f3; font-size: 13px; color: #3d3d3d;">{{ $activity['description'] ?? '—' }}</td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3; font-size: 13px; color: #3d3d3d; font-weight: 500;">{{ $activity['user_name'] ?? '—' }}</td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3; font-size: 13px; color: #3d3d3d;">{{ $activity['course_title'] ?? '—' }}</td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3;">
+                                    @php $t = $activity['type'] ?? 'enrollment'; @endphp
+                                    <span style="background: {{ $t === 'enrollment' ? '#e3f9e5' : '#e8f0fe' }}; color: {{ $t === 'enrollment' ? '#1cc88a' : '#4e73df' }}; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600;">
+                                        {{ ucfirst($t) }}
+                                    </span>
                                 </td>
-                                <td>{{ $activity['created_at'] ?? now()->format('M d, Y') }}</td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3; font-size: 12.5px; color: #858796;">{{ $activity['created_at'] ?? now()->format('d M Y') }}</td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center">Tidak ada aktivitas terbaru</td>
+                                <td colspan="5" style="padding: 40px; text-align: center;">
+                                    <i class="mdi mdi-history" style="font-size: 36px; color: #d1d3e2;"></i>
+                                    <p class="text-muted mt-2 mb-0" style="font-size: 13px;">Tidak ada aktivitas terbaru</p>
+                                </td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -342,442 +301,126 @@
     </div>
 </div>
 
-@push('styles')
-<style>
-    /* Interactive Cards Hover Effect */
-    .interactive-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .interactive-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: 1;
-    }
-
-    .interactive-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .interactive-card:hover::before {
-        opacity: 1;
-    }
-
-    /* Icon Circle Styling */
-    .card-icon-circle {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.25);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        flex-shrink: 0;
-    }
-
-    .card-icon-circle i {
-        font-size: 28px;
-        color: rgba(255, 255, 255, 0.95);
-        transition: all 0.3s ease;
-    }
-
-    .interactive-card:hover .card-icon-circle {
-        background: rgba(255, 255, 255, 0.35);
-        transform: scale(1.1) rotate(5deg);
-    }
-
-    .interactive-card:hover .card-icon-circle i {
-        transform: scale(1.1);
-    }
-
-    /* Chart container styling */
-    .card canvas {
-        border-radius: 8px;
-        max-height: 400px;
-    }
-    
-    /* Responsive chart containers */
-    .chart-container {
-        position: relative;
-        height: 300px;
-        width: 100%;
-    }
-    
-    .chart-container-small {
-        position: relative;
-        height: 250px;
-        width: 100%;
-    }
-    
-    /* Mobile chart adjustments */
-    @media (max-width: 768px) {
-        .chart-container {
-            height: 250px;
-        }
-        
-        .chart-container-small {
-            height: 200px;
-        }
-        
-        .card canvas {
-            max-height: 250px;
-        }
-        
-        .card-icon-circle {
-            width: 50px;
-            height: 50px;
-        }
-
-        .card-icon-circle i {
-            font-size: 24px;
-        }
-
-        .interactive-card:hover {
-            transform: translateY(-5px);
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .chart-container {
-            height: 200px;
-        }
-        
-        .chart-container-small {
-            height: 180px;
-        }
-        
-        .card canvas {
-            max-height: 200px;
-        }
-    }
-</style>
-@endpush
-
 @push('scripts')
 <script>
-    // Chart.js configuration
-    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
     Chart.defaults.color = '#6c757d';
-    
-    let enrollmentTrendsChart, courseLevelChart, activityHeatmapChart, completionRatesChart;
-    
-    // Initialize all charts
+
+    const palette = ['#4e73df','#1cc88a','#17a2b8','#f6c23e','#e74a3b','#6610f2','#fd7e14','#20c9a6'];
+
+    const tooltipDefaults = {
+        backgroundColor: 'rgba(0,0,0,0.82)',
+        titleColor: '#fff', bodyColor: '#fff',
+        cornerRadius: 8, borderWidth: 0
+    };
+
     document.addEventListener('DOMContentLoaded', function() {
-        initEnrollmentTrendsChart();
-        initCourseLevelChart();
-        initActivityHeatmapChart();
-        initCompletionRatesChart();
-        initTaskQuizChart();     
-        initTopCoursesChart();    
-    });
-    
-    // Enrollment Trends Chart - with real data from controller
-    function initEnrollmentTrendsChart() {
-        const ctx = document.getElementById('enrollmentTrendsChart').getContext('2d');
-        
+
+        // 1. Enrollment Trends
         const monthlyData = @json($monthlyEnrollments ?? []);
-        
-        enrollmentTrendsChart = new Chart(ctx, {
+        window.enrollmentChart = new Chart(document.getElementById('enrollmentTrendsChart'), {
             type: 'line',
             data: {
                 labels: monthlyData.map(d => d.month),
                 datasets: [
-                    {
-                        label: 'Pembelajaran Selesai',
-                        data: monthlyData.map(d => d.completed),
-                        borderColor: '#00d25b',
-                        backgroundColor: 'rgba(0, 210, 91, 0.1)',
-                        fill: true, tension: 0.4,
-                        pointBackgroundColor: '#00d25b', pointBorderColor: '#fff',
-                        pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8
-                    },
-                    {
-                        label: 'Sedang Belajar',
-                        data: monthlyData.map(d => d.active),
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        fill: true, tension: 0.4,
-                        pointBackgroundColor: '#667eea', pointBorderColor: '#fff',
-                        pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8
-                    }
+                    { label: 'Selesai', data: monthlyData.map(d => d.completed), borderColor: '#1cc88a', backgroundColor: 'rgba(28,200,138,0.08)', fill: true, tension: 0.4, pointBackgroundColor: '#1cc88a', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5 },
+                    { label: 'Berlangsung', data: monthlyData.map(d => d.active), borderColor: '#4e73df', backgroundColor: 'rgba(78,115,223,0.08)', fill: true, tension: 0.4, pointBackgroundColor: '#4e73df', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5 }
                 ]
             },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                interaction: { intersect: false, mode: 'index' },
-                plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, padding: 20 } },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#fff',
-                        bodyColor: '#fff', borderColor: '#667eea',
-                        borderWidth: 1, cornerRadius: 8
-                    }
-                },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#6c757d' } },
-                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#6c757d', stepSize: 1 } }
-                },
-                elements: { line: { borderWidth: 3 } }
+            options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } }, tooltip: tooltipDefaults },
+                scales: { x: { grid: { display: false }, ticks: { color: '#6c757d' } }, y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#6c757d', stepSize: 1 } } }
             }
         });
-    }
-    
-    // Course Level Distribution Chart - with real data from controller
-    function initCourseLevelChart() {
-        const ctx = document.getElementById('courseLevelChart').getContext('2d');
-        
-        // Course level data from controller
-        const beginnerCount = {{ $coursesByLevel['beginner'] ?? $coursesByLevel['Beginner'] ?? 0 }};
-        const intermediateCount = {{ $coursesByLevel['intermediate'] ?? $coursesByLevel['Intermediate'] ?? 0 }};
-        const advancedCount = {{ $coursesByLevel['advanced'] ?? $coursesByLevel['Advanced'] ?? 0 }};
-        
-        courseLevelChart = new Chart(ctx, {
+
+        // 2. Course Level Doughnut
+        const beg = {{ $coursesByLevel['beginner'] ?? $coursesByLevel['Beginner'] ?? 0 }};
+        const mid = {{ $coursesByLevel['intermediate'] ?? $coursesByLevel['Intermediate'] ?? 0 }};
+        const adv = {{ $coursesByLevel['advanced'] ?? $coursesByLevel['Advanced'] ?? 0 }};
+        new Chart(document.getElementById('courseLevelChart'), {
             type: 'doughnut',
-            data: {
-                labels: ['Pemula', 'Menengah', 'Lanjutan'],
-                datasets: [{
-                    data: [beginnerCount, intermediateCount, advancedCount],
-                    backgroundColor: [
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(118, 75, 162, 0.8)',
-                        'rgba(255, 99, 132, 0.8)'
-                    ],
-                    borderColor: [
-                        '#667eea',
-                        '#764ba2',
-                        '#ff6384'
-                    ],
-                    borderWidth: 2,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8
-                    }
-                },
-                cutout: '60%'
-            }
+            data: { labels: ['Pemula','Menengah','Lanjutan'], datasets: [{ data: [beg,mid,adv], backgroundColor: ['rgba(78,115,223,0.85)','rgba(28,200,138,0.85)','rgba(231,74,59,0.85)'], borderColor: ['#4e73df','#1cc88a','#e74a3b'], borderWidth: 2, hoverOffset: 8 }] },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { display: false }, tooltip: tooltipDefaults } }
         });
-    }
-    
-    function initActivityHeatmapChart() {
-        const ctx = document.getElementById('activityHeatmapChart').getContext('2d');
-        
-        const weeklyAttendance = @json($weeklyAttendanceChart ?? []);
-        
-        activityHeatmapChart = new Chart(ctx, {
+
+        // 3. Attendance weekly
+        const weeklyAtt = @json($weeklyAttendanceChart ?? []);
+        new Chart(document.getElementById('activityHeatmapChart'), {
             type: 'line',
             data: {
-                labels: weeklyAttendance.map(d => d.day),
+                labels: weeklyAtt.map(d => d.day),
                 datasets: [
-                    {
-                        label: 'Hadir',
-                        data: weeklyAttendance.map(d => d.present),
-                        borderColor: '#00d25b', backgroundColor: 'rgba(0,210,91,0.08)',
-                        fill: true, tension: 0.4,
-                        pointBackgroundColor: '#00d25b', pointBorderColor: '#fff',
-                        pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 7
-                    },
-                    {
-                        label: 'Absen',
-                        data: weeklyAttendance.map(d => d.absent),
-                        borderColor: '#fc424a', backgroundColor: 'rgba(252,66,74,0.08)',
-                        fill: true, tension: 0.4,
-                        pointBackgroundColor: '#fc424a', pointBorderColor: '#fff',
-                        pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 7
-                    },
-                    {
-                        label: 'Sakit',
-                        data: weeklyAttendance.map(d => d.sick),
-                        borderColor: '#ffab00', backgroundColor: 'rgba(255,171,0,0.08)',
-                        fill: true, tension: 0.4,
-                        pointBackgroundColor: '#ffab00', pointBorderColor: '#fff',
-                        pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 7
-                    }
+                    { label: 'Hadir',  data: weeklyAtt.map(d => d.present), borderColor: '#1cc88a', backgroundColor: 'rgba(28,200,138,0.07)', fill: true, tension: 0.4, pointBackgroundColor: '#1cc88a', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4 },
+                    { label: 'Absen',  data: weeklyAtt.map(d => d.absent),  borderColor: '#e74a3b', backgroundColor: 'rgba(231,74,59,0.07)',   fill: true, tension: 0.4, pointBackgroundColor: '#e74a3b', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4 },
+                    { label: 'Sakit',  data: weeklyAtt.map(d => d.sick),    borderColor: '#f6c23e', backgroundColor: 'rgba(246,194,62,0.07)',  fill: true, tension: 0.4, pointBackgroundColor: '#f6c23e', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4 }
                 ]
             },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                interaction: { intersect: false, mode: 'index' },
-                plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8,
-                        callbacks: {
-                            footer: items => 'Total: ' + items.reduce((s, i) => s + i.parsed.y, 0) + ' siswa'
-                        }
-                    }
-                },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#6c757d' } },
-                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#6c757d', stepSize: 1 } }
-                }
+            options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 12, font: { size: 11 } } }, tooltip: tooltipDefaults },
+                scales: { x: { grid: { display: false }, ticks: { color: '#6c757d', font: { size: 11 } } }, y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#6c757d', stepSize: 1 } } }
             }
         });
-    }
-        
-    // Course Completion Rates Chart - with real data from controller
-    function initCompletionRatesChart() {
-        const ctx = document.getElementById('completionRatesChart').getContext('2d');
-        
-        const lessonProgress = @json($lessonProgressChart ?? []);
-        
-        completionRatesChart = new Chart(ctx, {
+
+        // 4. Completion rates
+        const lessonProg = @json($lessonProgressChart ?? []);
+        new Chart(document.getElementById('completionRatesChart'), {
             type: 'bar',
             data: {
-                labels: lessonProgress.map(d => d.label),
+                labels: lessonProg.map(d => d.label),
                 datasets: [
-                    {
-                        label: 'Materi Selesai',
-                        data: lessonProgress.map(d => d.completed),
-                        backgroundColor: 'rgba(0, 210, 91, 0.85)',
-                        borderRadius: 4
-                    },
-                    {
-                        label: 'Belum Selesai',
-                        data: lessonProgress.map(d => d.incomplete),
-                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
-                        borderRadius: 4
-                    }
+                    { label: 'Selesai',       data: lessonProg.map(d => d.completed),  backgroundColor: 'rgba(28,200,138,0.85)', borderRadius: 4 },
+                    { label: 'Belum Selesai', data: lessonProg.map(d => d.incomplete), backgroundColor: 'rgba(78,115,223,0.2)',  borderRadius: 4 }
                 ]
             },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                interaction: { intersect: false, mode: 'index' },
-                plugins: {
-                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 16 } },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8,
-                        callbacks: {
-                            afterBody: function(items) {
-                                const i = items[0].dataIndex;
-                                const total = lessonProgress[i].completed + lessonProgress[i].incomplete;
-                                const pct = total > 0 ? Math.round((lessonProgress[i].completed / total) * 100) : 0;
-                                return 'Progress: ' + pct + '%';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: { stacked: true, grid: { display: false }, ticks: { color: '#6c757d', font: { size: 11 } } },
-                    y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#6c757d', stepSize: 1 } }
-                }
+            options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 12, font: { size: 11 } } }, tooltip: tooltipDefaults },
+                scales: { x: { stacked: true, grid: { display: false }, ticks: { color: '#6c757d', font: { size: 10 } } }, y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { stepSize: 1 } } }
             }
         });
-    }
 
-    function initTaskQuizChart() {
-        const ctx = document.getElementById('adminTaskQuizChart').getContext('2d');
-        const monthlyTasks = @json($monthlyTaskSubmissions ?? []);
-        const monthlyQuiz  = @json($monthlyQuizAttempts ?? []);
-
-        new Chart(ctx, {
+        // 5. Task & Quiz monthly
+        const mTasks = @json($monthlyTaskSubmissions ?? []);
+        const mQuiz  = @json($monthlyQuizAttempts ?? []);
+        new Chart(document.getElementById('adminTaskQuizChart'), {
             type: 'bar',
             data: {
-                labels: monthlyTasks.map(d => d.month),
+                labels: mTasks.map(d => d.month),
                 datasets: [
-                    {
-                        label: 'Pengumpulan Tugas',
-                        data: monthlyTasks.map(d => d.count),
-                        backgroundColor: 'rgba(102,126,234,0.8)', borderRadius: 4
-                    },
-                    {
-                        label: 'Percobaan Kuis',
-                        data: monthlyQuiz.map(d => d.count),
-                        backgroundColor: 'rgba(0,144,231,0.8)', borderRadius: 4
-                    }
+                    { label: 'Pengumpulan Tugas', data: mTasks.map(d => d.count), backgroundColor: 'rgba(78,115,223,0.85)', borderRadius: 4 },
+                    { label: 'Percobaan Kuis',    data: mQuiz.map(d => d.count),  backgroundColor: 'rgba(23,162,184,0.85)',  borderRadius: 4 }
                 ]
             },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                interaction: { intersect: false, mode: 'index' },
-                plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, padding: 12 } },
-                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8 }
-                },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#6c757d', maxRotation: 45, font: { size: 11 } } },
-                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { stepSize: 1 } }
-                }
+            options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 12, font: { size: 11 } } }, tooltip: tooltipDefaults },
+                scales: { x: { grid: { display: false }, ticks: { color: '#6c757d', maxRotation: 45, font: { size: 10 } } }, y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { stepSize: 1 } } }
             }
         });
-    }
 
-    function initTopCoursesChart() {
-        const ctx = document.getElementById('adminTopCoursesChart').getContext('2d');
-        const topCourses = @json($topCoursesByEnrollment ?? []);
-
-        new Chart(ctx, {
+        // 6. Top courses
+        const topC = @json($topCoursesByEnrollment ?? []);
+        new Chart(document.getElementById('adminTopCoursesChart'), {
             type: 'bar',
             data: {
-                labels: topCourses.map(d => d.label),
-                datasets: [{
-                    label: 'Siswa',
-                    data: topCourses.map(d => d.count),
-                    backgroundColor: [
-                        'rgba(102,126,234,0.8)','rgba(0,210,91,0.8)','rgba(255,171,0,0.8)',
-                        'rgba(252,66,74,0.8)','rgba(0,144,231,0.8)','rgba(228,169,81,0.8)',
-                        'rgba(88,216,163,0.8)','rgba(241,126,93,0.8)'
-                    ],
-                    borderRadius: 6
-                }]
+                labels: topC.map(d => d.label),
+                datasets: [{ label: 'Siswa', data: topC.map(d => d.count), backgroundColor: palette, borderRadius: 6 }]
             },
-            options: {
-                indexAxis: 'x',
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8 } },
-                scales: {
-                    x: { beginAtZero: true, ticks: { stepSize: 1 } },
-                    y: { ticks: { font: { size: 11 } } }
-                }
+            options: { responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: tooltipDefaults },
+                scales: { x: { grid: { display: false }, ticks: { color: '#6c757d', font: { size: 10 } } }, y: { beginAtZero: true, ticks: { stepSize: 1 } } }
             }
         });
-    }
-    
-    // Chart update functions
+
+    });
+
     function updateEnrollmentChart(period) {
-        // Simulate data update based on period
         const periods = {
-            '6months': ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            '12months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            'year': ['Q1', 'Q2', 'Q3', 'Q4']
+            '6months': ['Jul','Agu','Sep','Okt','Nov','Des'],
+            '12months': ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']
         };
-        
-        enrollmentTrendsChart.data.labels = periods[period] || periods['12months'];
-        enrollmentTrendsChart.update();
-    }
-    
-    function updateCharts(period) {
-        // Update all charts based on selected period
-        console.log('Updating charts for period:', period);
+        window.enrollmentChart.data.labels = periods[period] || periods['12months'];
+        window.enrollmentChart.update();
     }
 </script>
 @endpush
-@endsection
 
+@endsection

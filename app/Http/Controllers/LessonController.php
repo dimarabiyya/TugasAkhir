@@ -23,11 +23,7 @@ class LessonController extends Controller
         // Mulai query dengan eager loading
         $query = Lesson::with(['module.course']);
 
-        // ---------------------------------------------------
-        // 1. LOGIKA FILTER ROLE (Hanya tampilkan milik sendiri)
-        // ---------------------------------------------------
         if ($user->hasRole('instructor') && !$user->hasRole('admin')) {
-            // Ambil Lesson hanya jika Module -> Course -> Instructor ID sama dengan User ID
             $query->whereHas('module.course', function($q) use ($user) {
                 $q->where('instructor_id', $user->id);
             });
@@ -42,11 +38,6 @@ class LessonController extends Controller
             $modules = Module::with('course')->get();
         }
 
-        // ---------------------------------------------------
-        // 2. LOGIKA PENCARIAN & FILTER LAINNYA
-        // ---------------------------------------------------
-        
-        // Search functionality
         if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
@@ -61,17 +52,13 @@ class LessonController extends Controller
             });
         }
 
-        // Filter by module
         if ($request->filled('module_id')) {
             $query->where('module_id', $request->module_id);
         }
 
-        // Filter by type
         if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
-
-        // (Filter is_free dihapus/diabaikan dari controller ini jika sudah tidak dipakai di view)
 
         $lessons = $query->ordered()->paginate(15)->appends($request->query());
         $lessonTypes = ['video', 'reading', 'audio', 'interactive'];

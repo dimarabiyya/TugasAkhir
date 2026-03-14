@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Lesson;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
+use App\Exports\QuizGradeExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class QuizController extends Controller
 {
@@ -236,4 +239,23 @@ class QuizController extends Controller
         return redirect()->route('quizzes.index')
             ->with('success', 'Kuis berhasil di hapus!.');
     }
+
+    public function exportExcel($quizId)
+    {
+        $quiz = Quiz::findOrFail($quizId);
+        $user = auth()->user();
+
+        // Proteksi akses
+        if (!$user->hasRole('admin')) {
+            $canAccess = ($quiz->lesson->module->course->instructor_id == $user->id);
+            if (!$canAccess) {
+                abort(403, 'Anda tidak memiliki izin untuk mengekspor nilai quiz ini.');
+            }
+        }
+
+        $fileName = 'Nilai_Quiz_' . Str::slug($quiz->title) . '_' . date('Ymd_His') . '.xlsx';
+
+        return Excel::download(new QuizGradeExport($quizId), $fileName);
+    }
+    
 }

@@ -21,9 +21,12 @@ class TaskSubmission extends Model
         return $this->belongsTo(Task::class);
     }
 
-    // Relasi ke tabel penilaian (jika ada)
     public function grade() {
-        // Tambahkan parameter kedua untuk foreign key
         return $this->hasOne(TaskGrade::class, 'task_submission_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

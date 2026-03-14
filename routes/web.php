@@ -17,6 +17,7 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CounselingController;
+use App\Http\Controllers\ExamController;
 
 use App\Models\Course;
 use App\Models\Module;
@@ -115,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
     Route::put('/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
+    Route::get('/quizzes/{id}/export-excel', [QuizController::class, 'exportExcel'])->name('quizzes.export');
     
     // Quiz question management
     Route::get('/quizzes/{quiz}/questions', [QuizQuestionController::class, 'index'])->name('quiz.questions.index');
@@ -144,6 +146,7 @@ Route::middleware('auth')->group(function () {
 // Student routes
 Route::middleware(['auth', 'permission:view students'])->group(function () {
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
 });
 
 // Specific routes MUST come before parameterized routes
@@ -235,9 +238,8 @@ Route::middleware(['auth', 'role:admin|instructor'])->group(function () {
     Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/group/{course}/{date}', [AttendanceController::class, 'show'])->name('attendance.show');
     Route::delete('/attendance/destroy-group', [AttendanceController::class, 'destroy'])->name('attendance.destroyGroup');
-});
-
-Route::middleware(['auth', 'role:instructor'])->group(function () {
+    Route::get('/attendance/recap', [AttendanceController::class, 'recapForm'])->name('attendance.recap');
+    Route::post('/attendance/recap/export', [AttendanceController::class, 'exportRecap'])->name('attendance.export');
     Route::get('attendance/edit', [AttendanceController::class, 'edit'])->name('attendance.edit');
     Route::put('/attendance/{attendance}', [AttendanceController::class, 'update'])->name('attendance.update');
     Route::post('/attendance/group/update', [AttendanceController::class, 'updateGroup'])->name('attendance.group.update');
@@ -246,13 +248,10 @@ Route::middleware(['auth', 'role:instructor'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('tasks', TaskController::class);
-    
-    // Gunakan POST untuk Submit dan Grade
     Route::post('/tasks/{task}/submit', [TaskController::class, 'submit'])->name('tasks.submit');
     Route::post('/submissions/{submission_id}/grade', [TaskController::class, 'gradeTask'])->name('tasks.grade');
-    
-    // Route Hapus Nilai
     Route::delete('/grades/{id}', [TaskController::class, 'destroyGrade'])->name('tasks.grade.destroy');
+    Route::get('/tasks/{id}/export-excel', [TaskController::class, 'exportExcel'])->name('tasks.export');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -264,10 +263,30 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/counseling/{session}', [CounselingController::class, 'destroy'])->name('counseling.destroy');
 });
 
-// Pastikan route ini berada di dalam middleware auth
 Route::middleware(['auth'])->group(function () {
-    
-    // Ambil Course berdasarkan Kelas
+    Route::get('/exams', [ExamController::class, 'index'])->name('exams.index');
+    Route::get('/exams/{exam}/start', [ExamController::class, 'start'])->name('exams.start');
+    Route::post('/exams/{exam}/submit', [ExamController::class, 'submit'])->name('exams.submit');
+    Route::post('/exams/{exam}/save-progress', [ExamController::class, 'saveProgress'])->name('exams.saveProgress');
+    Route::get('/exams/{exam}/result', [ExamController::class, 'result'])->name('exams.result');
+    Route::resource('exams', ExamController::class)->except(['show']);
+    Route::post('/exams/{exam}/log-cheat', [ExamController::class, 'logCheat'])->name('exams.logCheat');
+
+    Route::middleware(['role:instructor|admin'])->group(function () {
+        Route::get('/exams/create', [ExamController::class, 'create'])->name('exams.create');
+        Route::post('/exams', [ExamController::class, 'store'])->name('exams.store');
+        Route::get('/exams/{exam}/edit', [ExamController::class, 'edit'])->name('exams.edit');
+        Route::put('/exams/{exam}', [ExamController::class, 'update'])->name('exams.update');
+        Route::delete('/exams/{exam}', [ExamController::class, 'destroy'])->name('exams.destroy');
+        Route::post('/exams/{exam}/questions', [ExamController::class, 'storeQuestion'])->name('exams.questions.store');
+        Route::delete('/exams/{exam}/questions/{question}', [ExamController::class, 'destroyQuestion'])->name('exams.questions.destroy');
+        Route::get('/exams/{exam}/report', [ExamController::class, 'report'])->name('exams.report');
+        Route::get('/exams/{exam}/export/{classroom}', [ExamController::class, 'exportExcel'])->name('exams.export');
+    });
+});
+
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/get-courses/{classroomId}', function($classroomId) {
         $user = auth()->user();
         $query = \App\Models\Course::where('classroom_id', $classroomId);
@@ -276,14 +295,10 @@ Route::middleware(['auth'])->group(function () {
         }
         return response()->json($query->get());
     });
-
-    // Ambil Module berdasarkan Course ID
     Route::get('/get-modules/{courseId}', function($courseId) {
         $modules = \App\Models\Module::where('course_id', $courseId)->get();
         return response()->json($modules);
     });
-
-    // Ambil Lesson berdasarkan Module ID
     Route::get('/get-lessons/{moduleId}', function($moduleId) {
         $lessons = \App\Models\Lesson::where('module_id', $moduleId)->get();
         return response()->json($lessons);

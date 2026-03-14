@@ -1,436 +1,267 @@
 @extends('layouts.skydash')
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 grid-margin">
-        <div class="row">
-            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                    <h3 class="font-weight-bold">Daftar Kuis</h3>
-                    <p class="text-muted">Kelola semua kuis untuk pelajaran Anda</p>
-                @else
-                    <h3 class="font-weight-bold">Kuis yang Tersedia</h3>
-                    <p class="text-muted">Uji pengetahuan Anda dengan kuis-kuis ini</p>
-                @endif
+
+{{-- ===== PAGE HEADER ===== --}}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); border-radius: 12px;">
+            <div class="card-body py-4 px-4">
+                <div class="row align-items-center">
+                    <div class="col-12 col-xl-8 mb-3 mb-xl-0">
+                        <div class="d-flex align-items-center">
+                            <div style="background: rgba(255,255,255,0.2); border-radius: 10px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-right: 14px; flex-shrink: 0;">
+                                <i class="mdi mdi-file-question-outline text-white" style="font-size: 26px;"></i>
+                            </div>
+                            <div>
+                                @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
+                                    <h4 class="font-weight-bold text-white mb-0">Daftar Kuis</h4>
+                                    <p class="text-white-50 mb-0" style="font-size: 13px;">Kelola semua kuis untuk pelajaran Anda</p>
+                                @else
+                                    <h4 class="font-weight-bold text-white mb-0">Kuis yang Tersedia</h4>
+                                    <p class="text-white-50 mb-0" style="font-size: 13px;">Uji pengetahuan Anda dengan kuis-kuis ini</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Statistics Cards -->
+{{-- ===== STAT CARDS ===== --}}
 @if($quizzes->count() > 0)
-<div class="row">
-    @php
-        $totalQuizzes = $quizzes->total();
-        $publishedQuizzes = $quizzes->filter(fn($q) => $q->status == 'published')->count();
-        $totalQuestions = $quizzes->sum(fn($q) => $q->questions->count());
-        $totalAttempts = $quizzes->sum(fn($q) => $q->attempts->count());
-    @endphp
-    
-    <div class="col-md-3">
-        <div class="card stats-card">
-            <div class="card-body text-center">
-                <i class="mdi mdi-file-question-outline" style="font-size: 40px; color: #667eea;"></i>
-                <h3 class="mt-3 mb-0">{{ $totalQuizzes }}</h3>
-                <p class="text-muted mb-0">Total Kuis</p>
+@php
+    $totalQuizzes    = $quizzes->total();
+    $publishedQuizzes = $quizzes->filter(fn($q) => $q->status == 'published')->count();
+    $totalQuestions  = $quizzes->sum(fn($q) => $q->questions->count());
+    $totalAttempts   = $quizzes->sum(fn($q) => $q->attempts->count());
+@endphp
+<div class="row mb-4">
+    @foreach([
+        ['label' => 'Total Kuis',        'value' => $totalQuizzes,     'icon' => 'mdi-file-question-outline',          'bg' => '#e8f0fe', 'ic' => '#4e73df'],
+        ['label' => 'Dipublikasikan',    'value' => $publishedQuizzes, 'icon' => 'mdi-checkbox-marked-circle-outline', 'bg' => '#e3f9e5', 'ic' => '#1cc88a'],
+        ['label' => 'Total Pertanyaan',  'value' => $totalQuestions,   'icon' => 'mdi-help-circle-outline',            'bg' => '#fde8e8', 'ic' => '#e74a3b'],
+        ['label' => 'Total Dikerjakan',  'value' => $totalAttempts,    'icon' => 'mdi-check-circle-outline',           'bg' => '#e0f7fa', 'ic' => '#17a2b8'],
+    ] as $s)
+    <div class="col-6 col-md-3 mb-3 mb-md-0">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">{{ $s['label'] }}</p>
+                        <h3 class="font-weight-bold text-dark mb-0" style="font-size: 26px;">{{ $s['value'] }}</h3>
+                    </div>
+                    <div style="background: {{ $s['bg'] }}; border-radius: 10px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="mdi {{ $s['icon'] }}" style="font-size: 22px; color: {{ $s['ic'] }};"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-3">
-        <div class="card stats-card">
-            <div class="card-body text-center">
-                <i class="mdi mdi-checkbox-marked-circle-outline" style="font-size: 40px; color: #06beb6;"></i>
-                <h3 class="mt-3 mb-0">{{ $publishedQuizzes }}</h3>
-                <p class="text-muted mb-0">Kuis terpublis</p>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-3">
-        <div class="card stats-card">
-            <div class="card-body text-center">
-                <i class="mdi mdi-help" style="font-size: 40px; color: #f5576c;"></i>
-                <h3 class="mt-3 mb-0">{{ $totalQuestions }}</h3>
-                <p class="text-muted mb-0">Total Pertanyaan</p>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-3">
-        <div class="card stats-card">
-            <div class="card-body text-center">
-                <i class="mdi mdi-check " style="font-size: 40px; color: #4facfe;"></i>
-                <h3 class="mt-3 mb-0">{{ $totalAttempts }}</h3>
-                <p class="text-muted mb-0">Total Dikumpulkan</p>
-            </div>
-        </div>
-    </div>
+    @endforeach
 </div>
 @endif
 
-<!-- Quizzes DataTable -->
-<div class="row mt-3">
-    <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
+{{-- ===== TABLE CARD ===== --}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-body p-0">
+
+                {{-- Card Header --}}
+                <div class="d-flex align-items-center justify-content-between px-4 py-3" style="border-bottom: 1px solid #f0f0f3;">
+                    <div class="d-flex align-items-center">
+                        <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                            <i class="mdi mdi-format-list-bulleted" style="font-size: 18px; color: #4e73df;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 font-weight-bold text-dark">Semua Kuis</h5>
+                            <small class="text-muted">{{ $quizzes->total() }} kuis terdaftar</small>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table mb-0" style="border-collapse: separate; border-spacing: 0;">
                         <thead>
-                            <tr>
-                                <th>Judul Kuis</th>
-                                <th>Mata Pelajaran</th>
-                                <th>Materi</th>
-                                <th>Status</th>
-                                <th>Skor/Waktu</th>
-                                <th>Pertanyaan</th>
-                                <th>Upaya</th>
-                                <th>Aksi</th>
+                            <tr style="background: #f8f9fc;">
+                                <th style="padding: 12px 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Judul Kuis</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Mata Pelajaran</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Status</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none; text-align: center;">Skor / Waktu</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none; text-align: center;">Soal</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none; text-align: center;">Upaya</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none; text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($quizzes as $quiz)
-                            <tr>
-                                <td data-priority="1">
-                                    <div>
-                                        <div class="font-weight-bold" style="word-break: break-word;">{{ $quiz->title }}</div>
-                                        @if($quiz->description)
-                                            <small class="text-muted d-none d-md-block" style="word-break: break-word;">{{ Str::limit($quiz->description, 50) }}</small>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td data-priority="3">
-                                    <span class="text-muted d-none d-lg-block">{{ Str::limit($quiz->lesson->module->course->title ?? 'N/A', 30) }}</span>
-                                    <span class="text-muted d-lg-none">{{ Str::limit($quiz->lesson->module->course->title ?? 'N/A', 20) }}</span>
-                                </td>
-                                <td data-priority="4">
-                                    <span class="text-muted d-none d-lg-block">{{ Str::limit($quiz->lesson->title ?? 'N/A', 30) }}</span>
-                                    <span class="text-muted d-lg-none">{{ Str::limit($quiz->lesson->title ?? 'N/A', 20) }}</span>
-                                </td>
-                                <td data-priority="2">
-                                    @php
-                                        $statusColors = [
-                                            'draft' => 'warning',
-                                            'published' => 'success',
-                                            'archived' => 'secondary'
-                                        ];
-                                    @endphp
-                                    <span class="badge badge-{{ $statusColors[$quiz->status] ?? 'secondary' }}">
-                                        {{ ucfirst($quiz->status) }}
-                                    </span>
-                                    @if($quiz->isAvailable())
-                                        <br><small class="text-success d-none d-md-inline"><i class="icon-check"></i> Available</small>
+                            <tr style="transition: background 0.15s ease;"
+                                onmouseover="this.style.background='#f8f9fc';"
+                                onmouseout="this.style.background='white';">
+
+                                {{-- Judul --}}
+                                <td style="padding: 14px 20px; border-bottom: 1px solid #f0f0f3; vertical-align: middle; max-width: 240px;">
+                                    <p class="mb-0 font-weight-bold text-dark" style="font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $quiz->title }}</p>
+                                    @if($quiz->description)
+                                    <small class="text-muted">{{ Str::limit($quiz->description, 50) }}</small>
                                     @endif
                                 </td>
-                                <td data-priority="5">
-                                    <div>
-                                        <small class="text-muted">Pass:</small>
-                                        <span class="badge badge-info">{{ $quiz->passing_score }}%</span>
-                                    </div>
-                                    <div class="mt-1">
-                                        <small class="text-muted">Time:</small>
-                                        <span class="text-muted">{{ $quiz->time_limit_minutes ? $quiz->time_limit_minutes . 'm' : '∞' }}</span>
+
+                                {{-- Mata Pelajaran & Materi --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle; max-width: 200px;">
+                                    <p class="mb-0 font-weight-bold text-dark" style="font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        {{ Str::limit($quiz->lesson->module->course->title ?? 'N/A', 28) }}
+                                    </p>
+                                    <small class="text-muted" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 200px;">
+                                        <i class="mdi mdi-book-open-outline mr-1"></i>{{ Str::limit($quiz->lesson->title ?? 'N/A', 28) }}
+                                    </small>
+                                </td>
+
+                                {{-- Status --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle;">
+                                    @php
+                                        $statusCfg = [
+                                            'published' => ['bg'=>'#e3f9e5','c'=>'#1cc88a','label'=>'Dipublikasikan','icon'=>'mdi-check-circle'],
+                                            'draft'     => ['bg'=>'#fff3e8','c'=>'#f6c23e','label'=>'Draf',           'icon'=>'mdi-pencil'],
+                                            'archived'  => ['bg'=>'#f4f6fb','c'=>'#858796','label'=>'Diarsipkan',     'icon'=>'mdi-archive'],
+                                        ];
+                                        $sc = $statusCfg[$quiz->status] ?? $statusCfg['draft'];
+                                    @endphp
+                                    <span style="background: {{ $sc['bg'] }}; color: {{ $sc['c'] }}; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap;">
+                                        <i class="mdi {{ $sc['icon'] }} mr-1"></i>{{ $sc['label'] }}
+                                    </span>
+                                    @if($quiz->isAvailable())
+                                    <br><small style="color: #1cc88a; font-size: 11px;"><i class="mdi mdi-check mr-1"></i>Tersedia</small>
+                                    @endif
+                                </td>
+
+                                {{-- Skor / Waktu --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle; text-align: center;">
+                                    <div class="d-flex flex-column align-items-center" style="gap: 4px;">
+                                        <span style="background: #e0f7fa; color: #17a2b8; border-radius: 6px; padding: 3px 9px; font-size: 11px; font-weight: 700;">
+                                            <i class="mdi mdi-check mr-1"></i>{{ $quiz->passing_score }}%
+                                        </span>
+                                        <span style="font-size: 11px; color: #858796;">
+                                            <i class="mdi mdi-clock-outline mr-1"></i>{{ $quiz->time_limit_minutes ? $quiz->time_limit_minutes.'m' : '∞' }}
+                                        </span>
                                     </div>
                                 </td>
-                                <td data-priority="6">
-                                    <span class="badge badge-primary">
-                                        <i class="icon-question mr-1"></i>{{ $quiz->questions->count() }}
+
+                                {{-- Soal --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle; text-align: center;">
+                                    <span style="background: #e8f0fe; color: #4e73df; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 700;">
+                                        {{ $quiz->questions->count() }}
                                     </span>
                                 </td>
-                                <td data-priority="7">
-                                    <span class="badge badge-success">
-                                        <i class="icon-people mr-1"></i>{{ $quiz->attempts->count() }}
+
+                                {{-- Upaya --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle; text-align: center;">
+                                    <span style="background: #e3f9e5; color: #1cc88a; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 700;">
+                                        {{ $quiz->attempts->count() }}
                                     </span>
                                 </td>
-                                <td data-priority="1">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <a href="{{ $quiz->url }}" 
-                                           class="btn btn-info pt-2" 
-                                           title="View Details">
-                                            <i class="mdi mdi-eye"></i>
+
+                                {{-- Aksi --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle; text-align: center;">
+                                    <div class="d-flex align-items-center justify-content-center" style="gap: 5px;">
+
+                                        {{-- View --}}
+                                        <a href="{{ $quiz->url }}" title="Lihat Detail"
+                                           style="background: #e8f0fe; color: #4e73df; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"
+                                           onmouseover="this.style.background='#4e73df';this.style.color='#fff';"
+                                           onmouseout="this.style.background='#e8f0fe';this.style.color='#4e73df';">
+                                            <i class="mdi mdi-eye" style="font-size: 15px;"></i>
                                         </a>
+
                                         @if(auth()->check() && auth()->user()->hasAnyRole(['admin', 'instructor']))
-                                            <a href="{{ route('quizzes.edit', $quiz) }}" 
-                                               class="btn btn-primary pt-2" 
-                                               title="Edit">
-                                                <i class="mdi mdi-pencil"></i>
-                                            </a>
-                                            <a href="{{ route('quiz.questions.index', $quiz) }}"
-                                               class="btn btn-warning pt-2" 
-                                               title="Manage Questions">
-                                                <i class="mdi mdi-plus"></i>
-                                            </a>
-                                            <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" 
-                                                onsubmit="event.preventDefault(); confirmDelete(event);">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" style=" border-radius:0px 12px 12px 0px;">
-                                                    <i class="mdi mdi-delete"></i>
-                                                </button>
-                                            </form>
-                                            
+
+                                        {{-- Edit --}}
+                                        <a href="{{ route('quizzes.edit', $quiz) }}" title="Edit"
+                                           style="background: #e8f0fe; color: #4e73df; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"
+                                           onmouseover="this.style.background='#4e73df';this.style.color='#fff';"
+                                           onmouseout="this.style.background='#e8f0fe';this.style.color='#4e73df';">
+                                            <i class="mdi mdi-pencil" style="font-size: 15px;"></i>
+                                        </a>
+
+                                        {{-- Manage Questions --}}
+                                        <a href="{{ route('quiz.questions.index', $quiz) }}" title="Kelola Pertanyaan"
+                                           style="background: #fff3e8; color: #f6c23e; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"
+                                           onmouseover="this.style.background='#f6c23e';this.style.color='#fff';"
+                                           onmouseout="this.style.background='#fff3e8';this.style.color='#f6c23e';">
+                                            <i class="mdi mdi-help-circle-outline" style="font-size: 15px;"></i>
+                                        </a>
+
+                                        {{-- Delete --}}
+                                        <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" class="d-inline m-0"
+                                              onsubmit="confirmDelete(event, 'Kuis ini akan dihapus permanen beserta semua pertanyaan dan upaya.');">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" title="Hapus"
+                                                    style="background: #fde8e8; color: #e74a3b; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                                                    onmouseover="this.style.background='#e74a3b';this.style.color='#fff';"
+                                                    onmouseout="this.style.background='#fde8e8';this.style.color='#e74a3b';">
+                                                <i class="mdi mdi-delete" style="font-size: 15px;"></i>
+                                            </button>
+                                        </form>
+
                                         @elseif(auth()->check() && !auth()->user()->hasAnyRole(['admin', 'instructor']))
                                             @if($quiz->isAvailable() && $quiz->canUserAttempt(auth()->id()))
-                                                <a href="{{ route('quiz.taking.start', $quiz) }}" 
-                                                   class="btn btn-success" 
-                                                   title="Start Quiz">
-                                                    <i class="icon-control-play"></i>
-                                                </a>
+                                            {{-- Start Quiz --}}
+                                            <a href="{{ route('quiz.taking.start', $quiz) }}" title="Mulai Kuis"
+                                               style="background: linear-gradient(135deg, #1cc88a, #17a673); color: #fff; border-radius: 8px; width: auto; height: 32px; padding: 6px 14px; font-size: 12px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;"
+                                               onmouseover="this.style.opacity='0.88';" onmouseout="this.style.opacity='1';">
+                                                <i class="mdi mdi-play" style="font-size: 15px;"></i> Mulai
+                                            </a>
                                             @endif
                                         @endif
+
                                     </div>
                                 </td>
+
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center py-5">
-                                    <i class="icon-note" style="font-size: 48px; color: #ccc;"></i>
-                                    <h5 class="mt-2">Kuis tidak ditemukan!</h5>
-                                    <p class="text-muted mb-0">
+                                <td colspan="7" style="padding: 48px 20px; text-align: center;">
+                                    <div style="background: #f0f0f3; border-radius: 50%; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
+                                        <i class="mdi mdi-file-question-outline" style="font-size: 36px; color: #c4c6d0;"></i>
+                                    </div>
+                                    <h5 class="font-weight-bold text-dark mb-1">Kuis Tidak Ditemukan</h5>
+                                    <p class="text-muted mb-3" style="font-size: 13px;">
                                         @if(request('search') || request('status') || request('lesson_id'))
-                                            Coba cek kata kunci!
+                                            Coba sesuaikan kata kunci pencarian Anda.
                                         @else
-                                            Belum ada kuis dibuat! <br>
-                                            <div class="mt-4">
-                                                <a href="{{ route('lessons.index') }}" class="btn btn-primary">
-                                                    <i class="mdi mdi-plus"></i>Tambah Kuis
-                                                </a>   
-                                            </div>
+                                            Belum ada kuis yang dibuat.
                                         @endif
-                                    <p>
-                                    </td>
+                                    </p>
+                                    @if(auth()->user()->hasAnyRole(['admin', 'instructor']) && !request()->hasAny(['search','status','lesson_id']))
+                                    <a href="{{ route('lessons.index') }}" class="btn btn-primary" style="border-radius: 8px; font-weight: 600; padding: 10px 24px;">
+                                        <i class="mdi mdi-plus mr-1"></i> Tambah Kuis
+                                    </a>
+                                    @endif
+                                </td>
                             </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-               
+
+                {{-- Pagination --}}
+                @if($quizzes->hasPages())
+                <div class="px-4 py-3" style="border-top: 1px solid #f0f0f3; background: #fafbff; border-radius: 0 0 12px 12px;">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 8px;">
+                        <p class="text-muted mb-0" style="font-size: 12px;">
+                            Menampilkan {{ $quizzes->firstItem() }}–{{ $quizzes->lastItem() }} dari {{ $quizzes->total() }} kuis
+                        </p>
+                        {{ $quizzes->withQueryString()->links() }}
+                    </div>
+                </div>
+                @endif
+
             </div>
         </div>
     </div>
 </div>
 
-@push('styles')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
-<style>
-    .stats-card {
-        transition: all 0.3s ease;
-        border: 1px solid #f0f0f0;
-        height: 100%;
-    }
-    
-    .stats-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    
-    #quizzesTable_wrapper .dataTables_length,
-    #quizzesTable_wrapper .dataTables_filter {
-        margin-bottom: 20px;
-    }
-    
-    #quizzesTable_wrapper .dataTables_filter {
-        text-align: right;
-    }
-    
-    #quizzesTable_wrapper .dataTables_filter input {
-        border-radius: 8px;
-        padding: 8px 12px;
-        border: 1px solid #ddd;
-        margin-left: 10px;
-        width: 250px;
-    }
-    
-    #quizzesTable_wrapper .dataTables_length select {
-        border-radius: 8px;
-        padding: 8px 12px;
-        border: 1px solid #ddd;
-        margin: 0 5px;
-    }
-    
-    .badge {
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-    
-    #quizzesTable tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-    
-    .btn-group .btn {
-        margin-right: 5px;
-    }
-    
-    .btn-group .btn:last-child {
-        margin-right: 0;
-    }
-    
-    @media (max-width: 768px) {
-        #quizzesTable_wrapper .dataTables_length,
-        #quizzesTable_wrapper .dataTables_filter {
-            margin-bottom: 15px;
-        }
-        
-        #quizzesTable_wrapper .dataTables_filter {
-            text-align: left;
-            margin-top: 10px;
-        }
-        
-        #quizzesTable_wrapper .dataTables_filter input {
-            width: 100%;
-            margin-left: 0;
-            margin-top: 10px;
-        }
-        
-        #quizzesTable_wrapper .dataTables_info,
-        #quizzesTable_wrapper .dataTables_paginate {
-            margin-top: 15px;
-            text-align: center !important;
-        }
-        
-        #quizzesTable_wrapper .dataTables_paginate .pagination {
-            justify-content: center;
-        }
-        
-        table.dataTable.dtr-inline.collapsed > tbody > tr > td.child,
-        table.dataTable.dtr-inline.collapsed > tbody > tr > th.child {
-            padding: 0.5rem;
-        }
-        
-        .dtr-details {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .dtr-details li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .dtr-details li:last-child {
-            border-bottom: none;
-        }
-        
-        .dtr-title {
-            font-weight: 600;
-            color: #333;
-            margin-right: 10px;
-            min-width: 120px;
-            display: inline-block;
-        }
-        
-        .dtr-data {
-            color: #666;
-        }
-    }
-    
-    @media (min-width: 769px) and (max-width: 1024px) {
-        #quizzesTable_wrapper .dataTables_filter input {
-            width: 200px;
-        }
-    }
-    
-    table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before,
-    table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
-        background-color: #667eea;
-        border: 2px solid white;
-        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-        top: 50%;
-        transform: translateY(-50%);
-    }
-</style>
-@endpush
-
-@push('scripts')
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
-<script>
-    (function($) {
-        'use strict';
-        $(document).ready(function() {
-            $('#quizzesTable').DataTable({
-                responsive: {
-                    details: {
-                        // Use the first column as the responsive control column (correct selector)
-                        type: 'column',
-                        target: 0
-                    }
-                },
-                pageLength: 10,
-                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                order: [[1, 'asc']],
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search quizzes...",
-                    lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ quizzes",
-                    infoEmpty: "No quizzes available",
-                    infoFiltered: "(filtered from _MAX_ total quizzes)",
-                    paginate: {
-                        first: "First",
-                        last: "Last",
-                        next: "Next",
-                        previous: "Previous"
-                    },
-                    emptyTable: "No quizzes found"
-                },
-                columnDefs: [
-                    {
-                        // Mark first column as control and not orderable
-                        className: 'control',
-                        orderable: false,
-                        targets: 0
-                    },
-                    {
-                        // Actions column should remain non-orderable
-                        targets: -1,
-                        orderable: false,
-                        searchable: false,
-                        responsivePriority: 1
-                    }
-                ],
-                autoWidth: false
-            });
-            
-            $('#quizzesTable').each(function() {
-                var datatable = $(this);
-                var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
-                search_input.attr('placeholder', 'Search quizzes...');
-                search_input.removeClass('form-control-sm');
-                var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
-                length_sel.removeClass('form-control-sm');
-            });
-        });
-    })(jQuery);
-    
-    function confirmDelete(url) {
-        if (confirm('Apakah Anda yakin ingin menghapus kuis ini? Tindakan ini tidak dapat dibatalkan.')) {
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = url;
-            
-            var csrf = document.createElement('input');
-            csrf.type = 'hidden';
-            csrf.name = '_token';
-            csrf.value = '{{ csrf_token() }}';
-            form.appendChild(csrf);
-            
-            var method = document.createElement('input');
-            method.type = 'hidden';
-            method.name = '_method';
-            method.value = 'DELETE';
-            form.appendChild(method);
-            
-            document.body.appendChild(form);
-            form.submit();
-        }
-    }
-</script>
-@endpush
 @endsection

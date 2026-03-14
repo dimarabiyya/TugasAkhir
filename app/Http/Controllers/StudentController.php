@@ -10,6 +10,8 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use App\Imports\StudentsImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -27,8 +29,9 @@ class StudentController extends Controller
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('name', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('email', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('phone', 'like', '%' . $searchTerm . '%');
+                    ->orWhere('nisn', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('email', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('phone', 'like', '%' . $searchTerm . '%');
             });
         }
 
@@ -189,6 +192,31 @@ class StudentController extends Controller
         return redirect()
             ->route('students.index')
             ->with('success', 'Student deleted successfully.');
+    }
+
+    /**
+     * Import students from Excel.
+     */
+    public function import(Request $request): RedirectResponse
+    {
+        // Pastikan hanya admin/instruktur yang bisa import
+        $this->checkManagePermission();
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048', // Maksimal 2MB
+        ]);
+
+        try {
+            Excel::import(new StudentsImport, $request->file('file'));
+            
+            return redirect()
+                ->route('students.index')
+                ->with('success', 'Data siswa berhasil diimport!');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('students.index')
+                ->with('error', 'Terjadi kesalahan saat import: ' . $e->getMessage());
+        }
     }
 
     /**

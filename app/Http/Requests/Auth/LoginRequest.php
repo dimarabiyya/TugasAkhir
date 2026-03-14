@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,11 +41,19 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // Ambil inputan dari form (bisa email, bisa NISN)
+        $loginInput = $this->input('login');
+
+        // Cek apakah inputan ini formatnya email yang valid?
+        // Jika YA, set field pengecekan ke 'email'. Jika TIDAK, set ke 'nisn'.
+        $fieldType = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'nisn';
+
+        // Lakukan proses login berdasarkan field yang terpilih
+        if (! Auth::attempt([$fieldType => $loginInput, 'password' => $this->input('password')], $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'login' => trans('auth.failed'), // Ubah pesan error mengarah ke 'login'
             ]);
         }
 

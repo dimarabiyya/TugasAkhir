@@ -23,4 +23,7 @@ class Classroom extends Model
         return $this->belongsTo(User::class, 'instructor_id');
     }
 
+    public function exams() {
+    return $this->belongsToMany(Exam::class, 'exam_classroom');
+    }
 }

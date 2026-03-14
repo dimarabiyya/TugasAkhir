@@ -1,1415 +1,1403 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ $title ?? 'Dashboard' }} - LMS SMKN 40 Jakarta</title>
-    
-    <!-- plugins:css -->
+
     <link rel="stylesheet" href="{{ asset('skydash/vendors/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('skydash/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('skydash/vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ asset('skydash/vendors/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('skydash/vendors/mdi/css/materialdesignicons.min.css') }}">
-    
-    <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('skydash/css/style.css') }}">
-    
     <link rel="shortcut icon" href="{{ asset('images/landing/Logo40.png') }}" />
-    
+
     <style>
-        @media (max-width: 991px) {
-            .sidebar {
-                display: none !important;
-            }
-            
-            .main-panel {
-                width: 100% !important;
-            }
-        }
-        
-        .bottom-nav {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 500px;
-            background: linear-gradient(135deg, 
-                rgba(102, 126, 234, 0.4) 0%, 
-                rgba(118, 75, 162, 0.35) 50%, 
-                rgba(102, 126, 234, 0.4) 100%);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 
-                0 8px 32px 0 rgba(31, 38, 135, 0.6),
-                0 0 0 1px rgba(255, 255, 255, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.5),
-                0 0 0 2px rgba(102, 126, 234, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            z-index: 1000;
-            display: none;
-            padding: 12px 10px calc(12px + env(safe-area-inset-bottom));
-            border-radius: 24px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: auto;
-            transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.32s ease;
-            will-change: transform, opacity;
-            contain: layout paint;
+    /* ===========================================
+       ROOT VARIABLES
+    =========================================== */
+    :root {
+        --primary:       #4e73df;
+        --primary-dark:  #224abe;
+        --primary-light: #e8f0fe;
+        --danger:        #e74a3b;
+        --success:       #1cc88a;
+        --sidebar-w:     238px;
+        --sidebar-mini:  68px;
+        --topbar-h:      62px;
+        --radius:        12px;
+        --shadow-xs:     0 1px 4px rgba(0,0,0,.06);
+        --shadow-sm:     0 2px 10px rgba(0,0,0,.08);
+        --shadow-md:     0 6px 24px rgba(0,0,0,.11);
+        --shadow-lg:     0 12px 40px rgba(0,0,0,.15);
+        --ease:          cubic-bezier(.4,0,.2,1);
+        --trans:         .22s var(--ease);
+    }
+
+    /* ===========================================
+       TOPBAR
+    =========================================== */
+    .navbar {
+        height: var(--topbar-h) !important;
+        background: #fff !important;
+        border-bottom: 1px solid #eaecf4 !important;
+        box-shadow: var(--shadow-xs) !important;
+        padding: 0 !important;
+        z-index: 1030 !important;
+    }
+
+    /* Brand wrapper */
+    .navbar-brand-wrapper {
+        width: var(--sidebar-w);
+        height: var(--topbar-h);
+        background: #fff;
+        border-right: 1px solid #eaecf4;
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+        flex-shrink: 0;
+        transition: width var(--trans);
+        overflow: hidden;
+    }
+
+    .navbar-brand-wrapper .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .navbar-brand-wrapper .navbar-brand img {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .brand-logo-text {
+        font-size: 15px;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -.2px;
+        transition: opacity var(--trans), width var(--trans);
+    }
+
+    /* Mini brand (collapsed) */
+    .navbar-brand-wrapper .navbar-brand.brand-logo-mini {
+        display: none;
+    }
+
+    /* Menu wrapper */
+    .navbar-menu-wrapper {
+        flex: 1;
+        height: var(--topbar-h);
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+        gap: 8px;
+    }
+
+    /* Sidebar toggle */
+    .sidebar-toggler {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        border: none;
+        background: transparent;
+        color: #9fa3b1;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--trans);
+        flex-shrink: 0;
+    }
+    .sidebar-toggler:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    /* Page title in topbar (mobile) */
+    .topbar-page-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #2d3748;
+        display: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 180px;
+    }
+
+    /* Push nav items to the right */
+    .navbar-menu-wrapper .navbar-nav-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        list-style: none;
+        margin-bottom: 0;
+        padding-left: 0;
+    }
+
+    /* Icon action button */
+    .nav-icon-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        border: 1px solid #eaecf4;
+        background: #f8f9fc;
+        color: #9fa3b1;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--trans);
+        text-decoration: none;
+        position: relative;
+    }
+    .nav-icon-btn:hover {
+        background: var(--primary-light);
+        border-color: #c5d5f8;
+        color: var(--primary);
+    }
+
+    /* Notification badge dot */
+    .nav-icon-btn .badge-dot {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 7px;
+        height: 7px;
+        background: var(--danger);
+        border-radius: 50%;
+        border: 2px solid #fff;
+    }
+
+    /* Profile chip */
+    .nav-profile-chip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px 4px 4px;
+        border-radius: 999px;
+        border: 1px solid #eaecf4;
+        background: #f8f9fc;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all var(--trans);
+    }
+    .nav-profile-chip:hover {
+        background: var(--primary-light);
+        border-color: #c5d5f8;
+    }
+
+    .nav-profile-chip img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .nav-profile-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+    }
+    .nav-profile-name {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #2d3748;
+        white-space: nowrap;
+    }
+    .nav-profile-role {
+        font-size: 10.5px;
+        color: #adb5bd;
+    }
+
+    /* Shared dropdown card */
+    .nav-dropdown-menu {
+        border: none !important;
+        border-radius: var(--radius) !important;
+        box-shadow: var(--shadow-lg) !important;
+        padding: 6px !important;
+        min-width: 200px;
+    }
+
+    .nav-dropdown-menu .dropdown-header-block {
+        padding: 8px 10px 10px;
+        border-bottom: 1px solid #f0f0f3;
+        margin-bottom: 4px;
+    }
+
+    .nav-dropdown-menu .dropdown-item {
+        border-radius: 8px;
+        padding: 9px 12px;
+        font-size: 13px;
+        color: #3d3d3d;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        transition: all var(--trans);
+    }
+    .nav-dropdown-menu .dropdown-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+    .nav-dropdown-menu .dropdown-item i { font-size: 16px; }
+    .nav-dropdown-menu .dropdown-divider { margin: 4px 0; border-color: #f0f0f3; }
+
+    /* ===========================================
+       SIDEBAR
+    =========================================== */
+    .sidebar {
+        width: var(--sidebar-w) !important;
+        background: #fff !important;
+        border-right: 1px solid #eaecf4 !important;
+        box-shadow: none !important;
+        transition: width var(--trans) !important;
+        overflow: hidden;
+    }
+
+    .sidebar .nav {
+        padding: 10px 10px 80px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        max-height: calc(100vh - var(--topbar-h));
+    }
+
+    /* Scrollbar */
+    .sidebar .nav::-webkit-scrollbar { width: 3px; }
+    .sidebar .nav::-webkit-scrollbar-track { background: transparent; }
+    .sidebar .nav::-webkit-scrollbar-thumb { background: #e0e3ed; border-radius: 4px; }
+
+    /* Section label */
+    .sidebar-label {
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 1.1px;
+        text-transform: uppercase;
+        color: #b0b7c3;
+        padding: 18px 12px 5px;
+    }
+
+    /* Nav item */
+    .sidebar .nav-item {
+        margin-bottom: 1px;
+    }
+
+    .sidebar .nav-item .nav-link {
+        display: flex !important;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px !important;
+        border-radius: 10px !important;
+        color: #6b7280 !important;
+        font-size: 13.5px !important;
+        font-weight: 500 !important;
+        white-space: nowrap;
+        overflow: hidden;
+        transition: all var(--trans) !important;
+        text-decoration: none;
+        position: relative;
+    }
+
+    .sidebar .nav-item .nav-link:hover {
+        background: #f4f6fb !important;
+        color: var(--primary) !important;
+    }
+    .sidebar .nav-item .nav-link:hover .menu-icon { color: var(--primary) !important; }
+
+    /* Active */
+    .sidebar .nav-item.active > .nav-link,
+    .sidebar .nav-item .nav-link.active {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+        color: #fff !important;
+        box-shadow: 0 4px 14px rgba(78,115,223,.38) !important;
+    }
+    .sidebar .nav-item.active > .nav-link .menu-icon,
+    .sidebar .nav-item .nav-link.active .menu-icon { color: #fff !important; }
+
+    /* Icon */
+    .sidebar .nav-link .menu-icon {
+        font-size: 19px !important;
+        width: 22px;
+        text-align: center;
+        flex-shrink: 0;
+        color: #b0b7c3;
+        transition: color var(--trans);
+        line-height: 1;
+    }
+
+    .sidebar .nav-link .menu-title {
+        font-size: 13.5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        transition: opacity var(--trans), width var(--trans);
+    }
+
+    /* Logout button in sidebar */
+    .sidebar .nav-item button.nav-link {
+        width: 100%;
+        text-align: left;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+    }
+
+    /* ===========================================
+       SIDEBAR ICON-ONLY (COLLAPSED)
+    =========================================== */
+    .sidebar-icon-only .sidebar { width: var(--sidebar-mini) !important; }
+    .sidebar-icon-only .sidebar .menu-title { display: none; }
+    .sidebar-icon-only .sidebar .sidebar-label { display: none; }
+    .sidebar-icon-only .sidebar .nav-link {
+        justify-content: center;
+        padding: 9px 0 !important;
+    }
+    .sidebar-icon-only .navbar-brand-wrapper { width: var(--sidebar-mini); }
+    .sidebar-icon-only .navbar-brand-wrapper .brand-logo-text { display: none; }
+    .sidebar-icon-only .main-panel { margin-left: var(--sidebar-mini) !important; }
+
+    /* ===========================================
+       MAIN PANEL
+    =========================================== */
+    .main-panel {
+        background: #f4f6fb !important;
+    }
+
+    .content-wrapper {
+        padding: 24px !important;
+    }
+
+    .footer {
+        background: #fff;
+        border-top: 1px solid #eaecf4;
+        padding: 14px 24px !important;
+    }
+    .footer span { font-size: 12px; color: #adb5bd; }
+
+    /* ===========================================
+       MOBILE BOTTOM NAV — App style
+    =========================================== */
+    .mobile-bottom-nav {
+        display: none;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        z-index: 1050;
+        background: rgba(255,255,255,0.96);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid #eaecf4;
+        box-shadow: 0 -4px 24px rgba(0,0,0,.09);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        transition: transform .3s var(--ease);
+    }
+
+    .mobile-bottom-nav.hide {
+        transform: translateY(105%);
+    }
+
+    .mobile-bottom-nav-track {
+        display: flex;
+        align-items: stretch;
+        height: 62px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .mobile-bottom-nav-track::-webkit-scrollbar { display: none; }
+
+    /* Tab item */
+    .mobile-tab {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        min-width: 64px;
+        flex: 1;
+        max-width: 84px;
+        padding: 8px 6px;
+        text-decoration: none;
+        color: #adb5bd;
+        position: relative;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: color var(--trans);
+        border: none;
+        background: none;
+        font-family: inherit;
+    }
+
+    .mobile-tab-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--trans);
+    }
+
+    .mobile-tab i {
+        font-size: 21px;
+        line-height: 1;
+        transition: all var(--trans);
+    }
+
+    .mobile-tab span {
+        font-size: 9.5px;
+        font-weight: 600;
+        letter-spacing: .2px;
+        white-space: nowrap;
+        max-width: 68px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+    }
+
+    /* Active tab */
+    .mobile-tab.active {
+        color: var(--primary);
+    }
+
+    .mobile-tab.active .mobile-tab-icon {
+        background: var(--primary-light);
+    }
+
+    .mobile-tab.active i {
+        transform: translateY(-1px);
+    }
+
+    /* Top indicator line */
+    .mobile-tab.active::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 24px; height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        border-radius: 0 0 4px 4px;
+    }
+
+    /* Tap feedback */
+    .mobile-tab:active .mobile-tab-icon {
+        transform: scale(.88);
+    }
+
+    /* "More" button */
+    .mobile-tab-more {
+        flex-shrink: 0;
+    }
+
+    /* ===========================================
+       MORE DRAWER (slide up)
+    =========================================== */
+    .drawer-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1055;
+        background: rgba(0,0,0,.35);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        animation: fadeIn .22s var(--ease);
+    }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+    .more-drawer {
+        display: none;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        z-index: 1060;
+        background: #fff;
+        border-radius: 22px 22px 0 0;
+        box-shadow: 0 -8px 40px rgba(0,0,0,.15);
+        padding: 0 16px calc(24px + env(safe-area-inset-bottom, 0px));
+        transform: translateY(100%);
+        transition: transform .32s var(--ease);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .more-drawer.open { transform: translateY(0); }
+
+    .drawer-handle {
+        width: 36px; height: 4px;
+        background: #e3e6f0;
+        border-radius: 2px;
+        margin: 14px auto 18px;
+    }
+
+    .drawer-section-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #b0b7c3;
+        margin-bottom: 10px;
+        padding: 0 2px;
+    }
+
+    .drawer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .drawer-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 14px 8px;
+        border-radius: 14px;
+        background: #f8f9fc;
+        border: 1px solid #eaecf4;
+        text-decoration: none;
+        color: #5a5c69;
+        transition: all var(--trans);
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+    }
+
+    .drawer-item i {
+        font-size: 23px;
+        line-height: 1;
+    }
+
+    .drawer-item span {
+        font-size: 10.5px;
+        font-weight: 600;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .drawer-item.active {
+        background: var(--primary-light);
+        border-color: #c5d5f8;
+        color: var(--primary);
+    }
+
+    .drawer-item:active {
+        transform: scale(.91);
+    }
+
+    /* Drawer logout row */
+    .drawer-logout {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 14px;
+        border-radius: 12px;
+        background: #fff5f5;
+        border: 1px solid #fdd;
+        color: var(--danger);
+        cursor: pointer;
+        font-size: 13.5px;
+        font-weight: 600;
+        width: 100%;
+        text-align: left;
+        transition: all var(--trans);
+        margin-top: 4px;
+    }
+    .drawer-logout:active { transform: scale(.97); }
+    .drawer-logout i { font-size: 20px; }
+
+    /* ===========================================
+       RESPONSIVE
+    =========================================== */
+
+    @media (max-width: 991px) {
+        /* Hide sidebar completely on mobile */
+        .sidebar {
+            display: none !important;
         }
 
-        /* Hide/show animation (scroll-aware) */
-        .bottom-nav.hidden {
-            transform: translate(-50%, 120%);
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        /* Scrolling state - Enhanced background */
-        .bottom-nav.scrolling {
-            background: linear-gradient(135deg, 
-                rgba(102, 126, 234, 0.6) 0%, 
-                rgba(118, 75, 162, 0.55) 50%, 
-                rgba(102, 126, 234, 0.6) 100%);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            box-shadow: 
-                0 12px 40px 0 rgba(31, 38, 135, 0.8),
-                0 0 0 1px rgba(255, 255, 255, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.7),
-                0 0 0 2px rgba(102, 126, 234, 0.4),
-                0 0 20px rgba(102, 126, 234, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.5);;
-            transform: translateX(-50%) scale(1.02);
-        }
-        
-        /* Touch interaction state */
-        .bottom-nav.touching {
-            background: linear-gradient(135deg, 
-                rgba(102, 126, 234, 0.7) 0%, 
-                rgba(118, 75, 162, 0.65) 50%, 
-                rgba(102, 126, 234, 0.7) 100%);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
-            box-shadow: 
-                0 16px 50px 0 rgba(31, 38, 135, 0.9),
-                0 0 0 1px rgba(255, 255, 255, 0.8),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                0 0 0 2px rgba(102, 126, 234, 0.6),
-                0 0 30px rgba(102, 126, 234, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            transform: translateX(-50%) scale(1.05);
-        }
-        
-        /* In-view state for visible items */
-        .bottom-nav-item.in-view {
-            opacity: 1;
-        }
-        
-        .bottom-nav-item:not(.in-view) {
-            opacity: 0.7;
-            transform: scale(0.98);
-        }
-        
-        @media (max-width: 991px) {
-            .bottom-nav {
-                display: flex;
-            }
-            
-            .content-wrapper {
-                padding-bottom: 100px;
-            }
-        }
-        
-        
-        .bottom-nav-items {
-            display: flex;
-            flex-direction: row;
-            gap: 8px;
-            align-items: center;
-            width: max-content;
-            min-width: 100%;
-            transition: transform 0.3s ease;
-            padding: 0 10px;
-            scroll-snap-type: x proximity;
-            position: relative;
-        }
-        
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                        opacity 0.3s ease, 
-                        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            padding: 10px 12px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            min-width: 70px;
-            min-height: 60px;
-            flex-shrink: 0;
-            gap: 4px;
-            scroll-snap-align: center;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
+        /* Brand wrapper shrinks */
+        .navbar-brand-wrapper {
+            width: auto !important;
+            min-width: unset !important;
+            border-right: none !important;
+            padding: 0 14px !important;
         }
 
-        /* Focus ring for accessibility */
-        .bottom-nav-item:focus-visible {
-            outline: 2px solid rgba(102, 126, 234, 0.9);
-            outline-offset: 2px;
+        /* Main panel takes full width */
+        .main-panel {
+            margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
         }
 
-        /* Subtle ripple feedback */
-        .bottom-nav-item::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0) 70%);
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: width 0.35s ease, height 0.35s ease, opacity 0.45s ease;
-            pointer-events: none;
-            border-radius: 50%;
+        /* page-body-wrapper override for mobile */
+        .container-fluid.page-body-wrapper {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
         }
 
-        .bottom-nav-item:active::after {
-            width: 160px;
-            height: 160px;
-            opacity: 1;
-        }
-        
-        .bottom-nav-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        }
-        
-        /* Enhanced menu items during scrolling */
-        .bottom-nav.scrolling .bottom-nav-item {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-        
-        .bottom-nav.touching .bottom-nav-item {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-        
-        .bottom-nav-item i {
-            font-size: 20px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            z-index: 2;
-        }
-        
-        .bottom-nav-item span {
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.2px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
-        
-        /* Active State - Enhanced glass effect */
-        .bottom-nav-item.active {
-            color: #667eea;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 
-                0 6px 25px rgba(102, 126, 234, 0.4),
-                0 0 0 2px rgba(255, 255, 255, 0.8),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .bottom-nav-item.active i {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            transform: scale(1.15);
-        }
-        
-        .bottom-nav-item.active span {
-            color: #667eea;
-            font-weight: 700;
-            transform: scale(1.05);
-        }
-        
-        /* Hover State */
-        .bottom-nav-item:hover:not(.active) {
-            color: rgba(255, 255, 255, 0.95);
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-        
-        .bottom-nav-item:hover:not(.active) i {
-            transform: scale(1.1);
-        }
-        
-        .bottom-nav-item:hover:not(.active) span {
-            transform: scale(1.02);
-        }
-        
-        /* Active indicator dot */
-        .bottom-nav-item.active::before {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 8px rgba(102, 126, 234, 0.6);
+        /* Show the bottom nav — override display:none */
+        .mobile-bottom-nav {
+            display: block !important;
         }
 
-        /* Gliding active indicator (bar under the active item) */
-        .bottom-nav-items .active-indicator {
-            position: absolute;
-            bottom: 4px;
-            height: 3px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 3px;
-            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.45);
-            transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                        width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-                        opacity 0.3s ease;
-            will-change: transform, width, opacity;
-            pointer-events: none;
-            opacity: 0;
-        }
-        
-        .bottom-nav-items .active-indicator.visible {
-            opacity: 1;
-            animation: indicatorPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes indicatorPulse {
-            0%, 100% {
-                box-shadow: 0 2px 10px rgba(102, 126, 234, 0.45);
-            }
-            50% {
-                box-shadow: 0 2px 15px rgba(102, 126, 234, 0.7), 0 0 8px rgba(102, 126, 234, 0.4);
-            }
-        }
-        
-        /* Custom horizontal scrollbar */
-        .bottom-nav::-webkit-scrollbar {
-            height: 4px;
-        }
-        
-        .bottom-nav::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-        }
-        
-        .bottom-nav::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.6);
-            border-radius: 2px;
-        }
-        
-        .bottom-nav::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.8);
-        }
-        
-        /* Hide scrollbar on mobile */
-        @media (max-width: 768px) {
-            .bottom-nav::-webkit-scrollbar {
-                display: none;
-            }
-        }
-        
-        
-        .bottom-nav.expanded::before {
-            background: linear-gradient(135deg, 
-                rgba(0, 0, 0, 0.2) 0%, 
-                rgba(0, 0, 0, 0.15) 50%, 
-                rgba(0, 0, 0, 0.2) 100%);
-        }
-        
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            .bottom-nav {
-                background: linear-gradient(135deg, 
-                    rgba(0, 0, 0, 0.4) 0%, 
-                    rgba(0, 0, 0, 0.3) 50%, 
-                    rgba(0, 0, 0, 0.4) 100%);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-            
-            .bottom-nav.expanded {
-                background: linear-gradient(135deg, 
-                    rgba(0, 0, 0, 0.5) 0%, 
-                    rgba(0, 0, 0, 0.4) 50%, 
-                    rgba(0, 0, 0, 0.5) 100%);
-            }
-            
-            .bottom-nav::before {
-                background: linear-gradient(135deg, 
-                    rgba(255, 255, 255, 0.05) 0%, 
-                    rgba(255, 255, 255, 0.02) 50%, 
-                    rgba(255, 255, 255, 0.05) 100%);
-            }
+        /* Extra bottom padding for content so it's not behind bottom nav */
+        .content-wrapper {
+            padding: 14px !important;
+            padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 12px) !important;
         }
 
-        /* Respect reduced motion preferences */
-        @media (prefers-reduced-motion: reduce) {
-            .bottom-nav, .bottom-nav-items, .bottom-nav-item, .bottom-nav .active-indicator {
-                transition: none !important;
-            }
-            .bottom-nav {
-                scroll-behavior: auto;
-            }
-            .bottom-nav-item::after { display: none; }
-            .active-indicator {
-                animation: none !important;
-            }
-        }
-        
-        /* Active click feedback */
-        .bottom-nav-item:active {
-            transform: scale(0.92) translateY(-1px);
-            transition: transform 0.1s ease;
-        }
-        
-        .bottom-nav-item.active:active {
-            transform: scale(0.95) translateY(-2px);
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 576px) {
-            .bottom-nav {
-                width: calc(100% - 30px);
-                bottom: max(15px, env(safe-area-inset-bottom));
-            }
-            
-            .bottom-nav-item span {
-                font-size: 9px;
-            }
-            
-            .bottom-nav-item i {
-                font-size: 18px;
-            }
-            
-            .bottom-nav-item {
-                padding: 8px 8px;
-            }
-        }
-        
-        @media (max-width: 400px) {
-            .bottom-nav-item span {
-                font-size: 8px;
-            }
-        }
-        
-        /* Avatar Styling */
-        .navbar-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .navbar-avatar:hover {
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: scale(1.05);
-        }
-        
-        .profile-image {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Brand Logo Text Styling */
-        .brand-logo-text {
-            font-size: 20px;
-            font-weight: bolder;
-            color: #667eea;
-            margin-left: 8px;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-        }
-        
-        .brand-logo:hover .brand-logo-text {
-            transform: scale(1.05);
-        }
-        
-        .brand-logo-mini .brand-logo-text {
-            display: none;
-        }
-        
-        @media (max-width: 991px) {
-            .brand-logo-text {
-                font-size: 16px;
-                margin-left: 6px;
-            
-            }
-            
-            .brand-logo {
-                margin-right: 1rem !important;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .brand-logo-text {
-                font-size: 14px;
-                margin-left: 4px;
-               
-                
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .brand-logo-text {
-                font-size: 12px;
-                margin-left: 3px;
-                
-            }
-            
-            .brand-logo img {
-                max-height: 32px !important;
-            }
-        }
+        /* Show mobile page title, hide desktop profile name */
+        .topbar-page-title { display: block; }
+        .nav-profile-info  { display: none; }
+        .navbar-menu-wrapper { padding: 0 10px; }
+    }
+
+    @media (max-width: 576px) {
+        .content-wrapper { padding: 10px !important; padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 10px) !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after { transition: none !important; animation: none !important; }
+    }
+
+    /* profile arrow */
+    .profile-arrow{
+        font-size:14px;
+        color:#adb5bd;
+        margin-left:4px;
+        transition:transform .2s ease;
+    }
+
+    .nav-profile-chip.show .profile-arrow{
+        transform:rotate(180deg);
+    }
+
+    /* dropdown header */
+    .dropdown-header-block{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        padding:10px 12px 12px;
+        border-bottom:1px solid #f0f0f3;
+        margin-bottom:4px;
+    }
+
+    .dropdown-avatar{
+        width:34px;
+        height:34px;
+        border-radius:50%;
+        object-fit:cover;
+        flex-shrink:0;
+    }
+
+    .dropdown-user{
+        line-height:1.2;
+    }
+
+    .dropdown-name{
+        font-size:13px;
+        font-weight:600;
+        color:#2d3748;
+        margin:0;
+    }
+
+    .dropdown-email{
+        font-size:11px;
+        color:#9aa0ac;
+        margin:0;
+    }
+
+    /* dropdown item improvement */
+    .nav-dropdown-menu .dropdown-item{
+        border-radius:8px;
+        padding:9px 12px;
+        font-size:13px;
+        color:#3d3d3d;
+        display:flex;
+        align-items:center;
+        gap:9px;
+    }
+
+    .nav-dropdown-menu .dropdown-item i{
+        font-size:17px;
+        width:18px;
+        text-align:center;
+    }
+
+    /* logout style */
+    .dropdown-logout{
+        color:var(--danger);
+    }
+
+    .dropdown-logout:hover{
+        background:#fff5f5;
+        color:var(--danger);
+    }
     </style>
+
     @stack('styles')
 </head>
+
 <body>
-    <div class="container-scroller">
-        <!-- Navbar -->
-        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-                <a class="navbar-brand brand-logo me-5 d-flex align-items-center" href="{{ route('dashboard') }}">
-                    <img src="{{ asset('images/landing/Logo40.png') }}" class="me-2" alt="logo" style="max-height: 40px;" />
-                    <span class="brand-logo-text" style="padding-left: 3px">LMS SMKN 40</span>
-                </a>
-                <a class="navbar-brand brand-logo-mini" href="{{ route('dashboard') }}">
-                    <img src="{{ asset('images/landing/Logo40.png') }}" alt="logo" style="max-height: 30px;" />
-                </a>
-            </div>
-            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-                <button class="navbar-toggler navbar-toggler align-self-center d-none d-lg-block" type="button" data-toggle="minimize">
-                    <span class="icon-menu"></span>
-                </button>
-                
-                <ul class="navbar-nav navbar-nav-right">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
-                            <i class="icon-bell mx-0"></i>
-                            <span class="count"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                            <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                        </div>
-                    </li>
-                    <li class="nav-item nav-profile dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                            <div class="profile-image">
-                                <img src="{{ auth()->user()->avatar_url }}" 
-                                     alt="Profile" 
-                                     class="navbar-avatar">
-                            </div>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                            <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                                <i class="ti-settings text-primary"></i> Settings
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="dropdown-item" style="border: none; background: none; width: 100%; text-align: left;">
-                                    <i class="ti-power-off text-primary"></i> Logout
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        
-        <!-- page-body-wrapper -->
-        <div class="container-fluid page-body-wrapper">
-            <!-- Sidebar -->
-            <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                        <i class="mdi mdi-view-dashboard-outline menu-icon"></i>
-                        <span class="menu-title">Dashboard</span>
-                    </a>
-                </li>
-                
-                @if(auth()->user()->hasRole('admin'))
-                    <li class="nav-item {{ request()->routeIs('classrooms.index, classrooms.edit, classrooms.create') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('classrooms.index') }}">
-                            <i class="mdi mdi-book-education-outline menu-icon"></i>
-                            <span class="menu-title">Kelas</span>
-                        </a>
-                    </li>
+<div class="container-scroller">
 
-                    <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('courses.index') }}">
-                            <i class="mdi mdi-library-outline menu-icon"></i>
-                            <span class="menu-title">Mata Pelajaran</span>
-                        </a>
-                    </li>
+{{-- ================================================
+     TOPBAR
+================================================ --}}
+<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 
-                    <li class="nav-item {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('modules.index') }}">
-                            <i class="mdi mdi-folder-outline menu-icon"></i>
-                            <span class="menu-title">Modul</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('lessons.index') }}">
-                            <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
-                            <span class="menu-title">Materi</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('tasks.index') }}">
-                            <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
-                            <span class="menu-title">Tugas</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('quizzes.index') }}">
-                            <i class="mdi mdi-file-question-outline menu-icon"></i>
-                            <span class="menu-title">Kuis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show', 'attendance.select']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('attendance.index') }}">
-                            <i class="mdi mdi-note-check-outline menu-icon"></i>
-                            <span class="menu-title">Absensi</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('enrollments.index') }}">
-                            <i class="mdi mdi-school-outline menu-icon"></i>
-                            <span class="menu-title">Progress Siswa</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('students.index') }}">
-                            <i class="mdi mdi-account-school-outline menu-icon"></i>
-                            <span class="menu-title">Siswa</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs('ebooks.index', 'ebooks.creates') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('ebooks.index') }}">
-                            <i class="mdi mdi-book-outline menu-icon"></i>
-                            <span class="menu-title">Perpustakaan</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['counseling.index', 'counseling.show', ]) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('counseling.index') }}">
-                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
-                            <span class="menu-title">Konseling</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.index', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('testimonials.manage') }}">
-                            <i class="mdi mdi mdi-comment-alert-outline menu-icon"></i>
-                            <span class="menu-title">Aduan siswa</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['instructors.index', 'instructors.create', 'instructors.edit', 'instructors.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('instructors.index') }}">
-                            <i class="mdi mdi-human-male-board menu-icon"></i>
-                            <span class="menu-title">Management Guru</span>
-                        </a>
-                    </li>
-                @endif
-                
-                @if(auth()->user()->hasRole('instructor'))
-                    <li class="nav-item {{ request()->routeIs('ebooks.index', 'ebooks.create') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('ebooks.index') }}">
-                            <i class="mdi mdi-book-outline menu-icon"></i>
-                            <span class="menu-title">Perpustakaan</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
-                        <a class="nav-link"  href="{{ route('courses.index') }}">
-                            <i class="mdi mdi-library-outline menu-icon"></i>
-                            <span class="menu-title">Mata Pelajaran</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('modules.index') }}">
-                            <i class="mdi mdi-folder-outline menu-icon"></i>
-                            <span class="menu-title">Modul</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}" >
-                        <a class="nav-link" href="{{ route('lessons.index') }}">
-                            <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
-                            <span class="menu-title">Materi</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show', 'attendance.select']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('attendance.index') }}">
-                            <i class="mdi mdi-note-check-outline menu-icon"></i>
-                            <span class="menu-title">Absensi</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" >
-                        <a class="nav-link" href="{{ route('tasks.index') }}">
-                            <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
-                            <span class="menu-title">Tugas</span>
-                        </a>
-                    </li>
-                    <li class="nav-item  {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}" >
-                        <a class="nav-link" href="{{ route('quizzes.index') }}">
-                            <i class="mdi mdi-file-question-outline menu-icon"></i>
-                            <span class="menu-title">Kuis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['counseling.index', 'counseling.show', ]) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('counseling.index') }}">
-                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
-                            <span class="menu-title">Konseling</span>
-                        </a>
-                    </li>
-                @endif
-                
-                @if(auth()->user()->hasRole('student'))
-                    <li class="nav-item {{ request()->routeIs('ebooks.*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('ebooks.index') }}">
-                            <i class="mdi mdi-book-outline menu-icon"></i>
-                            <span class="menu-title">Perpustakaan</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']) ? 'active' : '' }}">
-                        <a class="nav-link"  href="{{ route('courses.index') }}">
-                            <i class="mdi mdi-library-outline menu-icon"></i>
-                            <span class="menu-title">Mata Pelajaran</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('modules.index') }}">
-                            <i class="mdi mdi-folder-outline menu-icon"></i>
-                            <span class="menu-title">Modul</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']) ? 'active' : '' }}">
-                        <a class="nav-link " href="{{ route('lessons.index') }}">
-                            <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
-                            <span class="menu-title">Materi</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['enrollments.index', 'enrollments.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('enrollments.index') }}">
-                            <i class="mdi mdi-account-group-outline menu-icon"></i>
-                            <span class="menu-title">Progress Pelajaran</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) ? 'active' : '' }}" >
-                        <a class="nav-link " href="{{ route('tasks.index') }}">
-                            <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
-                            <span class="menu-title">Tugas</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('quizzes.index') }}">
-                            <i class="mdi mdi-file-question-outline menu-icon"></i>
-                            <span class="menu-title">Kuis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['counseling.index', 'counseling.show', ]) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('counseling.index') }}">
-                            <i class="mdi mdi-comment-multiple-outline menu-icon"></i>
-                            <span class="menu-title">Konseling</span>
-                        </a>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs(['testimonials.index', 'testimonials.create', 'testimonials.edit']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('testimonials.create') }}">
-                            <i class="mdi mdi mdi-comment-alert-outline menu-icon"></i>
-                            <span class="menu-title">Aduan</span>
-                        </a>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-        
-        <!-- Main Panel -->
-        <div class="main-panel">
-            <div class="content-wrapper">
-                @yield('content')
-            </div>
-            <!-- Footer -->
-            <footer class="footer">
-                <div class="row">
-                    <div class="col-md-12 d-none d-md-block text-end justify-content-end">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="" target="_blank">LMS SMKN 40 Jakarta</a> 2026</span>
+    {{-- Brand --}}
+    <div class="navbar-brand-wrapper">
+        <a class="navbar-brand brand-logo d-flex align-items-center" href="{{ route('dashboard') }}">
+            <img src="{{ asset('images/landing/Logo40.png') }}" alt="Logo">
+            <span class="brand-logo-text">LMS SMKN 40</span>
+        </a>
+    </div>
+
+    {{-- Menu area --}}
+    <div class="navbar-menu-wrapper">
+
+        {{-- Sidebar toggle (desktop only) --}}
+        <button class="sidebar-toggler d-none d-lg-flex" type="button" data-toggle="minimize" title="Toggle sidebar">
+            <i class="mdi mdi-menu"></i>
+        </button>
+
+        {{-- Page title (mobile) --}}
+        <span class="topbar-page-title ml-1">{{ $title ?? 'Dashboard' }}</span>
+
+        {{-- Right side --}}
+        <ul class="navbar-nav-right">
+
+            {{-- Notifications --}}
+            <li class="nav-item dropdown">
+                <a class="nav-icon-btn" href="#" data-bs-toggle="dropdown" title="Notifikasi">
+                    <i class="mdi mdi-bell-outline"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right nav-dropdown-menu">
+                    <div class="dropdown-header-block">
+                        <p class="mb-0 font-weight-bold" style="font-size:13px;color:#2d3748;">Notifikasi</p>
+                    </div>
+                    <div class="py-3 text-center">
+                        <i class="mdi mdi-bell-sleep-outline" style="font-size:30px;color:#d1d3e2;"></i>
+                        <p class="text-muted mb-0 mt-1" style="font-size:12px;">Tidak ada notifikasi</p>
                     </div>
                 </div>
-               
-            </footer>
-        </div>
-        <!-- main-panel ends -->
+            </li>
+
+            {{-- Profile --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-profile-chip" href="#" data-bs-toggle="dropdown" id="profileDrop">
+                        <img src="{{ auth()->user()->avatar_url }}" alt="avatar">
+
+                        <div class="nav-profile-info">
+                            <span class="nav-profile-name">
+                                {{ Str::limit(auth()->user()->name, 16) }}
+                            </span>
+
+                            <span class="nav-profile-role">
+                                @if(auth()->user()->hasRole('admin'))
+                                    Admin
+                                @elseif(auth()->user()->hasRole('instructor'))
+                                    Guru
+                                @else
+                                    Siswa
+                                @endif
+                            </span>
+                        </div>
+
+                        <i class="mdi mdi-chevron-down profile-arrow"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-end nav-dropdown-menu" aria-labelledby="profileDrop">
+
+                        {{-- Header --}}
+                        <div class="dropdown-header-block">
+                            <img src="{{ auth()->user()->avatar_url }}" class="dropdown-avatar">
+
+                            <div class="dropdown-user">
+                                <p class="dropdown-name">{{ auth()->user()->name }}</p>
+                                <p class="dropdown-email">{{ auth()->user()->email }}</p>
+                            </div>
+                        </div>
+
+                        {{-- Menu --}}
+                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                            <i class="mdi mdi-account-cog-outline"></i>
+                            Profil
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item dropdown-logout">
+                                <i class="mdi mdi-logout"></i>
+                                Keluar
+                            </button>
+                        </form>
+
+                    </div>
+                </li>
+
+        </ul>
     </div>
-    <!-- page-body-wrapper ends -->
-</div>
-<!-- container-scroller -->
+</nav>
 
-<!-- plugins:js -->
-    <script src="{{ asset('skydash/vendors/js/vendor.bundle.base.js') }}"></script>
-    
-    <!-- Plugin js for this page -->
-    <script src="{{ asset('skydash/vendors/chart.js/chart.umd.js') }}"></script>
-    
-    <!-- Chart.js responsive plugin -->
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-responsive"></script>
-    
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="{{ asset('skydash/js/template.js') }}"></script>
-    
-    @stack('scripts')
-    
-    <!-- SweetAlert2 Global Scripts -->
-    <script>
-        // Handle Laravel session messages with SweetAlert
-        @if(session('success'))
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "{{ session('success') }}",
-                showConfirmButton: false,
-                timer: 1500
-            });
-        @endif
+{{-- ================================================
+     PAGE BODY
+================================================ --}}
+<div class="container-fluid page-body-wrapper">
 
-        @if(session('error'))
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "{{ session('error') }}",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        @endif
+    {{-- ================================================
+         SIDEBAR
+    ================================================ --}}
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav flex-column">
 
-        @if(session('info'))
-            Swal.fire({
-                position: "center",
-                icon: "info",
-                title: "{{ session('info') }}",
-                showConfirmButton: false,
-                timer: 1500
-            });
-        @endif
-
-        // Global function for delete confirmation
-        function confirmDelete(event, message = "You won't be able to revert this!") {
-            event.preventDefault();
-            const form = event.target.closest('form');
-            
-            Swal.fire({
-                title: "Apa kamu yakin?",
-                text: message,
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Ya, hapus!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If form exists, submit it
-                    if (form) {
-                        form.submit();
-                    } else {
-                        // Otherwise, redirect to the href
-                        window.location.href = event.target.href || event.target.closest('a').href;
-                    }
-                }
-            });
-        }
-
-        // Global function for save confirmation
-        function confirmSave(form) {
-            Swal.fire({
-                title: "Apa kamu yakin?",
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: "Simpan",
-                denyButtonText: `Kembali`
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                } else if (result.isDenied) {
-                    Swal.fire("Gagal menyimpan data!", "", "info");
-                }
-            });
-        }
-    </script>
-    
-    <script>
-        // Bottom Navigation Horizontal Slide Functionality - Enhanced
-        let bottomNav = null;
-        let isScrolling = false;
-        let lastScrollY = 0;
-        let initialViewportH = window.innerHeight;
-        let keyboardLikelyOpen = false;
-        let scrollHideRaf = null;
-        let showDebounceTimer = null;
-        let indicatorEl = null;
-        
-        function initSlideNavigation() {
-            bottomNav = document.getElementById('bottomNav');
-            
-            if (!bottomNav) return;
-            
-            // Enable smooth native scrolling
-            bottomNav.style.scrollBehavior = 'auto'; // Use 'auto' for native smoothness
-            bottomNav.style.overflowX = 'auto';
-            bottomNav.style.overflowY = 'hidden';
-            bottomNav.style.webkitOverflowScrolling = 'touch';
-            
-            // Track scrolling state - combined handler
-            bottomNav.addEventListener('scroll', function() {
-                bottomNav.classList.add('scrolling');
-                clearTimeout(bottomNav.scrollTimeout);
-                bottomNav.scrollTimeout = setTimeout(() => {
-                    bottomNav.classList.remove('scrolling');
-                    updateActiveIndicator();
-                }, 150);
-            }, { passive: true });
-
-            // Window scroll: hide on scroll down, show on scroll up - Enhanced
-            window.addEventListener('scroll', throttle(handleWindowScroll, 16), { passive: true });
-
-            // Keyboard-aware (mobile): hide when viewport height shrinks significantly
-            window.addEventListener('resize', handleResize, { passive: true });
-
-            // Enhanced keyboard navigation between items
-            bottomNav.addEventListener('keydown', handleKeyNav);
-
-            // Haptic/light vibration on item click with better timing
-            bottomNav.addEventListener('click', handleHapticClick, { capture: true });
-
-            // Center active item on load with delay
-            setTimeout(centerActiveItem, 100);
-
-            // Create and position active indicator
-            createActiveIndicator();
-            updateActiveIndicator();
-
-            // Add Intersection Observer for better performance
-            setupIntersectionObserver();
-        }
-        
-        // Throttle function for performance
-        function throttle(func, limit) {
-            let inThrottle;
-            return function() {
-                const args = arguments;
-                const context = this;
-                if (!inThrottle) {
-                    func.apply(context, args);
-                    inThrottle = true;
-                    setTimeout(() => inThrottle = false, limit);
-                }
-            }
-        }
-        
-        // Debounce function for performance
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        function handleWindowScroll() {
-            const currentY = window.scrollY || window.pageYOffset;
-            const delta = currentY - lastScrollY;
-            const threshold = 10; // Slightly increased for better detection
-            
-            if (scrollHideRaf) cancelAnimationFrame(scrollHideRaf);
-            
-            scrollHideRaf = requestAnimationFrame(() => {
-                if (Math.abs(delta) > threshold) {
-                    if (delta > 0 && currentY > 1000 && !keyboardLikelyOpen) {
-                        // Scrolling down - hide nav
-                        bottomNav.classList.add('hidden');
-                    } else if (delta < -threshold) {
-                        // Scrolling up - show nav
-                        if (showDebounceTimer) clearTimeout(showDebounceTimer);
-                        showDebounceTimer = setTimeout(() => {
-                            bottomNav.classList.remove('hidden');
-                        }, 120);
-                    }
-                }
-            });
-            
-            lastScrollY = currentY;
-        }
-
-        function handleResize() {
-            // If innerHeight reduced notably, assume keyboard open (mobile); hide bar
-            const reduction = initialViewportH - window.innerHeight;
-            keyboardLikelyOpen = reduction > 150; // heuristic
-            
-            if (keyboardLikelyOpen) {
-                bottomNav.classList.add('hidden');
-            } else {
-                bottomNav.classList.remove('hidden');
-            }
-            
-            // Update initial viewport height
-            initialViewportH = window.innerHeight;
-        }
-
-        function handleKeyNav(e) {
-            const isHorizontal = ['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key);
-            if (!isHorizontal) return;
-            
-            const items = Array.from(bottomNav.querySelectorAll('.bottom-nav-item'));
-            const active = document.activeElement;
-            const idx = items.indexOf(active);
-            let nextIdx = idx;
-            
-            if (e.key === 'ArrowRight') {
-                nextIdx = Math.min(items.length - 1, idx + 1);
-            } else if (e.key === 'ArrowLeft') {
-                nextIdx = Math.max(0, idx - 1);
-            } else if (e.key === 'Home') {
-                nextIdx = 0;
-            } else if (e.key === 'End') {
-                nextIdx = items.length - 1;
-            }
-            
-            if (nextIdx !== -1 && items[nextIdx]) {
-                items[nextIdx].focus();
-                items[nextIdx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                e.preventDefault();
-            }
-        }
-
-        function handleHapticClick(e) {
-            try {
-                if (typeof navigator !== 'undefined' && navigator.vibrate) {
-                    navigator.vibrate([10, 5, 10]);
-                }
-            } catch (_) { /* ignore */ }
-        }
-        
-        function centerActiveItem() {
-            try {
-                const active = document.querySelector('#bottomNav .bottom-nav-item.active');
-                if (active) {
-                    setTimeout(() => {
-                    active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                    }, 200);
-                }
-            } catch (_) { /* ignore */ }
-        }
-
-        function createActiveIndicator() {
-            const container = document.getElementById('bottomNavItems');
-            if (!container || indicatorEl) return;
-            indicatorEl = document.createElement('div');
-            indicatorEl.className = 'active-indicator';
-            container.appendChild(indicatorEl);
-        }
-
-        function updateActiveIndicator() {
-            const container = document.getElementById('bottomNavItems');
-            if (!container) return;
-            
-            const active = container.querySelector('.bottom-nav-item.active');
-            if (!active) {
-                if (indicatorEl) {
-                    indicatorEl.style.width = '0px';
-                    indicatorEl.classList.remove('visible');
-                }
-                return;
-            }
-            
-            if (!indicatorEl) createActiveIndicator();
-
-            const containerRect = container.getBoundingClientRect();
-            const activeRect = active.getBoundingClientRect();
-            const width = Math.max(28, Math.min(activeRect.width - 20, 60));
-            const centerX = activeRect.left + activeRect.width / 2;
-            const left = centerX - containerRect.left - width / 2 + container.scrollLeft;
-
-            indicatorEl.style.width = width + 'px';
-            indicatorEl.style.transform = `translateX(${left}px)`;
-            
-            // Add visible class for smooth fade-in
-            requestAnimationFrame(() => {
-                indicatorEl.classList.add('visible');
-            });
-        }
-        
-        function setupIntersectionObserver() {
-            const items = bottomNav.querySelectorAll('.bottom-nav-item');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                    } else {
-                        entry.target.classList.remove('in-view');
-                    }
-                });
-            }, {
-                root: bottomNav,
-                rootMargin: '-20%',
-                threshold: 0.5
-            });
-            
-            items.forEach(item => observer.observe(item));
-        }
-        
-        // Initialize slide navigation when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initSlideNavigation);
-        } else {
-            initSlideNavigation();
-        }
-        
-        // Add CSS for horizontal scrolling
-        const style = document.createElement('style');
-        style.textContent = `
-            .bottom-nav {
-                scroll-behavior: smooth;
-            }
-            
-            .bottom-nav::-webkit-scrollbar {
-                height: 4px;
-            }
-            
-            .bottom-nav::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 2px;
-            }
-            
-            .bottom-nav::-webkit-scrollbar-thumb {
-                background: rgba(102, 126, 234, 0.6);
-                border-radius: 2px;
-            }
-            
-            .bottom-nav::-webkit-scrollbar-thumb:hover {
-                background: rgba(102, 126, 234, 0.8);
-            }
-            
-            @media (max-width: 768px) {
-                .bottom-nav::-webkit-scrollbar {
-                    display: none;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
-    
-    <!-- Bottom Navigation for Mobile -->
-    <nav class="bottom-nav" id="bottomNav" role="navigation" aria-label="Primary">
-        <div class="bottom-nav-items" id="bottomNavItems">
-            @php
-                $menuItems = [];
-                
-                // Always include Dashboard
-                $menuItems[] = [
-                    'url' => route('dashboard'),
-                    'icon' => 'mdi mdi-view-dashboard-outline',
-                    'label' => 'Dashboard',
-                    'active' => request()->routeIs('dashboard'),
-                    'priority' => 1
-                ];
-                
-                // Role-specific menu items
-                if(auth()->user()->hasRole('admin')) {
-                    $menuItems = array_merge($menuItems, [
-                        [
-                            'url' => route('classrooms.index'),
-                            'icon' => 'mdi mdi-book-education-outline',
-                            'label' => 'Kelas',
-                            'active' => request()->routeIs(['classrooms.index', 'classrooms.edit', 'classrooms.create']),
-                            'priority' => 2
-                        ],
-                        [
-                            'url' => route('courses.index'),
-                            'icon' => 'mdi mdi-library-outline',
-                            'label' => 'Mata Pelajaran',
-                            'active' => request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
-                            'priority' => 3
-                        ],
-                        [
-                            'url' => route('modules.index'),
-                            'icon' => 'mdi mdi-folder-outline',
-                            'label' => 'Modul',
-                            'active' => request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']),
-                            'priority' => 4
-                        ],
-                        [
-                            'url' => route('lessons.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant-outline',
-                            'label' => 'Materi',
-                            'active' => request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']),
-                            'priority' => 5
-                        ],
-                        [
-                            'url' => route('tasks.index'),
-                            'icon' => 'mdi mdi-clipboard-check-outline',
-                            'label' => 'Tugas',
-                            'active' => request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']),
-                            'priority' => 6
-                        ],
-                        [
-                            'url' => route('quizzes.index'),
-                            'icon' => 'mdi mdi-file-question-outline',
-                            'label' => 'Kuis',
-                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']),
-                            'priority' => 7
-                        ],
-                        [
-                            'url' => route('enrollments.index'),
-                            'icon' => 'mdi mdi-account-group-outline',
-                            'label' => 'Progress Siswa',
-                            'active' => request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']),
-                            'priority' => 8
-                        ],
-                        [
-                            'url' => route('students.index'),
-                            'icon' => 'mdi mdi-account-school-outline',
-                            'label' => 'Siswa',
-                            'active' => request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']),
-                            'priority' => 9
-                        ],
-                        [
-                            'url' => route('ebooks.index'),
-                            'icon' => 'mdi mdi-book-outline',
-                            'label' => 'Perpustakaan',
-                            'active' => request()->routeIs(['ebooks.index', 'ebooks.create']),
-                            'priority' => 10
-                        ],
-                        [
-                            'url' => route('counseling.index'),
-                            'icon' => 'mdi mdi-comment-multiple-outline',
-                            'label' => 'Konseling',
-                            'active' => request()->routeIs(['counseling.index', 'counseling.show', 'counseling.create']),
-                            'priority' => 11
-                        ],
-                        [
-                            'url' => route('testimonials.manage'),
-                            'icon' => 'mdi mdi-comment-alert-outline',
-                            'label' => 'Aduan siswa',
-                            'active' => request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']),
-                            'priority' => 12
-                        ],
-                        [
-                            'url' => route('instructors.index'),
-                            'icon' => 'mdi mdi-human-male-board',
-                            'label' => 'Management Guru',
-                            'active' => request()->routeIs(['instructors.index', 'instructors.create', 'instructors.edit', 'instructors.show']),
-                            'priority' => 13
-                        ],
-                        [
-                            'url' => route('attendance.index'),
-                            'icon' => 'mdi mdi-note-check-outline',
-                            'label' => 'Absensi',
-                            'active' => request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show']),
-                            'priority' => 14
-                        ]
-                    ]);
-                } elseif(auth()->user()->hasRole('instructor')) {
-                    $menuItems = array_merge($menuItems, [
-                        [
-                            'url' => route('courses.index'),
-                            'icon' => 'mdi mdi-library-outline',
-                            'label' => 'Mata Pelajaran',
-                            'active' => request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
-                            'priority' => 2
-                        ],
-                        [
-                            'url' => route('modules.index'),
-                            'icon' => 'mdi mdi-folder-outline',
-                            'label' => 'Modul',
-                            'active' => request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']),
-                            'priority' => 3
-                        ],
-                        [
-                            'url' => route('lessons.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant-outline',
-                            'label' => 'Materi',
-                            'active' => request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']),
-                            'priority' => 4
-                        ],
-                        [
-                            'url' => route('tasks.index'),
-                            'icon' => 'mdi mdi-clipboard-check-outline',
-                            'label' => 'Tugas',
-                            'active' => request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
-                            'priority' => 5
-                        ],
-                        [
-                            'url' => route('quizzes.index'),
-                            'icon' => 'mdi mdi-file-question-outline',
-                            'label' => 'Kuis',
-                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) || request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
-                            'priority' => 6
-                        ],
-                        [
-                            'url' => route('students.index'),
-                            'icon' => 'mdi mdi-account-school-outline',
-                            'label' => 'Siswa',
-                            'active' => request()->routeIs(['students.index', 'students.create', 'students.edit', 'students.show']),
-                            'priority' => 7
-                        ],
-                        [
-                            'url' => route('counseling.index'),
-                            'icon' => 'mdi mdi-comment-multiple-outline',
-                            'label' => 'Konseling',
-                            'active' => request()->routeIs(['counseling.index', 'counseling.show', 'counseling.create']),
-                            'priority' => 8
-                        ],
-                        [
-                            'url' => route('attendance.index'),
-                            'icon' => 'mdi mdi-note-check-outline',
-                            'label' => 'Absensi',
-                            'active' => request()->routeIs(['attendance.index', 'attendance.create', 'attendance.edit', 'attendance.show']),
-                            'priority' => 9
-                        ],
-                        [
-                            'url' => route('ebooks.index'),
-                            'icon' => 'mdi mdi-book-outline',
-                            'label' => 'Perpustakaan',
-                            'active' => request()->routeIs(['ebooks.index', 'ebooks.create']),
-                            'priority' => 10
-                        ],
-                    ]);
-                } elseif(auth()->user()->hasRole('student')) {
-                    $menuItems = array_merge($menuItems, [
-                        [
-                            'url' => route('courses.index'),
-                            'icon' => 'mdi mdi-library-outline',
-                            'label' => 'Mata Pelajaran',
-                            'active' => request()->routeIs(['courses.index', 'courses.create', 'courses.edit', 'courses.show']),
-                            'priority' => 2
-                        ],
-                        [
-                            'url' => route('modules.index'),
-                            'icon' => 'mdi mdi-folder-outline',
-                            'label' => 'Modul',
-                            'active' => request()->routeIs(['modules.index', 'modules.create', 'modules.edit', 'modules.show']),
-                            'priority' => 3
-                        ],
-                        [
-                            'url' => route('lessons.index'),
-                            'icon' => 'mdi mdi-book-open-page-variant-outline',
-                            'label' => 'Materi',
-                            'active' => request()->routeIs(['lessons.index', 'lessons.create', 'lessons.edit', 'lessons.show']),
-                            'priority' => 4
-                        ],
-                        [
-                            'url' => route('tasks.index'),
-                            'icon' => 'mdi mdi-clipboard-check-outline',
-                            'label' => 'Tugas',
-                            'active' => request()->routeIs(['tasks.index', 'tasks.create', 'tasks.edit', 'tasks.show']),
-                            'priority' => 5
-                        ],
-                        [
-                            'url' => route('quizzes.index'),
-                            'icon' => 'mdi mdi-file-question-outline',
-                            'label' => 'Kuis',
-                            'active' => request()->routeIs(['quizzes.index', 'quizzes.create', 'quizzes.edit', 'quizzes.show', 'quiz.questions.*', 'quiz.taking.*']) ,
-                            'priority' => 6
-                        ],
-                        [
-                            'url' => route('counseling.index'),
-                            'icon' => 'mdi mdi-comment-multiple-outline',
-                            'label' => 'Konseling',
-                            'active' => request()->routeIs(['counseling.index', 'counseling.show', 'counseling.create']),
-                            'priority' => 7
-                        ],
-                        [
-                            'url' => route('testimonials.manage'),
-                            'icon' => 'mdi mdi-comment-alert-outline',
-                            'label' => 'Aduan',
-                            'active' => request()->routeIs(['testimonials.manage', 'testimonials.create', 'testimonials.edit', 'testimonials.approve', 'testimonials.reject', 'testimonials.toggle-featured']) ,
-                            'priority' => 8
-                        ],
-                        [
-                            'url' => route('enrollments.index'),
-                            'icon' => 'mdi mdi-account-group-outline',
-                            'label' => 'Progress Saya',
-                            'active' => request()->routeIs(['enrollments.index', 'enrollments.create', 'enrollments.edit', 'enrollments.show']),
-                            'priority' => 9
-                        ],
-                        [
-                            'url' => route('ebooks.index'),
-                            'icon' => 'mdi mdi-book-outline',
-                            'label' => 'Perpustakaan',
-                            'active' => request()->routeIs(['ebooks.index', 'ebooks.create']),
-                            'priority' => 10
-                        ],
-                    ]);
-            }
-                
-                // Always include Profile at the end
-                $menuItems[] = [
-                    'url' => route('profile.edit'),
-                    'icon' => 'mdi mdi-account-settings',
-                    'label' => 'Profile',
-                    'active' => request()->routeIs(['profile.edit', 'profile.show']),
-                    'priority' => 99
-                ];
-                
-                // Sort by priority
-                usort($menuItems, function($a, $b) {
-                    return $a['priority'] <=> $b['priority'];
-                });
-                
-                $totalItems = count($menuItems);
-                $showAllButton = $totalItems > 4;
-            @endphp
-            
-            @foreach($menuItems as $item)
-                <a href="{{ $item['url'] }}" class="bottom-nav-item {{ $item['active'] ? 'active' : '' }}" aria-current="{{ $item['active'] ? 'page' : 'false' }}" aria-label="{{ $item['label'] }}">
-                    <i class="{{ $item['icon'] }}"></i>
-                    <span>{{ $item['label'] }}</span>
+            {{-- Dashboard --}}
+            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('dashboard') }}">
+                    <i class="mdi mdi-view-dashboard-outline menu-icon"></i>
+                    <span class="menu-title">Dashboard</span>
                 </a>
-            @endforeach
-        </div>
+            </li>
+
+            @if(auth()->user()->hasRole('admin'))
+
+            <span class="sidebar-label">Manajemen</span>
+            <li class="nav-item {{ request()->routeIs(['classrooms.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('classrooms.index') }}">
+                    <i class="mdi mdi-google-classroom menu-icon"></i>
+                    <span class="menu-title">Kelas</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['students.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('students.index') }}">
+                    <i class="mdi mdi-account-school-outline menu-icon"></i>
+                    <span class="menu-title">Siswa</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['instructors.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('instructors.index') }}">
+                    <i class="mdi mdi-human-male-board menu-icon"></i>
+                    <span class="menu-title">Management Guru</span>
+                </a>
+            </li>
+
+            <span class="sidebar-label">Konten Belajar</span>
+            <li class="nav-item {{ request()->routeIs(['courses.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('courses.index') }}">
+                    <i class="mdi mdi-library-outline menu-icon"></i>
+                    <span class="menu-title">Mata Pelajaran</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['modules.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('modules.index') }}">
+                    <i class="mdi mdi-folder-outline menu-icon"></i>
+                    <span class="menu-title">Modul</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['lessons.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('lessons.index') }}">
+                    <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
+                    <span class="menu-title">Materi</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['tasks.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('tasks.index') }}">
+                    <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
+                    <span class="menu-title">Tugas</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['quizzes.*','quiz.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('quizzes.index') }}">
+                    <i class="mdi mdi-file-question-outline menu-icon"></i>
+                    <span class="menu-title">Kuis</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['exams.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('exams.index') }}">
+                    <i class="mdi mdi-fountain-pen-tip menu-icon"></i>
+                    <span class="menu-title">Ujian</span>
+                </a>
+            </li>
+
+            <span class="sidebar-label">Monitoring</span>
+            <li class="nav-item {{ request()->routeIs(['attendance.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('attendance.index') }}">
+                    <i class="mdi mdi-note-check-outline menu-icon"></i>
+                    <span class="menu-title">Absensi</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['enrollments.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('enrollments.index') }}">
+                    <i class="mdi mdi-chart-bar menu-icon"></i>
+                    <span class="menu-title">Progress Siswa</span>
+                </a>
+            </li>
+
+            <span class="sidebar-label">Lainnya</span>
+            <li class="nav-item {{ request()->routeIs(['ebooks.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('ebooks.index') }}">
+                    <i class="mdi mdi-bookshelf menu-icon"></i>
+                    <span class="menu-title">Perpustakaan</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['counseling.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('counseling.index') }}">
+                    <i class="mdi mdi-chat-outline menu-icon"></i>
+                    <span class="menu-title">Konseling</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['testimonials.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('testimonials.manage') }}">
+                    <i class="mdi mdi-comment-alert-outline menu-icon"></i>
+                    <span class="menu-title">Aduan Siswa</span>
+                </a>
+            </li>
+
+            @elseif(auth()->user()->hasRole('instructor'))
+
+            <span class="sidebar-label">Konten Belajar</span>
+            <li class="nav-item {{ request()->routeIs(['courses.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('courses.index') }}">
+                    <i class="mdi mdi-library-outline menu-icon"></i>
+                    <span class="menu-title">Mata Pelajaran</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['modules.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('modules.index') }}">
+                    <i class="mdi mdi-folder-outline menu-icon"></i>
+                    <span class="menu-title">Modul</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['lessons.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('lessons.index') }}">
+                    <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
+                    <span class="menu-title">Materi</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['tasks.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('tasks.index') }}">
+                    <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
+                    <span class="menu-title">Tugas</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['quizzes.*','quiz.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('quizzes.index') }}">
+                    <i class="mdi mdi-file-question-outline menu-icon"></i>
+                    <span class="menu-title">Kuis</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['exams.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('exams.index') }}">
+                    <i class="mdi mdi-fountain-pen-tip menu-icon"></i>
+                    <span class="menu-title">Ujian</span>
+                </a>
+            </li>
+
+            <span class="sidebar-label">Monitoring</span>
+            <li class="nav-item {{ request()->routeIs(['attendance.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('attendance.index') }}">
+                    <i class="mdi mdi-note-check-outline menu-icon"></i>
+                    <span class="menu-title">Absensi</span>
+                </a>
+            </li>
+            <span class="sidebar-label">Lainnya</span>
+            <li class="nav-item {{ request()->routeIs(['ebooks.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('ebooks.index') }}">
+                    <i class="mdi mdi-bookshelf menu-icon"></i>
+                    <span class="menu-title">Perpustakaan</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['counseling.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('counseling.index') }}">
+                    <i class="mdi mdi-chat-outline menu-icon"></i>
+                    <span class="menu-title">Konseling</span>
+                </a>
+            </li>
+
+            @elseif(auth()->user()->hasRole('student'))
+
+            <span class="sidebar-label">Belajar</span>
+            <li class="nav-item {{ request()->routeIs(['courses.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('courses.index') }}">
+                    <i class="mdi mdi-library-outline menu-icon"></i>
+                    <span class="menu-title">Mata Pelajaran</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['modules.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('modules.index') }}">
+                    <i class="mdi mdi-folder-outline menu-icon"></i>
+                    <span class="menu-title">Modul</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['lessons.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('lessons.index') }}">
+                    <i class="mdi mdi-book-open-page-variant-outline menu-icon"></i>
+                    <span class="menu-title">Materi</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['tasks.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('tasks.index') }}">
+                    <i class="mdi mdi-clipboard-check-outline menu-icon"></i>
+                    <span class="menu-title">Tugas</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['quizzes.*','quiz.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('quizzes.index') }}">
+                    <i class="mdi mdi-file-question-outline menu-icon"></i>
+                    <span class="menu-title">Kuis</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['exams.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('exams.index') }}">
+                    <i class="mdi mdi-fountain-pen-tip menu-icon"></i>
+                    <span class="menu-title">Ujian</span>
+                </a>
+            </li>
+
+            <span class="sidebar-label">Saya</span>
+            <li class="nav-item {{ request()->routeIs(['enrollments.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('enrollments.index') }}">
+                    <i class="mdi mdi-trending-up menu-icon"></i>
+                    <span class="menu-title">Progress Pelajaran</span>
+                </a>
+            </li>
+            <span class="sidebar-label">Lainnya</span>
+            <li class="nav-item {{ request()->routeIs(['ebooks.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('ebooks.index') }}">
+                    <i class="mdi mdi-bookshelf menu-icon"></i>
+                    <span class="menu-title">Perpustakaan</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['counseling.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('counseling.index') }}">
+                    <i class="mdi mdi-chat-outline menu-icon"></i>
+                    <span class="menu-title">Konseling</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs(['testimonials.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('testimonials.create') }}">
+                    <i class="mdi mdi-comment-alert-outline menu-icon"></i>
+                    <span class="menu-title">Aduan</span>
+                </a>
+            </li>
+
+            @endif
+
+            {{-- Account --}}
+            <span class="sidebar-label">Akun</span>
+            <li class="nav-item {{ request()->routeIs(['profile.*']) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('profile.edit') }}">
+                    <i class="mdi mdi-account-cog-outline menu-icon"></i>
+                    <span class="menu-title">Profil Saya</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+                    @csrf
+                    <button type="submit" class="nav-link" style="color:#e74a3b !important;">
+                        <i class="mdi mdi-logout menu-icon" style="color:var(--danger) !important;"></i>
+                        <span class="menu-title" style="color:var(--danger) !important;">Keluar</span>
+                    </button>
+                </form>
+            </li>
+
+        </ul>
     </nav>
+    {{-- /sidebar --}}
+
+    {{-- ================================================
+         MAIN PANEL
+    ================================================ --}}
+    <div class="main-panel">
+        <div class="content-wrapper">
+            @yield('content')
+        </div>
+
+        <footer class="footer">
+            <div class="row">
+                <div class="col-12 text-center text-md-right">
+                    <span>© 2026 <strong>LMS SMKN 40 Jakarta</strong>. All rights reserved.</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</div>
+{{-- /page-body-wrapper --}}
+
+{{-- ================================================
+     MOBILE BOTTOM NAV
+================================================ --}}
+@php
+/* Define primary tabs (always visible) */
+$primaryTabs = [
+    ['url' => route('dashboard'), 'icon' => 'mdi mdi-view-dashboard-outline', 'label' => 'Home', 'active' => request()->routeIs('dashboard')],
+];
+
+if(auth()->user()->hasRole('admin')) {
+    $primaryTabs[] = ['url' => route('courses.index'),    'icon' => 'mdi mdi-library-outline',           'label' => 'Pelajaran', 'active' => request()->routeIs(['courses.*'])];
+    $primaryTabs[] = ['url' => route('students.index'),   'icon' => 'mdi mdi-account-school-outline',     'label' => 'Siswa',     'active' => request()->routeIs(['students.*'])];
+    $primaryTabs[] = ['url' => route('attendance.index'), 'icon' => 'mdi mdi-note-check-outline',         'label' => 'Absensi',   'active' => request()->routeIs(['attendance.*'])];
+} elseif(auth()->user()->hasRole('instructor')) {
+    $primaryTabs[] = ['url' => route('courses.index'), 'icon' => 'mdi mdi-library-outline',          'label' => 'Pelajaran', 'active' => request()->routeIs(['courses.*'])];
+    $primaryTabs[] = ['url' => route('tasks.index'),   'icon' => 'mdi mdi-clipboard-check-outline',  'label' => 'Tugas',     'active' => request()->routeIs(['tasks.*'])];
+    $primaryTabs[] = ['url' => route('attendance.index'), 'icon' => 'mdi mdi-note-check-outline',    'label' => 'Absensi',   'active' => request()->routeIs(['attendance.*'])];
+} elseif(auth()->user()->hasRole('student')) {
+    $primaryTabs[] = ['url' => route('courses.index'), 'icon' => 'mdi mdi-library-outline',         'label' => 'Pelajaran', 'active' => request()->routeIs(['courses.*'])];
+    $primaryTabs[] = ['url' => route('tasks.index'),   'icon' => 'mdi mdi-clipboard-check-outline', 'label' => 'Tugas',     'active' => request()->routeIs(['tasks.*'])];
+    $primaryTabs[] = ['url' => route('quizzes.index'), 'icon' => 'mdi mdi-file-question-outline',   'label' => 'Kuis',      'active' => request()->routeIs(['quizzes.*','quiz.*'])];
+}
+
+/* All other items go into "More" drawer */
+$drawerItems = [];
+
+if(auth()->user()->hasRole('admin')) {
+    $drawerItems = [
+        ['url' => route('classrooms.index'),    'icon' => 'mdi mdi-google-classroom',              'label' => 'Kelas',        'active' => request()->routeIs(['classrooms.*'])],
+        ['url' => route('instructors.index'),   'icon' => 'mdi mdi-human-male-board',              'label' => 'Guru',         'active' => request()->routeIs(['instructors.*'])],
+        ['url' => route('modules.index'),       'icon' => 'mdi mdi-folder-outline',                'label' => 'Modul',        'active' => request()->routeIs(['modules.*'])],
+        ['url' => route('lessons.index'),       'icon' => 'mdi mdi-book-open-page-variant-outline','label' => 'Materi',       'active' => request()->routeIs(['lessons.*'])],
+        ['url' => route('tasks.index'),         'icon' => 'mdi mdi-clipboard-check-outline',       'label' => 'Tugas',        'active' => request()->routeIs(['tasks.*'])],
+        ['url' => route('quizzes.index'),       'icon' => 'mdi mdi-file-question-outline',         'label' => 'Kuis',         'active' => request()->routeIs(['quizzes.*','quiz.*'])],
+        ['url' => route('exams.index'),         'icon' => 'mdi mdi-fountain-pen-tip',              'label' => 'Ujian',        'active' => request()->routeIs(['exams.*'])],
+        ['url' => route('enrollments.index'),   'icon' => 'mdi mdi-chart-bar',                     'label' => 'Progress',     'active' => request()->routeIs(['enrollments.*'])],
+        ['url' => route('ebooks.index'),        'icon' => 'mdi mdi-bookshelf',                     'label' => 'E-Book',       'active' => request()->routeIs(['ebooks.*'])],
+        ['url' => route('counseling.index'),    'icon' => 'mdi mdi-chat-outline',                  'label' => 'Konseling',    'active' => request()->routeIs(['counseling.*'])],
+        ['url' => route('testimonials.manage'), 'icon' => 'mdi mdi-comment-alert-outline',         'label' => 'Aduan',        'active' => request()->routeIs(['testimonials.*'])],
+        ['url' => route('profile.edit'),        'icon' => 'mdi mdi-account-cog-outline',           'label' => 'Profil',       'active' => request()->routeIs(['profile.*'])],
+    ];
+} elseif(auth()->user()->hasRole('instructor')) {
+    $drawerItems = [
+        ['url' => route('modules.index'),    'icon' => 'mdi mdi-folder-outline',                'label' => 'Modul',     'active' => request()->routeIs(['modules.*'])],
+        ['url' => route('lessons.index'),    'icon' => 'mdi mdi-book-open-page-variant-outline','label' => 'Materi',    'active' => request()->routeIs(['lessons.*'])],
+        ['url' => route('quizzes.index'),    'icon' => 'mdi mdi-file-question-outline',         'label' => 'Kuis',      'active' => request()->routeIs(['quizzes.*','quiz.*'])],
+        ['url' => route('exams.index'),      'icon' => 'mdi mdi-fountain-pen-tip',              'label' => 'Ujian',     'active' => request()->routeIs(['exams.*'])],
+        ['url' => route('ebooks.index'),     'icon' => 'mdi mdi-bookshelf',                     'label' => 'E-Book',    'active' => request()->routeIs(['ebooks.*'])],
+        ['url' => route('counseling.index'), 'icon' => 'mdi mdi-chat-outline',                  'label' => 'Konseling', 'active' => request()->routeIs(['counseling.*'])],
+        ['url' => route('profile.edit'),     'icon' => 'mdi mdi-account-cog-outline',           'label' => 'Profil',    'active' => request()->routeIs(['profile.*'])],
+    ];
+} elseif(auth()->user()->hasRole('student')) {
+    $drawerItems = [
+        ['url' => route('modules.index'),       'icon' => 'mdi mdi-folder-outline',                'label' => 'Modul',     'active' => request()->routeIs(['modules.*'])],
+        ['url' => route('lessons.index'),       'icon' => 'mdi mdi-book-open-page-variant-outline','label' => 'Materi',    'active' => request()->routeIs(['lessons.*'])],
+        ['url' => route('exams.index'),         'icon' => 'mdi mdi-fountain-pen-tip',              'label' => 'Ujian',     'active' => request()->routeIs(['exams.*'])],
+        ['url' => route('enrollments.index'),   'icon' => 'mdi mdi-trending-up',                   'label' => 'Progress',  'active' => request()->routeIs(['enrollments.*'])],
+        ['url' => route('ebooks.index'),        'icon' => 'mdi mdi-bookshelf',                     'label' => 'E-Book',    'active' => request()->routeIs(['ebooks.*'])],
+        ['url' => route('counseling.index'),    'icon' => 'mdi mdi-chat-outline',                  'label' => 'Konseling', 'active' => request()->routeIs(['counseling.*'])],
+        ['url' => route('testimonials.create'), 'icon' => 'mdi mdi-comment-alert-outline',         'label' => 'Aduan',     'active' => request()->routeIs(['testimonials.*'])],
+        ['url' => route('profile.edit'),        'icon' => 'mdi mdi-account-cog-outline',           'label' => 'Profil',    'active' => request()->routeIs(['profile.*'])],
+    ];
+}
+@endphp
+
+{{-- Bottom Tab Bar --}}
+<div class="mobile-bottom-nav" id="mobileBottomNav">
+    <div class="mobile-bottom-nav-track">
+
+        @foreach($primaryTabs as $tab)
+        <a href="{{ $tab['url'] }}"
+           class="mobile-tab {{ $tab['active'] ? 'active' : '' }}"
+           aria-label="{{ $tab['label'] }}">
+            <div class="mobile-tab-icon">
+                <i class="{{ $tab['icon'] }}"></i>
+            </div>
+            <span>{{ $tab['label'] }}</span>
+        </a>
+        @endforeach
+
+        @if(count($drawerItems))
+        <button class="mobile-tab mobile-tab-more" id="drawerOpenBtn" aria-label="Lebih banyak">
+            <div class="mobile-tab-icon">
+                <i class="mdi mdi-dots-grid"></i>
+            </div>
+            <span>Lainnya</span>
+        </button>
+        @endif
+
+    </div>
+</div>
+
+{{-- More Drawer --}}
+@if(count($drawerItems))
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<div class="more-drawer" id="moreDrawer">
+    <div class="drawer-handle"></div>
+
+    <p class="drawer-section-label">Semua Menu</p>
+
+    <div class="drawer-grid">
+        @foreach($drawerItems as $item)
+        <a href="{{ $item['url'] }}"
+           class="drawer-item {{ $item['active'] ? 'active' : '' }}"
+           aria-label="{{ $item['label'] }}">
+            <i class="{{ $item['icon'] }}"></i>
+            <span>{{ $item['label'] }}</span>
+        </a>
+        @endforeach
+    </div>
+
+    {{-- Logout in drawer --}}
+    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+        @csrf
+        <button type="submit" class="drawer-logout">
+            <i class="mdi mdi-logout"></i>
+            Keluar dari Akun
+        </button>
+    </form>
+</div>
+@endif
+
+</div>
+{{-- /container-scroller --}}
+
+{{-- ================================================
+     SCRIPTS
+================================================ --}}
+<script src="{{ asset('skydash/vendors/js/vendor.bundle.base.js') }}"></script>
+<script src="{{ asset('skydash/vendors/chart.js/chart.umd.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('skydash/js/template.js') }}"></script>
+
+@stack('scripts')
+
+<script>
+/* ============ SWEETALERT FLASH ============ */
+@if(session('success'))
+    Swal.fire({ position:'center', icon:'success', title:"{{ session('success') }}", showConfirmButton:false, timer:1600 });
+@endif
+@if(session('error'))
+    Swal.fire({ position:'center', icon:'error',   title:"{{ session('error') }}",   showConfirmButton:false, timer:2200 });
+@endif
+@if(session('info'))
+    Swal.fire({ position:'center', icon:'info',    title:"{{ session('info') }}",    showConfirmButton:false, timer:1600 });
+@endif
+
+/* ============ DELETE CONFIRM ============ */
+function confirmDelete(event, message = 'Data ini akan dihapus secara permanen!') {
+    event.preventDefault();
+    const form = event.target.closest('form');
+    Swal.fire({
+        title: 'Hapus data ini?',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e74a3b',
+        cancelButtonColor: '#858796',
+        confirmButtonText: '<i class="mdi mdi-delete mr-1"></i>Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then(r => { if (r.isConfirmed && form) form.submit(); });
+}
+
+/* ============ MOBILE BOTTOM NAV — auto-hide on scroll down ============ */
+(function() {
+    const nav = document.getElementById('mobileBottomNav');
+    if (!nav) return;
+
+    let lastY = 0, ticking = false;
+    let hideTimer = null;
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const y = window.scrollY;
+                const delta = y - lastY;
+
+                if (delta > 8 && y > 160) {
+                    nav.classList.add('hide');
+                } else if (delta < -8) {
+                    nav.classList.remove('hide');
+                    clearTimeout(hideTimer);
+                }
+                lastY = y;
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+
+    /* hide when virtual keyboard opens (viewport shrink heuristic) */
+    const baseH = window.innerHeight;
+    window.addEventListener('resize', () => {
+        if (window.innerHeight < baseH - 150) {
+            nav.classList.add('hide');
+        } else {
+            nav.classList.remove('hide');
+        }
+    }, { passive: true });
+})();
+
+/* ============ MORE DRAWER ============ */
+(function() {
+    const openBtn  = document.getElementById('drawerOpenBtn');
+    const drawer   = document.getElementById('moreDrawer');
+    const overlay  = document.getElementById('drawerOverlay');
+
+    if (!openBtn || !drawer) return;
+
+    let startY = 0;
+
+    function open() {
+        overlay.style.display = 'block';
+        drawer.style.display  = 'block';
+        // Double rAF ensures display:block is painted before transition starts
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            overlay.style.opacity = '1';
+            drawer.classList.add('open');
+        }));
+        document.body.style.overflow = 'hidden';
+        try { if (navigator.vibrate) navigator.vibrate(8); } catch(_) {}
+    }
+
+    function close() {
+        drawer.classList.remove('open');
+        overlay.style.opacity = '0';
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            drawer.style.display  = 'none';
+        }, 320);
+    }
+
+    openBtn.addEventListener('click', open);
+    overlay.addEventListener('click', close);
+
+    /* Swipe down to close */
+    drawer.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive:true });
+    drawer.addEventListener('touchend', e => {
+        if (e.changedTouches[0].clientY - startY > 70) close();
+    }, { passive:true });
+
+    /* Close drawer when a link inside is tapped */
+    drawer.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => close());
+    });
+})();
+
+/* ============ TAP HAPTIC ============ */
+document.querySelectorAll('.mobile-tab, .drawer-item').forEach(el => {
+    el.addEventListener('pointerdown', () => {
+        try { if (navigator.vibrate) navigator.vibrate(6); } catch(_) {}
+    });
+});
+</script>
+
 </body>
 </html>
-

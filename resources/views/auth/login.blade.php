@@ -6,26 +6,26 @@
         @csrf
 
         <!-- Email Address -->
-        <div class="{{ $errors->get('email') ? 'animate-shake' : '' }}">
-            <x-input-label for="email" :value="__('Email Address')" class="text-xs sm:text-sm font-semibold {{ $errors->get('email') ? 'text-red-700' : 'text-blue-900' }} mb-2 block" />
+        <div class="{{ $errors->get('login') ? 'animate-shake' : '' }}">
+            <x-input-label for="login" :value="__('Email atau NISN')" class="text-xs sm:text-sm font-semibold {{ $errors->get('login') ? 'text-red-700' : 'text-blue-900' }} mb-2 block" />
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-2.5 sm:pl-3 flex items-center pointer-events-none">
-                    <svg class="h-4 w-4 sm:h-5 sm:w-5 {{ $errors->get('email') ? 'text-red-400' : 'text-blue-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                    <svg class="h-4 w-4 sm:h-5 sm:w-5 {{ $errors->get('login') ? 'text-red-400' : 'text-blue-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
                 </div>
-                        <x-text-input 
-                            id="email" 
-                            class="block w-full pl-8 sm:pl-10 pr-3 py-2.5 sm:py-3 border {{ $errors->get('email') ? 'border-red-300 bg-red-50' : 'border-blue-200 bg-blue-50' }} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 focus:bg-white text-sm sm:text-base hover:border-blue-300 focus:shadow-lg" 
-                            type="email" 
-                            name="email" 
-                            :value="old('email')" 
-                            required 
-                            autofocus 
-                            autocomplete="username"
-                            placeholder="Enter your email address" />
+                <x-text-input 
+                    id="login" 
+                    class="block w-full pl-8 sm:pl-10 pr-3 py-2.5 sm:py-3 border {{ $errors->get('login') ? 'border-red-300 bg-red-50' : 'border-blue-200 bg-blue-50' }} rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 focus:bg-white text-sm sm:text-base hover:border-blue-300 focus:shadow-lg" 
+                    type="text" 
+                    name="login" 
+                    :value="old('login')" 
+                    required 
+                    autofocus 
+                    autocomplete="username"
+                    placeholder="Masukkan Email atau NISN Anda" />
             </div>
-            <x-input-error :messages="$errors->get('email')" class="mt-2 text-sm text-red-600" />
+            <x-input-error :messages="$errors->get('login')" class="mt-2 text-sm text-red-600" />
         </div>
 
         <!-- Password -->

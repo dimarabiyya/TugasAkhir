@@ -1,24 +1,44 @@
 @extends('layouts.skydash')
 
 @section('content')
-<!-- Header Section -->
-<div class="row">
-    <div class="col-md-12 grid-margin">
-        <div class="row">
-            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <div class="d-flex align-items-center">
-                    <div>
-                        <h3 class="font-weight-bold mb-2">Manajemen Siswa</h3>
-                        <p class="text-muted mb-0">Kelola akun siswa dan kemajuan pembelajaran mereka</p>
+
+{{-- ===== PAGE HEADER ===== --}}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); border-radius: 12px;">
+            <div class="card-body py-4 px-4">
+                <div class="row align-items-center">
+                    <div class="col-12 col-xl-7 mb-3 mb-xl-0">
+                        <div class="d-flex align-items-center">
+                            <div style="background: rgba(255,255,255,0.2); border-radius: 10px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-right: 14px; flex-shrink: 0;">
+                                <i class="mdi mdi-account-school-outline text-white" style="font-size: 26px;"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-weight-bold text-white mb-0">Manajemen Siswa</h4>
+                                <p class="text-white-50 mb-0" style="font-size: 13px;">Kelola akun siswa dan kemajuan pembelajaran mereka</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-12 col-xl-4">
-                <div class="justify-content-end d-flex">
                     @if(auth()->user()->hasRole('admin'))
-                        <a href="{{ route('students.create') }}" class="btn btn-primary mr-2">
-                            <i class="mdi mdi-plus"></i> Tambah Siswa
+                    <div class="col-12 col-xl-5 d-flex justify-content-xl-end flex-wrap" style="gap: 8px;">
+                        {{-- Import Excel --}}
+                        <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data"
+                              class="d-flex align-items-center" style="gap: 6px;">
+                            @csrf
+                            <input type="file" name="file" accept=".xlsx,.xls,.csv" required
+                                   style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; color: #fff; font-size: 12px; padding: 10px 10px ; max-width: 96px; height:5vh">
+                            <button type="submit"   
+                                    class="btn font-weight-bold"
+                                    style="background: rgba(255,255,255,0.15); color: #fff; border-radius: 8px; font-size: 13px; border: 1px solid rgba(255,255,255,0.3); white-space: nowrap;">
+                                <i class="mdi mdi-file-excel mr-1"></i> Import
+                            </button>
+                        </form>
+                        <a href="{{ route('students.create') }}"
+                           class="btn font-weight-bold"
+                           style="background: #fff; color: #4e73df; border-radius: 8px; font-size: 13px; border: none; white-space: nowrap;">
+                            <i class="mdi mdi-plus mr-1"></i> Tambah Siswa
                         </a>
+                    </div>
                     @endif
                 </div>
             </div>
@@ -26,289 +46,275 @@
     </div>
 </div>
 
-<!-- Search and Filter Section -->
-<div class="row">
-    <div class="col-md-12 grid-margin">
-            <div class="filter-card">
+{{-- ===== FILTER CARD ===== --}}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-body p-4">
                 <form method="GET" action="{{ route('students.index') }}" id="searchbar">
-                    <div class="row align-items-end g-3">
-                        <div class="col-md-4">
-                            <label for="search" class="filter-label">Cari Siswa</label>
-                            <input type="text" class="form-control" id="search" name="search" 
-                                value="{{ request('search') }}" placeholder="Cari berdasarkan nama, email, atau telepon...">
+                    <div class="row align-items-end" style="gap: 0;">
+
+                        {{-- Search --}}
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <label class="mb-2" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af;">Cari Siswa</label>
+                            <div style="position: relative;">
+                                <div style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <i class="mdi mdi-magnify" style="font-size: 17px; color: #adb5bd;"></i>
+                                </div>
+                                <input type="text" name="search" id="search"
+                                       class="form-control"
+                                       placeholder="Nama, email, atau telepon..."
+                                       value="{{ request('search') }}"
+                                       style="border-radius: 8px; border-color: #d1d3e2; font-size: 13px; height: 42px; padding-left: 38px;"
+                                       onfocus="this.style.borderColor='#4e73df'; this.style.boxShadow='0 0 0 3px rgba(78,115,223,0.12)';"
+                                       onblur="this.style.borderColor='#d1d3e2'; this.style.boxShadow='none';">
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label for="enrollment_status" class="filter-label">Status Siswa</label>
-                            <select class="form-control" id="enrollment_status" name="enrollment_status">
-                                <option value="">Semua Siswa</option>
-                                <option value="enrolled" {{ request('enrollment_status') == 'enrolled' ? 'selected' : '' }}>Terdaftar</option>
-                                <option value="not_enrolled" {{ request('enrollment_status') == 'not_enrolled' ? 'selected' : '' }}>Tidak Terdaftar</option>
-                            </select>
+
+                        {{-- Status Siswa --}}
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                            <label class="mb-2" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af;">Status Siswa</label>
+                            <div style="position: relative;">
+                                <select name="enrollment_status" id="enrollment_status" class="form-control"
+                                        style="border-radius: 8px; border-color: #d1d3e2; font-size: 13px; height: 42px; appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer;"
+                                        onfocus="this.style.borderColor='#4e73df'; this.style.boxShadow='0 0 0 3px rgba(78,115,223,0.12)';"
+                                        onblur="this.style.borderColor='#d1d3e2'; this.style.boxShadow='none';">
+                                    <option value="">Semua Siswa</option>
+                                    <option value="enrolled"     {{ request('enrollment_status') == 'enrolled'     ? 'selected' : '' }}>Terdaftar</option>
+                                    <option value="not_enrolled" {{ request('enrollment_status') == 'not_enrolled' ? 'selected' : '' }}>Tidak Terdaftar</option>
+                                </select>
+                                <div style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <i class="mdi mdi-chevron-down" style="font-size: 17px; color: #adb5bd;"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label for="email_verified" class="filter-label">Status Email</label>
-                            <select class="form-control" id="email_verified" name="email_verified">
-                                <option value="">Semua</option>
-                                <option value="verified" {{ request('email_verified') == 'verified' ? 'selected' : '' }}>Terverifikasi</option>
-                                <option value="unverified" {{ request('email_verified') == 'unverified' ? 'selected' : '' }}>Belum Terverifikasi</option>
-                            </select>
+
+                        {{-- Status Email --}}
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                            <label class="mb-2" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af;">Status Email</label>
+                            <div style="position: relative;">
+                                <select name="email_verified" id="email_verified" class="form-control"
+                                        style="border-radius: 8px; border-color: #d1d3e2; font-size: 13px; height: 42px; appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer;"
+                                        onfocus="this.style.borderColor='#4e73df'; this.style.boxShadow='0 0 0 3px rgba(78,115,223,0.12)';"
+                                        onblur="this.style.borderColor='#d1d3e2'; this.style.boxShadow='none';">
+                                    <option value="">Semua</option>
+                                    <option value="verified"   {{ request('email_verified') == 'verified'   ? 'selected' : '' }}>Terverifikasi</option>
+                                    <option value="unverified" {{ request('email_verified') == 'unverified' ? 'selected' : '' }}>Belum Terverifikasi</option>
+                                </select>
+                                <div style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <i class="mdi mdi-chevron-down" style="font-size: 17px; color: #adb5bd;"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="d-flex align-items-end gap-2">
-                                <button type="submit" class="btn btn-primary btn-sm flex-grow-1">
-                                    <i class="mdi mdi-magnify"></i> Cari
+
+                        {{-- Buttons --}}
+                        <div class="col-12 col-md-2">
+                            <div class="d-flex" style="gap: 6px;">
+                                <button type="submit" class="btn flex-fill"
+                                        style="background: linear-gradient(135deg, #4e73df, #224abe); color: #fff; border-radius: 8px; font-weight: 600; font-size: 13px; height: 42px; border: none; box-shadow: 0 3px 10px rgba(78,115,223,0.25);">
+                                    <i class="mdi mdi-magnify mr-1"></i> Cari
                                 </button>
-                                <a href="{{ route('students.index') }}" class="btn btn-reset" title="Reset">
-                                    <i class="mdi mdi-refresh"></i>
+                                <a href="{{ route('students.index') }}"
+                                   title="Reset"
+                                   style="background: #f4f6fb; color: #6b7280; border-radius: 8px; font-weight: 600; font-size: 13px; height: 42px; border: 1px solid #e3e6f0; padding: 0 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"
+                                   onmouseover="this.style.background='#e3e6f0';"
+                                   onmouseout="this.style.background='#f4f6fb';">
+                                    <i class="mdi mdi-refresh" style="font-size: 18px;"></i>
                                 </a>
                             </div>
                         </div>
+
                     </div>
                 </form>
-            </div>
-    </div>
-</div>
-
-<!-- Students List -->
-<div class="row">
-    <div class="col-md-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title mb-0">
-                        <i class="mdi mdi-account-group text-primary"></i> Semua Siswa ({{ $students->total() }})
-                    </h4>
-                </div>
-
-                @if($students->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Avatar</th>
-                                    <th>Nama</th>
-                                    <th>Email</th>
-                                    <th>Telepon</th>
-                                    <th>Tingkat</th>
-                                    <th>Jumlah Mapel</th>
-                                    <th>Status</th>
-                                    <th>Bergabung</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($students as $student)
-                                <tr>
-                                    <td>
-                                        <div class="student-avatar">
-                                            <img src="{{ $student->avatar_url }}" 
-                                                 alt="Avatar" 
-                                                 class="table-avatar">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <h6 class="mb-1 font-weight-bold">{{ $student->name }}</h6>
-                                            <small class="text-muted">ID: #{{ $student->id }}</small>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <span class="text-primary">{{ $student->email }}</span>
-                                            @if($student->email_verified_at)
-                                                <br><small class="text-success"><i class="mdi mdi-check-circle"></i> Terverifikasi</small>
-                                            @else
-                                                <br><small class="text-warning"><i class="mdi mdi-alert-circle"></i> Belum Terverifikasi</small>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @if($student->phone)
-                                            <span class="text-muted">{{ $student->phone }}</span>
-                                        @else
-                                            <span class="text-muted">-</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($student->level)
-                                            @php
-                                                $levelColors = [
-                                                    'beginner' => 'success',
-                                                    'intermediate' => 'warning',
-                                                    'advanced' => 'danger'
-                                                ];
-                                                $levelLabels = [
-                                                    'beginner' => 'Pemula',
-                                                    'intermediate' => 'Menengah',
-                                                    'advanced' => 'Lanjutan'
-                                                ];
-                                            @endphp
-                                            <span class="badge badge-{{ $levelColors[$student->level] ?? 'secondary' }}">
-                                                {{ $levelLabels[$student->level] ?? ucfirst($student->level) }}
-                                            </span>
-                                        @else
-                                            <span class="text-muted">-</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <span class="badge badge-info">{{ $student->enrollments->count() }}</span>
-                                            @if($student->enrollments->count() > 0)
-                                                <br><small class="text-muted">{{ $student->enrollments->where('completed_at', '!=', null)->count() }} selesai</small>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @if($student->enrollments->count() > 0)
-                                            <span class="badge badge-success">Aktif</span>
-                                        @else
-                                            <span class="badge badge-secondary">Tidak Aktif</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <small class="text-muted">{{ $student->created_at->format('M d, Y') }}</small>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group btn-sm-group gap-1" role="group">
-                                            <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-info" title="Lihat">
-                                                <i class="mdi mdi-eye"></i>
-                                            </a>
-                                            @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
-                                                <a href="{{ route('students.edit', $student) }}" class="btn btn-sm btn-primary" title="Edit">
-                                                    <i class="mdi mdi-pencil"></i>
-                                                </a>
-                                                <form action="{{ route('students.destroy', $student) }}" method="POST" class="d-inline btn-sm btn-danger"
-                                                      onsubmit="event.preventDefault(); confirmDelete(event, 'Apakah Anda yakin ingin menghapus siswa ini?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm bg-danger" style="border-radius: 0px 12px 12px 0px" title="Hapus">
-                                                        <i class="mdi mdi-delete"></i>
-                                                    </button>
-                                                </form>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $students->links() }}
-                    </div>
-                @else
-                    <div class="text-center py-5">
-                        <i class="mdi mdi-account-group" style="font-size: 64px; color: #e3e6f0;"></i>
-                        <h5 class="mt-3 mb-2 text-muted">Tidak ada siswa ditemukan</h5>
-                        <p class="text-muted">
-                            @if(request()->hasAny(['search', 'enrollment_status', 'email_verified']))
-                                Coba sesuaikan kriteria pencarian Anda
-                            @else
-                                Belum ada siswa yang terdaftar
-                            @endif
-                        </p>
-
-                        @if(auth()->user()->hasRole('admin'))
-                            <a href="{{ route('students.create') }}" class="btn btn-primary">
-                                <i class="mdi mdi-plus"></i> Tambah Siswa Pertama
-                            </a>
-                        @endif
-                    </div>
-                @endif
             </div>
         </div>
     </div>
 </div>
 
-@push('styles')
-<style>
-    .filter-card {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 20px 24px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
-    border: 1px solid #f0f0f0;
-  }
-  .filter-label {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.6px;
-    text-transform: uppercase; color: #9ca3af; margin-bottom: 6px; display: block;
-  }
-  .filter-card .form-control {
-    font-size: 14px; font-weight: 500; color: #111827;
-    background: #f9fafb; border: 1.5px solid #e5e7eb;
-    border-radius: 10px; padding: 9px 14px; height: auto;
-    transition: all 0.2s; box-shadow: none;
-  }
-  .filter-card .form-control:focus {
-    background: #fff; border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
-  }
-  .search-input-wrapper { position: relative; }
-  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 17px; pointer-events: none; }
-  .search-input-wrapper .form-control { padding-left: 38px; }
-    select.form-control { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
-  .btn-search { font-size: 13px; font-weight: 600; background: linear-gradient(135deg,#6366f1,#4f46e5); color: #fff; border: none; border-radius: 10px; padding: 9px 20px; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(99,102,241,0.3); transition: all 0.2s; cursor: pointer; }
-  .btn-search:hover { background: linear-gradient(135deg,#4f46e5,#4338ca); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(99,102,241,0.4); color:#fff; }
-  .btn-reset { font-size: 13px; font-weight: 600; background: #f3f4f6; color: #6b7280; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 9px 14px; display: flex; align-items: center; gap: 6px; transition: all 0.2s; cursor: pointer; text-decoration: none; }
-  .btn-reset:hover { background: #e5e7eb; color: #374151; }
+{{-- ===== TABLE CARD ===== --}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-body p-0">
 
+                {{-- Card Header --}}
+                <div class="d-flex align-items-center justify-content-between px-4 py-3" style="border-bottom: 1px solid #f0f0f3;">
+                    <div class="d-flex align-items-center">
+                        <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                            <i class="mdi mdi-account-group-outline" style="font-size: 18px; color: #4e73df;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 font-weight-bold text-dark">Semua Siswa</h5>
+                            <small class="text-muted">{{ $students->total() }} siswa terdaftar</small>
+                        </div>
+                    </div>
+                </div>
 
-    .table th {
-        border-top: none;
-        font-weight: 600;
-        color: #495057;
-    }
-    
-    .table td {
-        vertical-align: middle;
-    }
-    
-    .table-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #e3e6f0;
-    }
-    
-    .student-avatar {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .badge {
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-    
-    .btn-group .btn {
-        margin-right: 2px;
-    }
-    
-    .btn-group .btn:last-child {
-        margin-right: 0;
-    }
-    
-    .form-control:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-    }
-</style>
-@endpush
+                @if($students->count() > 0)
+                <div class="table-responsive">
+                    <table class="table mb-0" style="border-collapse: separate; border-spacing: 0;">
+                        <thead>
+                            <tr style="background: #f8f9fc;">
+                                <th style="padding: 12px 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">#</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Siswa</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">NISN</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Email</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Tingkat</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none; text-align: center;">Mapel</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Status</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none; text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $levelColors = ['beginner' => ['bg'=>'#e3f9e5','c'=>'#1cc88a'], 'intermediate' => ['bg'=>'#fff3e8','c'=>'#f6c23e'], 'advanced' => ['bg'=>'#fde8e8','c'=>'#e74a3b']];
+                                $levelLabels = ['beginner' => 'Pemula', 'intermediate' => 'Menengah', 'advanced' => 'Lanjutan'];
+                            @endphp
+                            @foreach($students as $index => $student)
+                            <tr style="transition: background 0.15s ease;"
+                                onmouseover="this.style.background='#f8f9fc';"
+                                onmouseout="this.style.background='white';">
 
-@push('scripts')
-<script>
-function confirmDelete(event, message) {
-    if (confirm(message)) {
-        event.target.closest('form').submit();
-    }
-}
-</script>
-@endpush
+                                {{-- No --}}
+                                <td style="padding: 14px 20px; border-bottom: 1px solid #f0f0f3; vertical-align: middle;">
+                                    <span style="background: #e8f0fe; color: #4e73df; border-radius: 6px; padding: 2px 9px; font-size: 12px; font-weight: 700;">
+                                        {{ $students->firstItem() + $index }}
+                                    </span>
+                                </td>
+
+                                {{-- Siswa --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle;">
+                                    <div class="d-flex align-items-center" style="gap: 10px;">
+                                        <img src="{{ $student->avatar_url }}" alt="{{ $student->name }}"
+                                             style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #e8f0fe; flex-shrink: 0;">
+                                        <div>
+                                            <p class="mb-0 font-weight-bold text-dark" style="font-size: 13px;">{{ $student->name }}</p>
+                                            <small class="text-muted">{{ $student->phone ?? '-' }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                {{-- NISN --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle;">
+                                    <span style="font-size: 13px; color: #5a5c69;">{{ $student->nisn ?? '—' }}</span>
+                                </td>
+
+                                {{-- Email --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle;">
+                                    <p class="mb-0" style="font-size: 13px; color: #4e73df;">{{ $student->email }}</p>
+                                    @if($student->email_verified_at)
+                                        <small style="color: #1cc88a;"><i class="mdi mdi-check-circle" style="font-size: 12px;"></i> Terverifikasi</small>
+                                    @else
+                                        <small style="color: #f6c23e;"><i class="mdi mdi-alert-circle" style="font-size: 12px;"></i> Belum</small>
+                                    @endif
+                                </td>
+
+                                {{-- Tingkat --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle;">
+                                    @if($student->level)
+                                        @php $lc = $levelColors[$student->level] ?? ['bg'=>'#f4f6fb','c'=>'#858796']; @endphp
+                                        <span style="background: {{ $lc['bg'] }}; color: {{ $lc['c'] }}; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600;">
+                                            {{ $levelLabels[$student->level] ?? ucfirst($student->level) }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted" style="font-size: 12px;">—</span>
+                                    @endif
+                                </td>
+
+                                {{-- Mapel --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle; text-align: center;">
+                                    <span style="background: #e0f7fa; color: #17a2b8; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 700;">
+                                        {{ $student->enrollments->count() }}
+                                    </span>
+                                    @if($student->enrollments->count() > 0)
+                                    <br><small class="text-muted" style="font-size: 10px;">{{ $student->enrollments->where('completed_at', '!=', null)->count() }} selesai</small>
+                                    @endif
+                                </td>
+
+                                {{-- Status --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle;">
+                                    @if($student->enrollments->count() > 0)
+                                        <span style="background: #e3f9e5; color: #1cc88a; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700;">
+                                            <i class="mdi mdi-check-circle mr-1"></i>Aktif
+                                        </span>
+                                    @else
+                                        <span style="background: #f4f6fb; color: #858796; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700;">
+                                            <i class="mdi mdi-minus-circle mr-1"></i>Tidak Aktif
+                                        </span>
+                                    @endif
+                                </td>
+
+                                {{-- Aksi --}}
+                                <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f3; vertical-align: middle; text-align: center;">
+                                    <div class="d-flex align-items-center justify-content-center" style="gap: 5px;">
+                                        <a href="{{ route('students.show', $student) }}" title="Lihat"
+                                           style="background: #e8f0fe; color: #4e73df; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"
+                                           onmouseover="this.style.background='#4e73df';this.style.color='#fff';"
+                                           onmouseout="this.style.background='#e8f0fe';this.style.color='#4e73df';">
+                                            <i class="mdi mdi-eye" style="font-size: 15px;"></i>
+                                        </a>
+                                        @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('instructor'))
+                                        <a href="{{ route('students.edit', $student) }}" title="Edit"
+                                           style="background: #e8f0fe; color: #4e73df; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"
+                                           onmouseover="this.style.background='#4e73df';this.style.color='#fff';"
+                                           onmouseout="this.style.background='#e8f0fe';this.style.color='#4e73df';">
+                                            <i class="mdi mdi-pencil" style="font-size: 15px;"></i>
+                                        </a>
+                                        <form action="{{ route('students.destroy', $student) }}" method="POST" class="d-inline m-0"
+                                              onsubmit="confirmDelete(event, 'Data siswa ini akan dihapus permanen.');">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" title="Hapus"
+                                                    style="background: #fde8e8; color: #e74a3b; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                                                    onmouseover="this.style.background='#e74a3b';this.style.color='#fff';"
+                                                    onmouseout="this.style.background='#fde8e8';this.style.color='#e74a3b';">
+                                                <i class="mdi mdi-delete" style="font-size: 15px;"></i>
+                                            </button>
+                                        </form>
+                                        @endif
+                                    </div>
+                                </td>
+
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Pagination --}}
+                @if($students->hasPages())
+                <div class="px-4 py-3" style="border-top: 1px solid #f0f0f3; background: #fafbff; border-radius: 0 0 12px 12px;">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 8px;">
+                        <p class="text-muted mb-0" style="font-size: 12px;">
+                            Menampilkan {{ $students->firstItem() }}–{{ $students->lastItem() }} dari {{ $students->total() }} siswa
+                        </p>
+                        {{ $students->withQueryString()->links() }}
+                    </div>
+                </div>
+                @endif
+
+                @else
+                {{-- Empty State --}}
+                <div class="text-center py-5">
+                    <div style="background: #f0f0f3; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <i class="mdi mdi-account-group-outline" style="font-size: 40px; color: #c4c6d0;"></i>
+                    </div>
+                    <h5 class="font-weight-bold text-dark mb-1">
+                        {{ request()->hasAny(['search','enrollment_status','email_verified']) ? 'Tidak Ada Hasil Pencarian' : 'Belum Ada Siswa' }}
+                    </h5>
+                    <p class="text-muted mb-4" style="font-size: 14px;">
+                        {{ request()->hasAny(['search','enrollment_status','email_verified']) ? 'Coba sesuaikan filter pencarian Anda.' : 'Tambahkan siswa pertama untuk memulai.' }}
+                    </p>
+                    @if(auth()->user()->hasRole('admin') && !request()->hasAny(['search','enrollment_status','email_verified']))
+                    <a href="{{ route('students.create') }}" class="btn btn-primary" style="border-radius: 8px; font-weight: 600; padding: 10px 24px;">
+                        <i class="mdi mdi-plus mr-1"></i> Tambah Siswa Pertama
+                    </a>
+                    @endif
+                </div>
+                @endif
+
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection

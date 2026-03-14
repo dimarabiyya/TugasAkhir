@@ -9,6 +9,8 @@ use App\Models\TaskGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\TaskGradeExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TaskController extends Controller
 {
@@ -255,4 +257,23 @@ class TaskController extends Controller
 
         return redirect()->back()->with('success', 'Nilai berhasil dihapus!');
     }
+
+    public function exportExcel($taskId)
+    {
+        $task = Task::findOrFail($taskId);
+        $user = auth()->user();
+
+        // Proteksi: Hanya Admin atau Guru pemilik tugas yang bisa export
+        if (!$user->hasRole('admin')) {
+            $canAccess = ($task->lesson->module->course->instructor_id == $user->id);
+            if (!$canAccess) {
+                abort(403, 'Anda tidak memiliki izin untuk mengekspor nilai ini.');
+            }
+        }
+
+        $fileName = 'Nilai_Tugas_' . Str::slug($task->title) . '_' . date('Ymd_His') . '.xlsx';
+
+        return Excel::download(new TaskGradeExport($taskId), $fileName);
+    }
+    
 }

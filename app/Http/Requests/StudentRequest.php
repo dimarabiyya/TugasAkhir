@@ -35,6 +35,7 @@ class StudentRequest extends FormRequest
             ],
             'phone' => 'nullable|string|max:20',
             'level' => 'nullable|string|in:beginner,intermediate,advanced',
+            'nisn' => 'nullable|string|max:50|unique:users,nisn,' . $studentId,
         ];
 
         // Password is required for creation, optional for updates

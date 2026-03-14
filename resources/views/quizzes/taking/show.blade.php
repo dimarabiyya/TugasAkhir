@@ -1,33 +1,40 @@
 @extends('layouts.skydash')
 
 @section('content')
-<!-- Debug Info -->
+
+{{-- Debug (hidden in production) --}}
 <script>
     console.log('Quiz ID: {{ $quiz->id }}');
     console.log('Attempt ID: {{ $attempt->id }}');
-    console.log('Form action: {{ route("quiz.taking.submit", ["quiz" => $quiz, "attempt" => $attempt]) }}');
 </script>
 
-<div class="quiz-taking-container">
-    <!-- Quiz Header -->
-    <div class="row mb-4">
+<div style="max-width: 860px; margin: 0 auto;">
+
+    {{-- ===== QUIZ HEADER ===== --}}
+    <div class="row mb-3">
         <div class="col-md-12">
-            <div class="card quiz-header-card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
+            <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); border-radius: 12px;">
+                <div class="card-body py-3 px-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
                         <div>
-                            <h3 class="mb-1">{{ $quiz->title }}</h3>
-                            <p class="text-muted mb-0">{{ $quiz->description ?? '' }}</p>
-                        </div>
-                        <div class="text-right">
-                            @if($quiz->time_limit_minutes)
-                                <div id="timer" class="timer-display">
-                                    <i class="icon-clock mr-2"></i>
-                                    <span id="time-remaining">--:--</span>
-                                </div>
+                            <h5 class="font-weight-bold text-white mb-0">{{ $quiz->title }}</h5>
+                            @if($quiz->description)
+                            <p class="text-white-50 mb-0" style="font-size: 12px;">{{ $quiz->description }}</p>
                             @endif
-                            <div class="mt-2">
-                                <span class="badge badge-info">Pertanyaan <span id="current-question">1</span> dari {{ $questions->count() }}</span>
+                        </div>
+                        <div class="d-flex align-items-center" style="gap: 10px;">
+                            @if($quiz->time_limit_minutes)
+                            <div id="timer"
+                                 style="background: rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 16px; display: flex; align-items: center; gap: 6px;">
+                                <i class="mdi mdi-clock-outline text-white" style="font-size: 18px;"></i>
+                                <span id="time-remaining" class="text-white font-weight-bold" style="font-size: 18px; font-family: monospace; letter-spacing: 1px;">--:--</span>
+                            </div>
+                            @endif
+                            <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 14px; text-align: center;">
+                                <p class="text-white-50 mb-0" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px;">Soal</p>
+                                <p class="text-white font-weight-bold mb-0" style="font-size: 14px;">
+                                    <span id="current-question">1</span> / {{ $questions->count() }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -36,37 +43,52 @@
         </div>
     </div>
 
-    <!-- Progress Bar -->
-    <div class="row mb-4">
+    {{-- ===== PROGRESS BAR ===== --}}
+    <div class="row mb-3">
         <div class="col-md-12">
-            <div class="progress-quiz">
-                <div class="progress" style="height: 8px; border-radius: 10px;">
-                    <div id="progress-bar" class="progress-bar bg-gradient-primary" role="progressbar" style="width: 0%"></div>
-                </div>
-                <div class="d-flex justify-content-between mt-2">
-                    <small class="text-muted">Terjawab: <span id="answered-count">0</span></small>
-                    <small class="text-muted">Total: {{ $questions->count() }}</small>
+            <div class="card border-0 shadow-sm" style="border-radius: 10px;">
+                <div class="card-body py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small class="text-muted font-weight-600">Terjawab: <strong id="answered-count" class="text-primary">0</strong></small>
+                        <small class="text-muted">Total: <strong>{{ $questions->count() }}</strong> soal</small>
+                    </div>
+                    <div style="background: #e3e6f0; border-radius: 6px; height: 8px; overflow: hidden;">
+                        <div id="progress-bar"
+                             style="height: 100%; width: 0%; border-radius: 6px; background: linear-gradient(90deg, #4e73df, #224abe); transition: width 0.4s ease;"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Question Navigation (if enabled) -->
+    {{-- ===== QUESTION NAVIGATION ===== --}}
     @if($quiz->allow_navigation && $questions->count() > 1)
-    <div class="row mb-4">
+    <div class="row mb-3">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="question-navigation">
+            <div class="card border-0 shadow-sm" style="border-radius: 10px;">
+                <div class="card-body py-3 px-4">
+                    <div class="d-flex flex-wrap justify-content-center" style="gap: 6px;">
                         @foreach($questions as $index => $q)
-                            <button type="button" 
-                                    class="question-nav-btn" 
-                                    data-question="{{ $index + 1 }}"
-                                    data-question-id="{{ $q->id }}"
-                                    title="Pertanyaan {{ $index + 1 }}">
-                                {{ $index + 1 }}
-                            </button>
+                        <button type="button"
+                                class="question-nav-btn"
+                                data-question="{{ $index + 1 }}"
+                                data-question-id="{{ $q->id }}"
+                                title="Soal {{ $index + 1 }}"
+                                style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #d1d3e2; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; color: #5a5c69;">
+                            {{ $index + 1 }}
+                        </button>
                         @endforeach
+                    </div>
+                    <div class="d-flex justify-content-center mt-2" style="gap: 14px;">
+                        <small class="d-flex align-items-center" style="gap: 5px; font-size: 11px; color: #858796;">
+                            <span style="width: 12px; height: 12px; border-radius: 50%; background: #4e73df; display: inline-block;"></span> Aktif
+                        </small>
+                        <small class="d-flex align-items-center" style="gap: 5px; font-size: 11px; color: #858796;">
+                            <span style="width: 12px; height: 12px; border-radius: 50%; background: #1cc88a; display: inline-block;"></span> Terjawab
+                        </small>
+                        <small class="d-flex align-items-center" style="gap: 5px; font-size: 11px; color: #858796;">
+                            <span style="width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #d1d3e2; display: inline-block;"></span> Belum
+                        </small>
                     </div>
                 </div>
             </div>
@@ -74,502 +96,375 @@
     </div>
     @endif
 
-    <!-- Quiz Form -->
-    <form id="quiz-form" action="{{ route('quiz.taking.submit', ['quiz' => $quiz, 'attempt' => $attempt]) }}" method="POST" enctype="multipart/form-data">
+    {{-- ===== QUIZ FORM ===== --}}
+    <form id="quiz-form"
+          action="{{ route('quiz.taking.submit', ['quiz' => $quiz, 'attempt' => $attempt]) }}"
+          method="POST"
+          enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="submitted" value="1">
-        
-        <div class="questions-container">
-            @foreach($questions as $index => $question)
-            <div class="question-card card mb-4 {{ $index === 0 ? 'active' : 'd-none' }}" data-question-index="{{ $index + 1 }}" data-question-id="{{ $question->id }}">
-                <div class="card-body">
-                    <div class="question-header mb-4">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <span class="badge badge-primary mb-2">Pertanyaan {{ $index + 1 }}</span>
-                                <span class="badge badge-warning">{{ $question->points }} Poin</span>
-                                @if($question->difficulty)
-                                    <span class="badge badge-{{ $question->difficulty == 'easy' ? 'success' : ($question->difficulty == 'medium' ? 'warning' : 'danger') }}">
-                                        {{ $question->difficulty == 'easy' ? 'Mudah' : ($question->difficulty == 'medium' ? 'Menengah' : 'Sulit') }}
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="question-status">
-                                <i class="icon-check text-success d-none saved-indicator"></i>
-                            </div>
-                        </div>
+
+        {{-- Questions --}}
+        @foreach($questions as $index => $question)
+        @php
+            $shuffledAnswers = $quiz->shuffle_answers ? $question->answers->shuffle() : $question->answers;
+            $userAnswerIds   = isset($userAnswers[$question->id]) ? (array)$userAnswers[$question->id] : [];
+            $diffCfg = ['easy' => ['bg'=>'#e3f9e5','c'=>'#1cc88a','label'=>'Mudah'], 'medium' => ['bg'=>'#fff3e8','c'=>'#f6c23e','label'=>'Menengah'], 'hard' => ['bg'=>'#fde8e8','c'=>'#e74a3b','label'=>'Sulit']];
+        @endphp
+
+        <div class="question-card card border-0 shadow-sm mb-3 {{ $index === 0 ? 'active' : 'd-none' }}"
+             data-question-index="{{ $index + 1 }}"
+             data-question-id="{{ $question->id }}"
+             style="border-radius: 12px;">
+            <div class="card-body p-4">
+
+                {{-- Question header badges --}}
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center" style="gap: 6px; flex-wrap: wrap;">
+                        <span style="background: #e8f0fe; color: #4e73df; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700;">
+                            Soal {{ $index + 1 }}
+                        </span>
+                        <span style="background: #e0f7fa; color: #17a2b8; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700;">
+                            {{ $question->points }} Poin
+                        </span>
+                        @if($question->difficulty && isset($diffCfg[$question->difficulty]))
+                        @php $dc = $diffCfg[$question->difficulty]; @endphp
+                        <span style="background: {{ $dc['bg'] }}; color: {{ $dc['c'] }}; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700;">
+                            {{ $dc['label'] }}
+                        </span>
+                        @endif
                     </div>
-
-                    <div class="question-content mb-4">
-                        <h5 class="font-weight-bold">{{ $question->question_text ?? $question->question }}</h5>
-                    </div>
-
-                    <div class="answers-container">
-                        @php
-                            $shuffledAnswers = $quiz->shuffle_answers ? $question->answers->shuffle() : $question->answers;
-                            $userAnswerIds = isset($userAnswers[$question->id]) ? $userAnswers[$question->id] : [];
-                            if (!is_array($userAnswerIds)) {
-                                $userAnswerIds = [$userAnswerIds];
-                            }
-                        @endphp
-
-                        @foreach($shuffledAnswers as $answer)
-                        <div class="answer-option mb-3">
-                            <div class="custom-control custom-{{ $question->type == 'multiple_choice' ? 'radio' : 'checkbox' }}">
-                                <input type="{{ $question->type == 'multiple_choice' || $question->type == 'true_false' ? 'radio' : 'checkbox' }}"
-                                       class="custom-control-input answer-input"
-                                       name="answers[{{ $question->id }}][]"
-                                       id="answer_{{ $answer->id }}"
-                                       value="{{ $answer->id }}"
-                                       data-question-id="{{ $question->id }}"
-                                       {{ in_array($answer->id, $userAnswerIds) ? 'checked' : '' }}>
-                                <label class="custom-control-label answer-label" for="answer_{{ $answer->id }}">
-                                    {{ $answer->answer_text }}
-                                </label>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-
-                    @if($question->explanation && $quiz->show_correct_answers)
-                        <div class="alert alert-info mt-3 explanation-box">
-                            <i class="icon-info mr-2"></i>
-                            <strong>Penjelasan:</strong> {{ $question->explanation }}
-                        </div>
-                    @endif
-                </div>
-            </div>
-            @endforeach
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button type="button" id="prev-btn" class="btn btn-outline-primary" style="display: none;">
-                                <i class="icon-arrow-left mr-2"></i> Sebelumnya
-                            </button>
-                            <div class="text-center">
-                                <span class="text-muted" id="question-counter">Pertanyaan 1 dari {{ $questions->count() }}</span>
-                            </div>
-                            <div>
-                                <button type="button" id="next-btn" class="btn btn-primary" {{ $questions->count() <= 1 ? 'style="display: none;"' : '' }}>
-                                    Berikutnya <i class="icon-arrow-right ml-2"></i>
-                                </button>
-                                <button type="button" id="submit-btn" class="btn btn-success ml-2" {{ $questions->count() <= 1 ? '' : 'style="display: none;"' }}>
-                                    <i class="icon-check mr-2"></i> Kirim Kuis
-                                </button>
-                            </div>
-                        </div>
+                    {{-- Saved indicator --}}
+                    <div class="saved-indicator" style="display: none; align-items: center; gap: 4px;">
+                        <i class="mdi mdi-check-circle" style="font-size: 16px; color: #1cc88a;"></i>
+                        <small style="color: #1cc88a; font-size: 11px; font-weight: 600;">Tersimpan</small>
                     </div>
                 </div>
+
+                {{-- Question text --}}
+                <div class="mb-4 p-3" style="background: #f8f9fc; border-radius: 10px; border-left: 3px solid #4e73df;">
+                    <h5 class="font-weight-bold text-dark mb-0" style="font-size: 15px; line-height: 1.6;">
+                        {{ $question->question_text ?? $question->question }}
+                    </h5>
+                </div>
+
+                {{-- Answer Options --}}
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    @foreach($shuffledAnswers as $answer)
+                    <label class="answer-option d-flex align-items-center p-3"
+                           style="border-radius: 10px; border: 2px solid #eaecf4; background: #fff; cursor: pointer; transition: all 0.2s; margin: 0; user-select: none;"
+                           onmouseover="if(!this.querySelector('input').checked){this.style.borderColor='#4e73df';this.style.background='#f0f4ff';}"
+                           onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#eaecf4';this.style.background='#fff';}">
+                        <input type="{{ $question->type == 'multiple_choice' || $question->type == 'true_false' ? 'radio' : 'checkbox' }}"
+                               class="answer-input"
+                               name="answers[{{ $question->id }}][]"
+                               id="answer_{{ $answer->id }}"
+                               value="{{ $answer->id }}"
+                               data-question-id="{{ $question->id }}"
+                               {{ in_array($answer->id, $userAnswerIds) ? 'checked' : '' }}
+                               style="display: none;">
+                        {{-- Custom bullet --}}
+                        <div class="answer-bullet"
+                             style="width: 20px; height: 20px; border-radius: {{ $question->type == 'multiple_choice' || $question->type == 'true_false' ? '50%' : '4px' }}; border: 2px solid #d1d3e2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 12px; transition: all 0.2s;">
+                        </div>
+                        <span class="answer-text" style="font-size: 13.5px; color: #3d3d3d; flex: 1;">{{ $answer->answer_text }}</span>
+                    </label>
+                    @endforeach
+                </div>
+
+                @if($question->explanation && $quiz->show_correct_answers)
+                <div class="mt-3 p-3" style="background: #e8f0fe; border-radius: 8px; border-left: 3px solid #4e73df;">
+                    <p class="mb-0" style="font-size: 13px; color: #3d3d3d;">
+                        <i class="mdi mdi-information-outline mr-1" style="color: #4e73df;"></i>
+                        <strong>Penjelasan:</strong> {{ $question->explanation }}
+                    </p>
+                </div>
+                @endif
+
             </div>
         </div>
+        @endforeach
+
+        {{-- ===== NAVIGATION BUTTONS ===== --}}
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+            <div class="card-body px-4 py-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <button type="button" id="prev-btn"
+                            style="background: #f4f6fb; color: #6b7280; border-radius: 8px; font-weight: 600; font-size: 13.5px; padding: 9px 20px; border: 1px solid #e3e6f0; cursor: pointer; display: none; transition: all 0.2s;"
+                            onmouseover="this.style.background='#e3e6f0';" onmouseout="this.style.background='#f4f6fb';">
+                        <i class="mdi mdi-arrow-left mr-1"></i> Sebelumnya
+                    </button>
+                    <div style="flex: 1;"></div>
+                    <div class="d-flex align-items-center" style="gap: 8px;">
+                        <button type="button" id="next-btn"
+                                style="background: linear-gradient(135deg, #4e73df, #224abe); color: #fff; border-radius: 8px; font-weight: 600; font-size: 13.5px; padding: 9px 22px; border: none; cursor: pointer; {{ $questions->count() <= 1 ? 'display:none;' : '' }} box-shadow: 0 4px 12px rgba(78,115,223,0.3);"
+                                onmouseover="this.style.opacity='0.9';" onmouseout="this.style.opacity='1';">
+                            Berikutnya <i class="mdi mdi-arrow-right ml-1"></i>
+                        </button>
+                        <button type="button" id="submit-btn"
+                                style="background: linear-gradient(135deg, #1cc88a, #17a673); color: #fff; border-radius: 8px; font-weight: 600; font-size: 13.5px; padding: 9px 22px; border: none; cursor: pointer; {{ $questions->count() > 1 ? 'display:none;' : '' }} box-shadow: 0 4px 12px rgba(28,200,138,0.3);"
+                                onmouseover="this.style.opacity='0.9';" onmouseout="this.style.opacity='1';">
+                            <i class="mdi mdi-send-outline mr-1"></i> Kirim Kuis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </form>
 </div>
 
 @push('styles')
 <style>
-    .quiz-taking-container {
-        max-width: 1200px;
-        margin: 0 auto;
+    /* Active answer option */
+    .answer-option:has(.answer-input:checked) {
+        border-color: #4e73df !important;
+        background: #f0f4ff !important;
+    }
+    .answer-option:has(.answer-input:checked) .answer-bullet {
+        background: #4e73df;
+        border-color: #4e73df;
+    }
+    .answer-option:has(.answer-input:checked) .answer-bullet::after {
+        content: '';
+        display: block;
+        width: 8px; height: 8px;
+        background: #fff;
+        border-radius: 50%;
+    }
+    .answer-option:has(.answer-input:checked) .answer-text {
+        color: #4e73df;
+        font-weight: 600;
     }
 
-    .quiz-header-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-    }
-
-    .quiz-header-card h3,
-    .quiz-header-card p {
-        color: white !important;
-    }
-
-    .timer-display {
-        font-size: 24px;
-        font-weight: 700;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 10px 20px;
-        border-radius: 8px;
-        display: inline-block;
-    }
-
-    .timer-display.warning {
-        background: rgba(255, 193, 7, 0.3);
-        animation: pulse 1s infinite;
-    }
-
-    .timer-display.danger {
-        background: rgba(220, 53, 69, 0.3);
-        animation: pulse 0.5s infinite;
-    }
+    /* Timer warning states */
+    #timer.warning { background: rgba(246,194,62,0.3) !important; }
+    #timer.danger  { background: rgba(231,74,59,0.3) !important; animation: pulse 0.6s infinite; }
 
     @keyframes pulse {
         0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
+        50%       { opacity: 0.65; }
     }
 
-    .progress-quiz {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
+    /* Nav button states */
+    .question-nav-btn.active   { background: #4e73df !important; color: #fff !important; border-color: #4e73df !important; }
+    .question-nav-btn.answered { background: #1cc88a !important; color: #fff !important; border-color: #1cc88a !important; }
+    .question-nav-btn:hover    { transform: scale(1.1); }
 
-    .question-nav-btn {
-        width: 40px;
-        height: 40px;
-        border: 2px solid #e3e6f0;
-        background: white;
-        border-radius: 50%;
-        margin: 5px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-weight: 600;
-    }
-
-    .question-nav-btn:hover {
-        border-color: #667eea;
-        transform: scale(1.1);
-    }
-
-    .question-nav-btn.active {
-        background: #667eea;
-        color: white;
-        border-color: #667eea;
-    }
-
-    .question-nav-btn.answered {
-        background: #10b981;
-        color: white;
-        border-color: #10b981;
-    }
-
-    .question-card {
-        transition: all 0.3s ease;
-        border: 1px solid #e3e6f0;
-    }
-
-    .question-card.active {
-        border-color: #667eea;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
-    }
-
-    .answer-option {
-        padding: 15px;
-        border: 2px solid #e3e6f0;
-        border-radius: 8px;
-        transition: all 0.3s;
-        cursor: pointer;
-    }
-
-    .answer-option:hover {
-        border-color: #667eea;
-        background: rgba(102, 126, 234, 0.05);
-        transform: translateX(5px);
-    }
-
-    .answer-input:checked + .answer-label {
-        color: #667eea;
-        font-weight: 600;
-    }
-
-    .answer-option:has(.answer-input:checked) {
-        border-color: #667eea;
-        background: rgba(102, 126, 234, 0.1);
-    }
-
-    .saved-indicator {
-        font-size: 20px;
-    }
-
-    .question-navigation {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 5px;
-    }
-
-    .custom-control-input:checked ~ .custom-control-label::before {
-        border-color: #667eea;
-        background-color: #667eea;
-    }
-
-    @media (max-width: 768px) {
-        .timer-display {
-            font-size: 18px;
-            padding: 8px 15px;
-        }
-
-        .question-nav-btn {
-            width: 35px;
-            height: 35px;
-            font-size: 14px;
-        }
+    @media (max-width: 576px) {
+        #time-remaining { font-size: 16px !important; }
+        .question-nav-btn { width: 32px !important; height: 32px !important; font-size: 11px !important; }
     }
 </style>
 @endpush
 
 @push('scripts')
 <script>
-let currentQuestion = 1;
-let totalQuestions = {{ $questions->count() }};
-let timeLimit = {{ $quiz->time_limit_minutes ? $quiz->time_limit_minutes * 60 : 0 }};
-let timeRemaining = timeLimit;
-let timerInterval = null;
-const startTime = new Date('{{ $attempt->started_at->toIso8601String() }}');
+let currentQuestion  = 1;
+const totalQuestions = {{ $questions->count() }};
+const timeLimit      = {{ $quiz->time_limit_minutes ? $quiz->time_limit_minutes * 60 : 0 }};
+let   timeRemaining  = timeLimit;
+let   timerInterval  = null;
+let   allowBeforeUnload = false;
+const startTime      = new Date('{{ $attempt->started_at->toIso8601String() }}');
 
+/* ===================== TIMER ===================== */
 @if($quiz->time_limit_minutes)
-// Initialize timer
-if (timeLimit > 0) {
+(function() {
     const elapsed = Math.floor((new Date() - startTime) / 1000);
     timeRemaining = Math.max(0, timeLimit - elapsed);
-    
     updateTimerDisplay();
-    timerInterval = setInterval(function() {
+
+    timerInterval = setInterval(() => {
         if (timeRemaining > 0) {
             timeRemaining--;
             updateTimerDisplay();
-            
-            if (timeRemaining <= 0) {
-                clearInterval(timerInterval);
-                console.log('Waktu habis! Mengirim kuis secara otomatis via AJAX...');
-                // Disable form inputs before submit
-                document.getElementById('quiz-form').querySelectorAll('input, button').forEach(el => {
-                    if (el.id !== 'quiz-form') {
-                        el.disabled = true;
-                    }
-                });
-                // Submit via AJAX
-                submitQuizViaAjax();
-            }
+        }
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            disableForm();
+            submitQuizViaAjax();
         }
     }, 1000);
-}
+})();
 
 function updateTimerDisplay() {
-    const minutes = Math.floor(timeRemaining / 60);
-    const seconds = timeRemaining % 60;
-    const timeString = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    
-    document.getElementById('time-remaining').textContent = timeString;
-    
-    const timerEl = document.getElementById('timer');
-    timerEl.classList.remove('warning', 'danger');
-    
-    if (timeRemaining <= 300) { // 5 minutes
-        timerEl.classList.add('danger');
-    } else if (timeRemaining <= 600) { // 10 minutes
-        timerEl.classList.add('warning');
-    }
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('time-remaining').textContent =
+        String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+
+    const el = document.getElementById('timer');
+    el.classList.remove('warning','danger');
+    if (timeRemaining <= 300) el.classList.add('danger');
+    else if (timeRemaining <= 600) el.classList.add('warning');
 }
 @endif
 
-// Question Navigation
+/* ===================== NAVIGATION ===================== */
 function showQuestion(index) {
-    // Hide all questions
-    document.querySelectorAll('.question-card').forEach(card => {
-        card.classList.remove('active');
-        card.classList.add('d-none');
+    document.querySelectorAll('.question-card').forEach(c => {
+        c.classList.remove('active');
+        c.classList.add('d-none');
     });
-    
-    // Show selected question
-    const questionCard = document.querySelector(`.question-card[data-question-index="${index}"]`);
-    if (questionCard) {
-        questionCard.classList.add('active');
-        questionCard.classList.remove('d-none');
-    }
-    
-    // Update navigation
+    const card = document.querySelector(`.question-card[data-question-index="${index}"]`);
+    if (card) { card.classList.add('active'); card.classList.remove('d-none'); }
+
     currentQuestion = index;
     document.getElementById('current-question').textContent = index;
-    document.getElementById('question-counter').textContent = `Pertanyaan ${index} dari ${totalQuestions}`;
-    
-    // Update nav buttons
+
+    // Nav buttons
+    document.querySelectorAll('.question-nav-btn').forEach(b => {
+        b.classList.remove('active');
+        if (parseInt(b.dataset.question) === index) b.classList.add('active');
+    });
+
     updateNavButtons();
     updateProgress();
-    
-    // Update question nav
-    document.querySelectorAll('.question-nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if (parseInt(btn.dataset.question) === index) {
-            btn.classList.add('active');
-        }
-    });
 }
 
 function updateNavButtons() {
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const submitBtn = document.getElementById('submit-btn');
-    
-    prevBtn.style.display = currentQuestion > 1 ? 'block' : 'none';
-    
-    // Show next button only if not on last question and there are multiple questions
+    const prev   = document.getElementById('prev-btn');
+    const next   = document.getElementById('next-btn');
+    const submit = document.getElementById('submit-btn');
+
+    prev.style.display = currentQuestion > 1 ? 'block' : 'none';
+
     if (currentQuestion < totalQuestions && totalQuestions > 1) {
-        nextBtn.style.display = 'block';
-        submitBtn.style.display = 'none';
+        next.style.display   = 'inline-block';
+        submit.style.display = 'none';
     } else {
-        // Show submit button on last question or if only one question
-        nextBtn.style.display = 'none';
-        submitBtn.style.display = 'block';
+        next.style.display   = 'none';
+        submit.style.display = 'inline-block';
     }
 }
 
 function updateProgress() {
-    const answered = document.querySelectorAll('.answer-input:checked').length;
-    const progress = (answered / totalQuestions) * 100;
-    
-    document.getElementById('progress-bar').style.width = progress + '%';
+    // Count unique answered questions (at least one checked answer)
+    let answered = 0;
+    document.querySelectorAll('.question-card').forEach(card => {
+        if (card.querySelectorAll('.answer-input:checked').length > 0) answered++;
+    });
+    const pct = (answered / totalQuestions) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
     document.getElementById('answered-count').textContent = answered;
 }
 
-// Navigation button clicks
-document.getElementById('next-btn')?.addEventListener('click', function() {
-    if (currentQuestion < totalQuestions) {
-        showQuestion(currentQuestion + 1);
-    }
+/* ===================== EVENTS ===================== */
+document.getElementById('next-btn').addEventListener('click', e => {
+    e.preventDefault();
+    if (currentQuestion < totalQuestions) showQuestion(currentQuestion + 1);
 });
 
-document.getElementById('prev-btn')?.addEventListener('click', function() {
-    if (currentQuestion > 1) {
-        showQuestion(currentQuestion - 1);
-    }
+document.getElementById('prev-btn').addEventListener('click', e => {
+    e.preventDefault();
+    if (currentQuestion > 1) showQuestion(currentQuestion - 1);
 });
 
-// Question nav buttons
 document.querySelectorAll('.question-nav-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const questionIndex = parseInt(this.dataset.question);
-        showQuestion(questionIndex);
-    });
+    btn.addEventListener('click', () => showQuestion(parseInt(btn.dataset.question)));
 });
 
-// Answer change - auto save
+/* ===================== ANSWER AUTO-SAVE ===================== */
 document.querySelectorAll('.answer-input').forEach(input => {
+    // Style checked state on page load
+    styleAnswerOption(input);
+
     input.addEventListener('change', function() {
-        const questionId = this.dataset.questionId;
-        const checkedAnswers = Array.from(document.querySelectorAll(`input[name="answers[${questionId}][]"]:checked`))
-            .map(input => input.value);
-        
-        // Auto-save
+        styleAnswerOption(this);
+        const qid = this.dataset.questionId;
+        const checked = Array.from(document.querySelectorAll(`input[data-question-id="${qid}"]:checked`))
+                             .map(i => i.value);
+
         fetch('{{ route('quiz.taking.save', ['quiz' => $quiz, 'attempt' => $attempt]) }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN':  '{{ csrf_token() }}'
             },
-            body: JSON.stringify({
-                question_id: questionId,
-                answer_ids: checkedAnswers
-            })
+            body: JSON.stringify({ question_id: qid, answer_ids: checked })
         })
-        .then(response => response.json())
+        .then(r => r.json())
         .then(data => {
             if (data.success) {
                 // Show saved indicator
-                const questionCard = this.closest('.question-card');
-                const savedIndicator = questionCard.querySelector('.saved-indicator');
-                savedIndicator.classList.remove('d-none');
-                
-                setTimeout(() => {
-                    savedIndicator.classList.add('d-none');
-                }, 2000);
-                
-                // Update nav button
-                const navBtn = document.querySelector(`.question-nav-btn[data-question-id="${questionId}"]`);
-                if (navBtn) {
-                    navBtn.classList.add('answered');
-                }
-                
+                const indicator = this.closest('.question-card').querySelector('.saved-indicator');
+                indicator.style.display = 'flex';
+                setTimeout(() => { indicator.style.display = 'none'; }, 2000);
+
+                // Mark nav button answered
+                const navBtn = document.querySelector(`.question-nav-btn[data-question-id="${qid}"]`);
+                if (navBtn) navBtn.classList.add('answered');
+
                 updateProgress();
             }
         })
-        .catch(error => {
-            console.error('Gagal menyimpan jawaban:', error);
-        });
+        .catch(err => console.error('Auto-save failed:', err));
     });
 });
 
-// Submit button
-document.getElementById('submit-btn')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    console.log('Submit button clicked');
-    
-    const answered = document.querySelectorAll('.answer-input:checked').length;
-    console.log('Pertanyaan yang terjawab: ' + answered + ' / ' + totalQuestions);
-    
-    let confirmMessage = '';
-    if (answered === 0) {
-        confirmMessage = 'Anda belum menjawab pertanyaan apapun. Apakah Anda yakin ingin mengirim?';
-    } else if (answered < totalQuestions) {
-        confirmMessage = `Anda telah menjawab ${answered} dari ${totalQuestions} pertanyaan. Apakah Anda yakin ingin mengirim?`;
+function styleAnswerOption(input) {
+    const label = input.closest('.answer-option') || input.closest('label');
+    if (!label) return;
+    if (input.checked) {
+        label.style.borderColor = '#4e73df';
+        label.style.background  = '#f0f4ff';
+        const bullet = label.querySelector('.answer-bullet');
+        if (bullet) { bullet.style.background = '#4e73df'; bullet.style.borderColor = '#4e73df'; }
+        const text = label.querySelector('.answer-text');
+        if (text) { text.style.color = '#4e73df'; text.style.fontWeight = '600'; }
     } else {
-        confirmMessage = 'Apakah Anda yakin ingin mengirim kuis Anda? Tindakan ini tidak dapat dibatalkan.';
+        label.style.borderColor = '#eaecf4';
+        label.style.background  = '#fff';
+        const bullet = label.querySelector('.answer-bullet');
+        if (bullet) { bullet.style.background = ''; bullet.style.borderColor = '#d1d3e2'; }
+        const text = label.querySelector('.answer-text');
+        if (text) { text.style.color = '#3d3d3d'; text.style.fontWeight = '400'; }
     }
-    
-    if (!confirm(confirmMessage)) {
-        console.log('Pengiriman dibatalkan oleh pengguna');
-        return;
-    }
-    
-    console.log('Submitting form...');
-    
-    // Clear timer
-    if (timerInterval) {
-        clearInterval(timerInterval);
-    }
-    
-    // Get form data before disabling
-    const formData = new FormData(document.getElementById('quiz-form'));
-    console.log('Kunci data form:', Array.from(formData.keys()));
-    
-    // Disable form
-    const form = document.getElementById('quiz-form');
-    form.querySelectorAll('input, button').forEach(el => {
-        el.disabled = true;
+}
+
+/* ===================== SUBMIT ===================== */
+document.getElementById('submit-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    let answered = 0;
+    document.querySelectorAll('.question-card').forEach(c => {
+        if (c.querySelectorAll('.answer-input:checked').length > 0) answered++;
     });
 
-    // Allow page unload (prevent beforeunload prompt) and submit via AJAX helper
-    allowBeforeUnload = true;
-    console.log('Mengirim melalui pembantu AJAX');
-    submitQuizViaAjax();
+    let msg = answered === 0
+        ? 'Anda belum menjawab pertanyaan apapun. Kirim sekarang?'
+        : answered < totalQuestions
+            ? `Anda telah menjawab ${answered} dari ${totalQuestions} soal. Kirim sekarang?`
+            : 'Kirim kuis? Jawaban tidak dapat diubah setelah dikirim.';
+
+    Swal.fire({
+        title: 'Kirim Kuis?',
+        text: msg,
+        icon: answered < totalQuestions ? 'warning' : 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#1cc88a',
+        cancelButtonColor: '#858796',
+        confirmButtonText: '<i class="mdi mdi-send-outline mr-1"></i> Ya, Kirim!',
+        cancelButtonText: 'Lanjut Mengerjakan'
+    }).then(result => {
+        if (result.isConfirmed) {
+            if (timerInterval) clearInterval(timerInterval);
+            disableForm();
+            allowBeforeUnload = true;
+            submitQuizViaAjax();
+        }
+    });
 });
 
-// Keyboard shortcuts
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowLeft' && currentQuestion > 1) {
-        showQuestion(currentQuestion - 1);
-    } else if (e.key === 'ArrowRight' && currentQuestion < totalQuestions) {
-        showQuestion(currentQuestion + 1);
-    }
-});
+function disableForm() {
+    document.getElementById('quiz-form').querySelectorAll('input,button').forEach(el => el.disabled = true);
+}
 
-// Prevent accidental page leave unless allowed (we set allowBeforeUnload=true when submitting)
-let allowBeforeUnload = false;
-window.addEventListener('beforeunload', function(e) {
-    if (allowBeforeUnload) return;
-    const answered = document.querySelectorAll('.answer-input:checked').length;
-    if (answered > 0) {
-        e.preventDefault();
-        e.returnValue = '';
-    }
-});
-
-// Initialize
-showQuestion(1); // Pastikan mulai dari pertanyaan 1
-updateNavButtons();
-updateProgress();
-
-// Fungsi untuk Mengirim Kuis via AJAX (Perbaikan Utama)
 function submitQuizViaAjax() {
     const form = document.getElementById('quiz-form');
     const answers = {};
-    
-    // Kumpulkan jawaban
+
     document.querySelectorAll('.answer-input').forEach(input => {
         const qid = input.dataset.questionId;
         if (!qid) return;
@@ -577,60 +472,62 @@ function submitQuizViaAjax() {
         if (input.checked) answers[qid].push(input.value);
     });
 
-    allowBeforeUnload = true;
-
     fetch(form.action, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type':    'application/json',
+            'X-CSRF-TOKEN':    '{{ csrf_token() }}',
             'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json'
+            'Accept':          'application/json'
         },
-        body: JSON.stringify({ 
-            answers: answers, 
-            submitted: 1 
-        })
+        body: JSON.stringify({ answers, submitted: 1 })
     })
-    .then(async response => {
-        const data = await response.json().catch(() => null);
+    .then(async res => {
+        const data = await res.json().catch(() => null);
         if (data && data.success && data.redirect) {
             window.location.href = data.redirect;
         } else {
-            // Jika AJAX gagal, coba submit manual sebagai cadangan
-            form.method = 'POST';
             form.submit();
         }
     })
-    .catch(error => {
-        console.error('Pengiriman gagal:', error);
-        form.submit(); // Terakhir, paksa submit form biasa
-    });
+    .catch(() => form.submit());
 }
 
-// Perbaikan Event Listener Next Button
-document.getElementById('next-btn')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (currentQuestion < totalQuestions) {
-        showQuestion(currentQuestion + 1);
+/* ===================== KEYBOARD SHORTCUTS ===================== */
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft'  && currentQuestion > 1)             showQuestion(currentQuestion - 1);
+    if (e.key === 'ArrowRight' && currentQuestion < totalQuestions) showQuestion(currentQuestion + 1);
+});
+
+/* ===================== PREVENT ACCIDENTAL LEAVE ===================== */
+window.addEventListener('beforeunload', e => {
+    if (allowBeforeUnload) return;
+    if (document.querySelectorAll('.answer-input:checked').length > 0) {
+        e.preventDefault();
+        e.returnValue = '';
     }
 });
 
-// Perbaikan Event Listener Prev Button
-document.getElementById('prev-btn')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (currentQuestion > 1) {
-        showQuestion(currentQuestion - 1);
-    }
-});
-
-// Keep session alive - refresh every 2 minutes (Cukup progress saja)
-setInterval(function() {
+/* ===================== SESSION KEEPALIVE ===================== */
+setInterval(() => {
     fetch('{{ route('quiz.taking.progress', ['quiz' => $quiz, 'attempt' => $attempt]) }}')
-        .then(response => response.json())
-        .catch(error => console.log('Session keep-alive failed'));
+        .catch(() => {});
 }, 120000);
+
+/* ===================== INIT ===================== */
+showQuestion(1);
+updateNavButtons();
+updateProgress();
+
+// Mark already-answered nav buttons on load
+document.querySelectorAll('.question-card').forEach(card => {
+    if (card.querySelectorAll('.answer-input:checked').length > 0) {
+        const qid = card.dataset.questionId;
+        const btn = document.querySelector(`.question-nav-btn[data-question-id="${qid}"]`);
+        if (btn) btn.classList.add('answered');
+    }
+});
 </script>
 @endpush
-@endsection
 
+@endsection

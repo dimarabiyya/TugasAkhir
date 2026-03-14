@@ -1,177 +1,151 @@
 @extends('layouts.skydash')
 
 @section('content')
-<div class="row">
-    <div class="col-md-12 grid-margin">
-        <div class="row">
-            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Selamat Datang {{ auth()->user()->name }}</h3>
-                <h6 class="font-weight-normal mb-0">Kelola Mata Pelajaran Anda dan lacak kemajuan siswa Anda!</h6>
+
+{{-- ===== PAGE HEADER ===== --}}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); border-radius: 12px;">
+            <div class="card-body py-4 px-4">
+                <div class="row align-items-center">
+                    <div class="col-12 col-xl-8 mb-2 mb-xl-0">
+                        <div class="d-flex align-items-center" style="gap: 14px;">
+                            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="mdi mdi-human-male-board text-white" style="font-size: 26px;"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-weight-bold text-white mb-0">Selamat Datang, {{ auth()->user()->name }}!</h4>
+                                <p class="text-white-50 mb-0" style="font-size: 13px;">Kelola mata pelajaran Anda dan lacak kemajuan siswa</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-4 d-flex justify-content-xl-end">
+                        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 16px; text-align: right;">
+                            <p class="text-white-50 mb-0" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Hari ini</p>
+                            <p class="text-white mb-0 font-weight-bold" style="font-size: 13px;">{{ now()->translatedFormat('l, d F Y') }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
+{{-- ===== STAT CARDS ===== --}}
+<div class="row mb-4">
+    @php
+        $istats = [
+            ['label'=>'Total Siswa',        'value'=> number_format($totalStudents ?? 0),              'sub'=>'Aktif pembelajaran',                                         'icon'=>'mdi-account-school-outline',  'bg'=>'#e8f0fe','ic'=>'#4e73df'],
+            ['label'=>'Mata Pelajaran',      'value'=> number_format($totalCourses ?? 0),               'sub'=> number_format($publishedCourses ?? 0).' dipublikasikan',       'icon'=>'mdi-library-outline',         'bg'=>'#e3f9e5','ic'=>'#1cc88a'],
+            ['label'=>'Kehadiran Hari Ini',  'value'=> number_format($todayPresent ?? 0),              'sub'=>'dari '.number_format($todayTotal ?? 0).' total siswa',         'icon'=>'mdi-check-circle-outline',    'bg'=>'#e0f7fa','ic'=>'#17a2b8'],
+            ['label'=>'Total Tugas',         'value'=> number_format($totalTasks ?? 0),                'sub'=> number_format($pendingTaskSubmissions ?? 0).' menunggu review', 'icon'=>'mdi-clipboard-check-outline', 'bg'=>'#fff3e8','ic'=>'#f6c23e'],
+            ['label'=>'Total Kuis',          'value'=> number_format($totalQuizzes ?? 0),              'sub'=> number_format($totalQuizAttempts ?? 0).' dikerjakan',           'icon'=>'mdi-file-question-outline',   'bg'=>'#fde8e8','ic'=>'#e74a3b'],
+            ['label'=>'Performa Tinggi',     'value'=> number_format($highPerformanceCourses ?? 0),    'sub'=>'Mata pelajaran',                                               'icon'=>'mdi-star-outline',            'bg'=>'#e3f9e5','ic'=>'#1cc88a'],
+            ['label'=>'Performa Sedang',     'value'=> number_format($mediumPerformanceCourses ?? 0),  'sub'=>'Mata pelajaran',                                               'icon'=>'mdi-star-half-full',          'bg'=>'#fff3e8','ic'=>'#f6c23e'],
+            ['label'=>'Perlu Perhatian',     'value'=> number_format($lowPerformanceCourses ?? 0),     'sub'=>'Mata pelajaran',                                               'icon'=>'mdi-alert-circle-outline',    'bg'=>'#fde8e8','ic'=>'#e74a3b'],
+        ];
+    @endphp
+    @foreach($istats as $s)
+    <div class="col-6 col-md-3 mb-4">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div style="flex: 1;">
+                        <p class="text-muted mb-1" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">{{ $s['label'] }}</p>
+                        <h3 class="font-weight-bold text-dark mb-0" style="font-size: 24px;">{{ $s['value'] }}</h3>
+                        <p class="text-muted mb-0" style="font-size: 11px; margin-top: 2px;">{{ $s['sub'] }}</p>
+                    </div>
+                    <div style="background: {{ $s['bg'] }}; border-radius: 10px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="mdi {{ $s['icon'] }}" style="font-size: 22px; color: {{ $s['ic'] }};"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
 </div>
 
-<!-- Stats Cards - Row 1 -->
-<div class="row">
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card tale-bg">
-            <div class="card-people mt-auto">
-                <img src="{{ asset('skydash/images/dashboard/people.svg') }}" alt="people">
-                <div class="weather-info">
-                    <div class="d-flex">
-                        <div>
-                            <h2 class="mb-0 font-weight-normal"><i class="mdi mdi-school me-2"></i>{{ $totalStudents ?? 0 }}</h2>
-                        </div>
-                        <div class="ms-2">
-                            <h4 class="location font-weight-normal">Total Siswa</h4>
-                            <h6 class="font-weight-normal">Aktif pembelajaran</h6>
-                        </div>
+{{-- ===== CHARTS ROW 1 ===== --}}
+<div class="row mb-4">
+    <div class="col-md-8 mb-4 mb-md-0">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-trending-up" style="font-size: 18px; color: #4e73df;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Tren Peningkatan Pembelajaran Siswa</h5>
+                        <small class="text-muted">Pola pembelajaran dan keterlibatan siswa</small>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 grid-margin transparent">
-        <div class="row">
-            <div class="col-md-6 mb-4 stretch-card transparent">
-                <div class="card card-tale interactive-card">
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-2">Total Mata Pelajaran</p>
-                                <p class="fs-30 mb-2">{{ number_format($totalCourses ?? 0) }}</p>
-                                <p class="text-white mb-0">{{ number_format($publishedCourses ?? 0) }} dipublikasikan</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-school"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4 stretch-card transparent">
-                <div class="card card-dark-blue interactive-card">
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-2">Kehadiran Hari Ini</p>
-                                <p class="fs-30 mb-2"> {{ $todayPresent }}</p>
-                                <p class="text-white mb-0">dari {{ $todayTotal }} total siswa</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-check-circle"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 mb-4 stretch-card transparent">
-                <div class="card card-light-blue interactive-card">
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                            <p class="mb-2">Total Tugas</p>
-                            <p class="fs-30 mb-2">{{ number_format($totalTasks ?? 0) }}</p>
-                            <p class="text-white mb-0">{{ number_format($pendingTaskSubmissions ?? 0) }} menunggu</p>
-                        </div>
-                        <div class="card-icon-circle">
-                            <i class="mdi mdi-file-check"></i>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4 stretch-card transparent">
-                <div class="card card-light-danger interactive-card">
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-2">Total Kuis</p>
-                                <p class="fs-30 mb-2">{{ number_format($totalQuizzes ?? 0) }}</p>
-                                <p class="text-white mb-0">{{ number_format($totalQuizAttempts ?? 0) }} Dikumpulkan</p>
-                            </div>
-                            <div class="card-icon-circle">
-                                <i class="mdi mdi-clipboard-text"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<!-- Charts Section - Row 1 -->
-<div class="row">
-    <!-- Enrollment Trends Chart -->
-    <div class="col-md-8 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-1">Tren Peningkatan Pembelajaran Siswa</h4>
-                </div>
-                <p class="text-muted mb-3">Lacak pola pembelajaran Mata Pelajaran dan keterlibatan siswa</p>
-                <div class="chart-container">
+                <div style="position: relative; height: 280px;">
                     <canvas id="enrollmentTrendsChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Course Performance -->
-    <div class="col-md-4 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-1">Performa Mata Pelajaran</h4>
-                <p class="text-muted mb-3text-muted mb-3">Mata Pelajaran Anda berdasarkan tingkat penyelesaian</p>
-                <div class="chart-container-small">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e3f9e5; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-chart-pie-outline" style="font-size: 18px; color: #1cc88a;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Performa Mata Pelajaran</h5>
+                        <small class="text-muted">Berdasarkan tingkat penyelesaian</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 180px;">
                     <canvas id="coursePerformanceChart"></canvas>
                 </div>
                 <div class="mt-3">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Performa Tinggi</span>
-                        <span class="font-weight-bold text-success">{{ $highPerformanceCourses ?? 0 }}</span>
+                    @foreach(['Performa Tinggi' => ['val' => $highPerformanceCourses ?? 0, 'c' => '#1cc88a', 'bg' => '#e3f9e5'], 'Performa Sedang' => ['val' => $mediumPerformanceCourses ?? 0, 'c' => '#f6c23e', 'bg' => '#fff3e8'], 'Perlu Perhatian' => ['val' => $lowPerformanceCourses ?? 0, 'c' => '#e74a3b', 'bg' => '#fde8e8']] as $lbl => $cfg)
+                    <div class="d-flex justify-content-between align-items-center py-1" style="border-bottom: 1px solid #f0f0f3;">
+                        <span class="text-muted" style="font-size: 12.5px;">{{ $lbl }}</span>
+                        <span style="background: {{ $cfg['bg'] }}; color: {{ $cfg['c'] }}; border-radius: 6px; padding: 2px 9px; font-size: 12px; font-weight: 700;">{{ $cfg['val'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Performa Sedang</span>
-                        <span class="font-weight-bold text-warning">{{ $mediumPerformanceCourses ?? 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Perlu Perhatian</span>
-                        <span class="font-weight-bold text-danger">{{ $lowPerformanceCourses ?? 0 }}</span>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Charts Section - Row 2 -->
-<div class="row">
-    <!-- Student Activity -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-1">Absensi Siswa Mingguan</h4>
-                <p class="text-muted mb-3">Pola Absensi siswa berdasarkan hari</p>
-                <div class="chart-container-small">
+{{-- ===== CHARTS ROW 2 ===== --}}
+<div class="row mb-4">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e0f7fa; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-account-check-outline" style="font-size: 18px; color: #17a2b8;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Absensi Siswa Mingguan</h5>
+                        <small class="text-muted">Pola absensi siswa berdasarkan hari</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 220px;">
                     <canvas id="studentActivityChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-
-     <!-- Course Completion Rates -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-1">Penyelesaian Mata Pelajaran</h4>
-                <p class="text-muted mb-3">Tingkat penyelesaian berdasarkan Mata Pelajaran</p>
-                <div class="chart-container-small">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e3f9e5; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-check-all" style="font-size: 18px; color: #1cc88a;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Penyelesaian Mata Pelajaran</h5>
+                        <small class="text-muted">Materi selesai vs belum selesai</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 220px;">
                     <canvas id="lessonProgressChart"></canvas>
                 </div>
             </div>
@@ -179,72 +153,96 @@
     </div>
 </div>
 
-    <!-- Charts Section - Row 3 -->
-<div class="row">
-    <!-- Task Submission Chart -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-1">Pengumpulan Tugas</h4>
-                <p class="text-muted mb-3" style="font-size:13px">Jumlah siswa yang mengumpulkan per tugas</p>
-                <div class="chart-container-small">
+{{-- ===== CHARTS ROW 3 ===== --}}
+<div class="row mb-4">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-clipboard-check-outline" style="font-size: 18px; color: #4e73df;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Pengumpulan Tugas</h5>
+                        <small class="text-muted">Jumlah siswa yang mengumpulkan per tugas</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 220px;">
                     <canvas id="taskSubmissionChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-    
-
-    <!-- Quiz Attempt Chart -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-1">Pengerjaan Kuis</h4>
-                <p class="text-muted mb-3" style="font-size:13px">Jumlah percobaan siswa per kuis</p>
-                <div class="chart-container-small">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="background: #fff3e8; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-file-question-outline" style="font-size: 18px; color: #f6c23e;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Pengerjaan Kuis</h5>
+                        <small class="text-muted">Jumlah percobaan siswa per kuis</small>
+                    </div>
+                </div>
+                <div style="position: relative; height: 220px;">
                     <canvas id="quizAttemptChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-<!-- Recent Courses Table -->
+
+{{-- ===== RECENT COURSES TABLE ===== --}}
 <div class="row">
-    <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Mata Pelajaran Terbaru</h4>
-                <p class="font-weight-500 mb-0">Pembaruan Mata Pelajaran terbaru Anda</p>
-                <div class="table-responsive mt-3">
-                    <table class="table table-striped">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-body p-0">
+                <div class="d-flex align-items-center px-4 py-3" style="border-bottom: 1px solid #f0f0f3;">
+                    <div style="background: #e8f0fe; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="mdi mdi-library-outline" style="font-size: 18px; color: #4e73df;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 font-weight-bold text-dark">Mata Pelajaran Terbaru</h5>
+                        <small class="text-muted">Pembaruan mata pelajaran Anda</small>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table mb-0">
                         <thead>
-                            <tr>
-                                <th>Mata Pelajaran</th>
-                                <th>Tingkat</th>
-                                <th>Modul</th>
-                                <th>Siswa</th>
-                                <th>Status</th>
-                                <th>Tanggal</th>
+                            <tr style="background: #f8f9fc;">
+                                <th style="padding: 12px 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Mata Pelajaran</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Tingkat</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none; text-align: center;">Modul</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none; text-align: center;">Siswa</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Status</th>
+                                <th style="padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #858796; border-bottom: 1px solid #eaecf4; border-top: none;">Tanggal</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($recentCourses ?? [] as $course)
-                            <tr>
-                                <td>{{ $course->title ?? 'Course Title' }}</td>
-                                <td>{{ $course->level ?? 'N/A' }}</td>
-                                <td>{{ $course->modules->count() ?? 0 }}</td>
-                                <td>{{ $course->enrollments->count() ?? 0 }}</td>
-                                <td>
-                                    <label class="badge {{ $course->is_published ? 'badge-success' : 'badge-warning' }}">
-                                        {{ $course->is_published ? 'Dipublikasikan' : 'Draf' }}
-                                    </label>
+                            <tr style="transition: background 0.15s;" onmouseover="this.style.background='#f8f9fc';" onmouseout="this.style.background='white';">
+                                <td style="padding: 13px 20px; border-bottom: 1px solid #f0f0f3; font-size: 13.5px; font-weight: 600; color: #2d3748;">{{ $course->title ?? '—' }}</td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3;">
+                                    <span style="background: #e8f0fe; color: #4e73df; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600;">{{ ucfirst($course->level ?? '—') }}</span>
                                 </td>
-                                <td>{{ $course->created_at->format('M d, Y') }}</td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3; text-align: center; font-size: 13px; font-weight: 600; color: #2d3748;">{{ $course->modules->count() ?? 0 }}</td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3; text-align: center; font-size: 13px; font-weight: 600; color: #2d3748;">{{ $course->enrollments->count() ?? 0 }}</td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3;">
+                                    @if($course->is_published)
+                                        <span style="background: #e3f9e5; color: #1cc88a; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600;"><i class="mdi mdi-check-circle mr-1"></i>Dipublikasikan</span>
+                                    @else
+                                        <span style="background: #fff3e8; color: #f6c23e; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600;"><i class="mdi mdi-pencil-outline mr-1"></i>Draf</span>
+                                    @endif
+                                </td>
+                                <td style="padding: 13px 16px; border-bottom: 1px solid #f0f0f3; font-size: 12.5px; color: #858796;">{{ $course->created_at->format('d M Y') }}</td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center">Belum ada Mata Pelajaran. <a href="{{ route('courses.create') }}">Buat Mata Pelajaran pertama Anda</a></td>
+                                <td colspan="6" style="padding: 40px; text-align: center;">
+                                    <i class="mdi mdi-library-outline" style="font-size: 36px; color: #d1d3e2;"></i>
+                                    <p class="text-muted mt-2 mb-0" style="font-size: 13px;">Belum ada mata pelajaran. <a href="{{ route('courses.create') }}">Buat yang pertama</a></p>
+                                </td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -255,524 +253,98 @@
     </div>
 </div>
 
-@push('styles')
-<style>
-    /* Interactive Cards Hover Effect */
-    .interactive-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .interactive-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: 1;
-    }
-
-    .interactive-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .interactive-card:hover::before {
-        opacity: 1;
-    }
-
-    /* Icon Circle Styling */
-    .card-icon-circle {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.25);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        flex-shrink: 0;
-    }
-
-    .card-icon-circle i {
-        font-size: 28px;
-        color: rgba(255, 255, 255, 0.95);
-        transition: all 0.3s ease;
-    }
-
-    .interactive-card:hover .card-icon-circle {
-        background: rgba(255, 255, 255, 0.35);
-        transform: scale(1.1) rotate(5deg);
-    }
-
-    .interactive-card:hover .card-icon-circle i {
-        transform: scale(1.1);
-    }
-
-    /* Stagger Animation Delay for Multiple Cards */
-    .interactive-card:nth-child(1) {
-        animation-delay: 0.05s;
-    }
-
-    .interactive-card:nth-child(2) {
-        animation-delay: 0.1s;
-    }
-
-    .interactive-card:nth-child(3) {
-        animation-delay: 0.15s;
-    }
-
-    .interactive-card:nth-child(4) {
-        animation-delay: 0.2s;
-    }
-
-    /* Pulse Effect for Numbers */
-    .fs-30 {
-        transition: all 0.3s ease;
-    }
-
-    .interactive-card:hover .fs-30 {
-        transform: scale(1.05);
-        font-weight: 700;
-    }
-
-    /* Chart container styling */
-    .card canvas {
-        border-radius: 8px;
-        max-height: 400px;
-    }
-    
-    /* Responsive chart containers */
-    .chart-container {
-        position: relative;
-        height: 300px;
-        width: 100%;
-    }
-    
-    .chart-container-small {
-        position: relative;
-        height: 250px;
-        width: 100%;
-    }
-    
-    /* Mobile chart adjustments */
-    @media (max-width: 768px) {
-        .chart-container {
-            height: 250px;
-        }
-        
-        .chart-container-small {
-            height: 200px;
-        }
-        
-        .card canvas {
-            max-height: 250px;
-        }
-        
-        .card-icon-circle {
-            width: 50px;
-            height: 50px;
-        }
-
-        .card-icon-circle i {
-            font-size: 24px;
-        }
-
-        .interactive-card:hover {
-            transform: translateY(-5px);
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .chart-container {
-            height: 200px;
-        }
-        
-        .chart-container-small {
-            height: 180px;
-        }
-        
-        .card canvas {
-            max-height: 200px;
-        }
-    }
-</style>
-@endpush
-
 @push('scripts')
 <script>
-    // Chart.js configuration
-    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
     Chart.defaults.color = '#6c757d';
-    
-    let enrollmentTrendsChart, coursePerformanceChart, studentActivityChart, completionRatesChart;
-    
-    // Initialize all charts
+
+    const palette = ['#4e73df','#1cc88a','#17a2b8','#f6c23e','#e74a3b','#6610f2','#fd7e14','#20c9a6'];
+    const tooltipCfg = { backgroundColor: 'rgba(0,0,0,0.82)', titleColor: '#fff', bodyColor: '#fff', cornerRadius: 8 };
+
     document.addEventListener('DOMContentLoaded', function() {
-        initEnrollmentTrendsChart();
-        initCoursePerformanceChart();
-        initStudentActivityChart();
-        initCompletionRatesChart();
-    });
-    
-    // Enrollment Trends Chart - with real data from controller
-    function initEnrollmentTrendsChart() {
-        const ctx = document.getElementById('enrollmentTrendsChart').getContext('2d');
-        
-        // Monthly enrollments data from controller
-        const monthlyData = @json($monthlyEnrollmentsData ?? array_fill(0, 12, 0));
-        
-        enrollmentTrendsChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [
-                    {
-                        label: 'Materi Selesai',
-                        data: lessonProgressData.map(d => d.completed),
-                        backgroundColor: 'rgba(0, 210, 91, 0.85)',
-                        borderRadius: 6,
-                        borderSkipped: false,
-                    },
-                    {
-                        label: 'Belum Selesai',
-                        data: lessonProgressData.map(d => d.incomplete),
-                        backgroundColor: 'rgba(102, 126, 234, 0.25)',
-                        borderRadius: 6,
-                        borderSkipped: false,
-                    }
-                ]
-            },
-            options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { intersect: false, mode: 'index' },
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: { usePointStyle: true, padding: 20 }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0,0,0,0.8)',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    borderColor: '#667eea',
-                    borderWidth: 1,
-                    cornerRadius: 8,
-                    callbacks: {
-                        afterBody: function(items) {
-                            const i = items[0].dataIndex;
-                            const total = lessonProgressData[i].completed + lessonProgressData[i].incomplete;
-                            const pct = total > 0 
-                                ? Math.round((lessonProgressData[i].completed / total) * 100) 
-                                : 0;
-                            return `Progress: ${pct}%`;
-                        }
-                    }
-                }
-            },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: '#6c757d'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        },
-                        ticks: {
-                            color: '#6c757d'
-                        }
-                    }
-                },
-                elements: {
-                    line: {
-                        borderWidth: 3
-                    }
-                }
-            }
-        });
-    }
 
-    // Course Performance Chart - with real data from controller
-    function initCoursePerformanceChart() {
-        const ctx = document.getElementById('coursePerformanceChart').getContext('2d');
-        
-        // Course performance data from controller
-        const highPerf = {{ $highPerformanceCourses ?? 0 }};
-        const mediumPerf = {{ $mediumPerformanceCourses ?? 0 }};
-        const lowPerf = {{ $lowPerformanceCourses ?? 0 }};
-        
-        coursePerformanceChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Performa Tinggi', 'Performa Sedang', 'Perlu Perhatian'],
-                datasets: [{
-                    data: [highPerf, mediumPerf, lowPerf],
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.8)',
-                        'rgba(255, 193, 7, 0.8)',
-                        'rgba(220, 53, 69, 0.8)'
-                    ],
-                    borderColor: [
-                        '#28a745',
-                        '#ffc107',
-                        '#dc3545'
-                    ],
-                    borderWidth: 2,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8
-                    }
-                },
-                cutout: '60%'
-            }
-        });
-    }
-    
-    // Student Activity Chart - with real data from controller
-    function initStudentActivityChart() {
-        const ctx = document.getElementById('studentActivityChart').getContext('2d');
-
-        const weeklyAttendance = @json($weeklyAttendanceChart ?? []);
-
-        studentActivityChart = new Chart(ctx, {
+        // 1. Enrollment Trends
+        const mData = @json($monthlyEnrollmentsData ?? array_fill(0, 12, 0));
+        new Chart(document.getElementById('enrollmentTrendsChart'), {
             type: 'line',
             data: {
-                labels: weeklyAttendance.map(d => d.day),
-                datasets: [
-                    {
-                        label: 'Hadir',
-                        data: weeklyAttendance.map(d => d.present),
-                        borderColor: '#00d25b',
-                        backgroundColor: 'rgba(0, 210, 91, 0.08)',
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#00d25b',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                    },
-                    {
-                        label: 'Absen',
-                        data: weeklyAttendance.map(d => d.absent),
-                        borderColor: '#fc424a',
-                        backgroundColor: 'rgba(252, 66, 74, 0.08)',
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#fc424a',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                    },
-                    {
-                        label: 'Sakit',
-                        data: weeklyAttendance.map(d => d.sick),
-                        borderColor: '#ffab00',
-                        backgroundColor: 'rgba(255, 171, 0, 0.08)',
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#ffab00',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                    }
-                ]
+                labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
+                datasets: [{
+                    label: 'Siswa Aktif', data: mData,
+                    borderColor: '#4e73df', backgroundColor: 'rgba(78,115,223,0.08)',
+                    fill: true, tension: 0.4, pointBackgroundColor: '#4e73df',
+                    pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5
+                }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { intersect: false, mode: 'index' },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { usePointStyle: true, padding: 16, font: { size: 12 } }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8,
-                        borderColor: '#667eea',
-                        borderWidth: 1,
-                        callbacks: {
-                            footer: function(items) {
-                                const total = items.reduce((s, i) => s + i.parsed.y, 0);
-                                return `Total: ${total} siswa`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#6c757d' }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(0,0,0,0.05)' },
-                        ticks: { color: '#6c757d', stepSize: 1 }
-                    }
-                }
+            options: { responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } }, tooltip: tooltipCfg },
+                scales: { x: { grid: { display: false }, ticks: { color: '#6c757d' } }, y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { stepSize: 1 } } }
             }
         });
-    }
-    
-    
-    // Chart update functions
-    function updateEnrollmentChart(period) {
-        // Simulate data update based on period
-        const periods = {
-            '6months': ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            '12months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            'year': ['Q1', 'Q2', 'Q3', 'Q4']
-        };
-        
-        enrollmentTrendsChart.data.labels = periods[period] || periods['12months'];
-        enrollmentTrendsChart.update();
-    }
 
-    // ── Data dari controller ──────────────────────────────────
-    const taskSubmissionData  = @json($taskSubmissionChart);
-    const quizAttemptData     = @json($quizAttemptChart);
-    const lessonProgressData  = @json($lessonProgressChart);
-
-    // ── Warna palette ────────────────────────────────────────
-    const palette = [
-        '#695ced','#00d25b','#ffab00','#fc424a',
-        '#0090e7','#e4a951','#58d8a3','#f17e5d'
-    ];
-
-    // 1. Task Submission — Bar horizontal
-    new Chart(document.getElementById('taskSubmissionChart'), {
-        type: 'bar',
-        data: {
-            labels: taskSubmissionData.map(d => d.label),
-            datasets: [{
-                label: 'Pengumpulan',
-                data: taskSubmissionData.map(d => d.count),
-                backgroundColor: palette,
-                borderRadius: 6,
-            }]
-        },
-        options: {
-            indexAxis: 'x',
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: {
-                x: { beginAtZero: true, ticks: { stepSize: 1 } },
-                y: { ticks: { font: { size: 11 } } }
-            }
-        }
-    });
-
-    // 2. Quiz Attempt — Bar horizontal
-    new Chart(document.getElementById('quizAttemptChart'), {
-        type: 'bar',
-        data: {
-            labels: quizAttemptData.map(d => d.label),
-            datasets: [{
-                label: 'Percobaan',
-                data: quizAttemptData.map(d => d.count),
-                backgroundColor: palette,
-                borderRadius: 6,
-            }]
-        },
-        options: {
-            indexAxis: 'x',
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: {
-                x: { beginAtZero: true, ticks: { stepSize: 1 } },
-                y: { ticks: { font: { size: 11 } } }
-            }
-        }
-    });
-
-    // 3. Lesson Progress — Stacked bar per course
-    new Chart(document.getElementById('lessonProgressChart'), {
-        type: 'bar',
-        data: {
-            labels: lessonProgressData.map(d => d.label),
-            datasets: [
-                {
-                    label: 'Selesai',
-                    data: lessonProgressData.map(d => d.completed),
-                    backgroundColor: [
-                        "#4CAF50",
-                        "#009688",
-                        "#F57C00",
-                        "#2E7D32",
-                        "#455A64",
-                    ],
-                    borderRadius: 8,
-                },
-                {
-                    label: 'Belum',
-                    data: lessonProgressData.map(d => d.incomplete),
-                    backgroundColor: [
-                        "#8BC34A",
-                        "#4DB6AC",
-                        "#FFB300",
-                        "#A5D6A7",
-                        "#90A4AE",  
-                    ],
-                    borderRadius: 8,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                x: { stacked: true, ticks: { font: { size: 8 } } },
-                y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+        // 2. Course Performance Doughnut
+        new Chart(document.getElementById('coursePerformanceChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Performa Tinggi','Performa Sedang','Perlu Perhatian'],
+                datasets: [{ data: [{{ $highPerformanceCourses ?? 0 }}, {{ $mediumPerformanceCourses ?? 0 }}, {{ $lowPerformanceCourses ?? 0 }}], backgroundColor: ['rgba(28,200,138,0.85)','rgba(246,194,62,0.85)','rgba(231,74,59,0.85)'], borderColor: ['#1cc88a','#f6c23e','#e74a3b'], borderWidth: 2, hoverOffset: 8 }]
             },
-            plugins: {
-                legend: { position: 'bottom', labels: { font: { size: 12 } } }
+            options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { display: false }, tooltip: tooltipCfg } }
+        });
+
+        // 3. Weekly Attendance
+        const wAtt = @json($weeklyAttendanceChart ?? []);
+        new Chart(document.getElementById('studentActivityChart'), {
+            type: 'line',
+            data: {
+                labels: wAtt.map(d => d.day),
+                datasets: [
+                    { label: 'Hadir', data: wAtt.map(d => d.present), borderColor: '#1cc88a', backgroundColor: 'rgba(28,200,138,0.07)', fill: true, tension: 0.4, pointBackgroundColor: '#1cc88a', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4 },
+                    { label: 'Absen', data: wAtt.map(d => d.absent),  borderColor: '#e74a3b', backgroundColor: 'rgba(231,74,59,0.07)',   fill: true, tension: 0.4, pointBackgroundColor: '#e74a3b', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4 },
+                    { label: 'Sakit', data: wAtt.map(d => d.sick),    borderColor: '#f6c23e', backgroundColor: 'rgba(246,194,62,0.07)',  fill: true, tension: 0.4, pointBackgroundColor: '#f6c23e', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4 }
+                ]
             },
-            tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8,
-                        callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + '%';
-                            }
-                        }
-                    },
-        }
+            options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 12, font: { size: 11 } } }, tooltip: tooltipCfg },
+                scales: { x: { grid: { display: false }, ticks: { color: '#6c757d', font: { size: 11 } } }, y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { stepSize: 1 } } }
+            }
+        });
+
+        // 4. Lesson Progress stacked bar
+        const lp = @json($lessonProgressChart ?? []);
+        new Chart(document.getElementById('lessonProgressChart'), {
+            type: 'bar',
+            data: {
+                labels: lp.map(d => d.label),
+                datasets: [
+                    { label: 'Selesai', data: lp.map(d => d.completed), backgroundColor: 'rgba(28,200,138,0.85)', borderRadius: 4 },
+                    { label: 'Belum',   data: lp.map(d => d.incomplete), backgroundColor: 'rgba(78,115,223,0.2)',  borderRadius: 4 }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 12, font: { size: 11 } } }, tooltip: tooltipCfg },
+                scales: { x: { stacked: true, grid: { display: false }, ticks: { color: '#6c757d', font: { size: 9 } } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+
+        // 5. Task submissions
+        const taskData = @json($taskSubmissionChart ?? []);
+        new Chart(document.getElementById('taskSubmissionChart'), {
+            type: 'bar',
+            data: { labels: taskData.map(d => d.label), datasets: [{ label: 'Pengumpulan', data: taskData.map(d => d.count), backgroundColor: palette, borderRadius: 6 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: tooltipCfg }, scales: { x: { grid: { display: false }, ticks: { color: '#6c757d', font: { size: 10 } } }, y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        });
+
+        // 6. Quiz attempts
+        const quizData = @json($quizAttemptChart ?? []);
+        new Chart(document.getElementById('quizAttemptChart'), {
+            type: 'bar',
+            data: { labels: quizData.map(d => d.label), datasets: [{ label: 'Percobaan', data: quizData.map(d => d.count), backgroundColor: palette, borderRadius: 6 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: tooltipCfg }, scales: { x: { grid: { display: false }, ticks: { color: '#6c757d', font: { size: 10 } } }, y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        });
+
     });
 </script>
 @endpush
+
 @endsection

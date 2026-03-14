@@ -17,12 +17,6 @@ class CourseController extends Controller
 
         $query = Course::with(['modules.lessons', 'instructor', 'classroom']);
 
-        /*
-        |--------------------------------------------------------------------------
-        | FILTER BERDASARKAN ROLE
-        |--------------------------------------------------------------------------
-        */
-
         if ($user->hasRole('admin')) {
             // Admin bisa lihat semua
         }
