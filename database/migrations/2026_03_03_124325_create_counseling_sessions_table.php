@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('counseling_sessions'); 
+
         Schema::create('counseling_sessions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
