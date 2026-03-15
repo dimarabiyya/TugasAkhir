@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@lms.com',
+            'nisn' => '0000000000',
             'level' => 'advanced',
         ]);
         $admin->assignRole('admin');
@@ -33,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $instructor = User::factory()->create([
             'name' => 'Instructor User',
             'email' => 'instructor@lms.com',
+            'nisn' => '0000000000',
             'level' => 'advanced',
         ]);
         $instructor->assignRole('instructor');
@@ -41,6 +43,7 @@ class DatabaseSeeder extends Seeder
         $student = User::factory()->create([
             'name' => 'Student User',
             'email' => 'student@lms.com',
+            'nisn' => '1234567890',
             'level' => 'beginner',
         ]);
         $student->assignRole('student');
